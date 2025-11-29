@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id       String @id @default(uuid())
+  email    String @unique
+  userName String
+
+  subscriptions Subscription[]
+  stocks        Stock[]
+  categories    Category[]
+  payments      Payment[]
+  incomes       Income[]
+}
+
+// 支払い履歴
+model Payment {
+  id          String   @id @default(uuid())
+  amount      Int // 支払金額
+  paymentDate DateTime @default(now())
+
+  // リレーション
+  userId     String
+  categoryId String
+  user     User      @relation(fields: [userId], references: [id],onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id],onDelete: Cascade)
+}
+
+// 収入履歴
+model Income {
+  id         String   @id @default(uuid())
+  amount     Int // 収入金額
+  incomeDate DateTime @default(now())
+
+  // リレーション
+  categoryId String
+  userId     String
+  user     User      @relation(fields: [userId], references: [id],onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id],onDelete: Cascade)
+}
+
+// サブスクリプション
+model Subscription {
+  id           String @id @default(uuid())
+  name         String
+  startDate    DateTime @default(now())
+  endDate      DateTime
+  monthlyPrice Int
+  userId       String
+  user     User      @relation(fields: [userId], references: [id],onDelete: Cascade)
+}
+
+// 在庫管理
+model Stock {
+  id          String @id @default(uuid())
+  name        String
+  quantity    Int // 数量
+  minQuantity Int? // 最小数量
+  unit        String // 单位
+  unitPrice   Int? // 値段
+
+  // リレーション
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id],onDelete: Cascade)
+
+  userId String
+  user     User      @relation(fields: [userId], references: [id],onDelete: Cascade)
+}
+
+// カテゴリー
+model Category {
+  id   String @id @default(uuid())
+  name String
+
+  // リレーション
+  userId   String
+  payments Payment[]
+  incomes  Income[]
+  stocks   Stock[]
+  user     User      @relation(fields: [userId], references: [id],onDelete: Cascade)
+}
