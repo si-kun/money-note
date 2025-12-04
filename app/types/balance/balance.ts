@@ -4,7 +4,6 @@ import { Prisma } from "@prisma/client";
 export type IncomeWithCategory = Prisma.IncomeGetPayload<{
     include: { category: true };
   }>;
-  
 export  type PaymentWithCategory = Prisma.PaymentGetPayload<{
     include: { category: true };
   }>;

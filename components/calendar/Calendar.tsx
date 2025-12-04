@@ -4,6 +4,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 
 import interractionPlugin, { DateClickArg } from "@fullcalendar/interaction";
+import { EventClickArg } from "@fullcalendar/core";
 
 import { Button } from "@/components/ui/button";
 import { EventData } from "@/app/(private)/page";
@@ -15,11 +16,12 @@ interface CalendarProps {
   handlePrevMonth: () => void;
   handleNextMonth: () => void;
   handleDateClick: (arg: DateClickArg) => void;
+  handleEventClick: (arg: EventClickArg) => void;
   events: EventData[];
   calendarRef: RefObject<FullCalendar | null>
 }
 
-const BalanceCalendar = ({ year, month,handleNextMonth,handlePrevMonth,handleDateClick,events,calendarRef, }: CalendarProps) => {
+const BalanceCalendar = ({ year, month,handleNextMonth,handlePrevMonth,handleDateClick,handleEventClick,events,calendarRef, }: CalendarProps) => {
   return (
     <div className="w-[65%] space-y-4">
       <div className="flex items-center justify-between">
@@ -37,6 +39,7 @@ const BalanceCalendar = ({ year, month,handleNextMonth,handlePrevMonth,handleDat
         dayCellClassNames={"cursor-pointer"}
         events={events}
         dateClick={handleDateClick}
+        eventClick={handleEventClick}
         eventContent={(eventInfo) => {
           const { income, payment, balance } = eventInfo.event.extendedProps;
           return (

@@ -33,6 +33,7 @@ import { useEffect, useRef, useState } from "react";
 import { getIncome } from "../server-aciton/balance/getIncome";
 import { getPayment } from "../server-aciton/balance/getPayment";
 import { DateClickArg } from "@fullcalendar/interaction";
+import { EventClickArg } from "@fullcalendar/core";
 import BalanceCalendar from "@/components/calendar/Calendar";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -213,8 +214,7 @@ export default function Home() {
     calendarRef.current?.getApi().next();
   };
 
-  const handleDateClick = (arg: DateClickArg) => {
-    const clickedDate = arg.dateStr;
+  const handleSelectedDate = (clickedDate: string) => {
 
     const selectedIncomes = incomeData.filter((income) => {
       return income.incomeDate.toISOString().split("T")[0] === clickedDate;
@@ -242,6 +242,14 @@ export default function Home() {
     });
   };
 
+  const handleDateClick = (arg: DateClickArg) => {
+    handleSelectedDate(arg.dateStr);
+  }
+
+  const handleEventClick = (arg: EventClickArg) => {
+    handleSelectedDate(arg.event.startStr);
+  }
+
   return (
     <div className="w-full h-full flex gap-4 overflow-hidden">
       <BalanceCalendar
@@ -250,6 +258,7 @@ export default function Home() {
         handleNextMonth={handleNextMonth}
         handlePrevMonth={handlePrevMonth}
         handleDateClick={handleDateClick}
+        handleEventClick={handleEventClick}
         events={events}
         calendarRef={calendarRef}
       />
