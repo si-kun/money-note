@@ -1,18 +1,18 @@
 "use server";
 
 import { ApiResponse } from "@/app/types/api/api";
-import { SubscriptionEditForm } from "@/app/types/zod/subscription";
+import { SubscriptionFormType } from "@/app/types/zod/subscription";
 import { prisma } from "@/lib/prisma/prisma";
 
 export const editSubscription = async (
-  editingTarget: SubscriptionEditForm
+  editingTarget: SubscriptionFormType
 ): Promise<ApiResponse<null>> => {
   try {
     await prisma.subscription.update({
       where: { id: editingTarget.id },
       data: {
         name: editingTarget.name,
-        monthlyPrice: editingTarget.monthlyPrice,
+        monthlyPrice: Number(editingTarget.monthlyPrice),
         startDate: editingTarget.startDate,
         endDate: editingTarget.endDate,
       },

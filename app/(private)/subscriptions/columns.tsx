@@ -2,7 +2,7 @@
 
 import { Subscription } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
-import { format, set } from "date-fns";
+import { format } from "date-fns";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -13,12 +13,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -27,31 +21,19 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { ChevronDownIcon, Ellipsis } from "lucide-react";
+import {  Ellipsis } from "lucide-react";
 import HeaderButton from "./components/HeaderButton";
 import { toast } from "sonner";
 import { deleteSubscription } from "@/app/server-aciton/subscription/deleteSubscription";
 import { useRouter } from "next/navigation";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import {
-  SubscriptionEditForm,
+  SubscriptionFormType,
   subscriptionSchema,
 } from "@/app/types/zod/subscription";
-import { Calendar } from "@/components/ui/calendar";
 import { useEffect, useState } from "react";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { editSubscription } from "@/app/server-aciton/subscription/editSubscription";
+import SubscriptionForm from "./components/SubscriptionForm";
 
 function ActionsCell({ row }: { row: Subscription }) {
   const router = useRouter();
@@ -79,7 +61,7 @@ function ActionsCell({ row }: { row: Subscription }) {
   };
 
   // サブスクの更新処理
-  const handleEditing = async (data: SubscriptionEditForm) => {
+  const handleEditing = async (data: SubscriptionFormType) => {
     try {
       console.log(data);
       const result = await editSubscription(data);
@@ -102,8 +84,7 @@ function ActionsCell({ row }: { row: Subscription }) {
     reset();
   };
 
-  // const form = useForm<SubscriptionEditForm>({
-  const formMethods = useForm<SubscriptionEditForm>({
+  const formMethods = useForm<SubscriptionFormType>({
     resolver: zodResolver(subscriptionSchema),
     defaultValues: {
       id: row.id,
@@ -115,10 +96,8 @@ function ActionsCell({ row }: { row: Subscription }) {
   });
 
   const {
-    handleSubmit,
-    control,
     reset,
-    formState: { isValid, isSubmitting },
+    formState: { isValid },
   } = formMethods;
 
   useEffect(() => {
@@ -176,173 +155,16 @@ function ActionsCell({ row }: { row: Subscription }) {
                 account and remove your data from our servers.
               </DialogDescription>
             </DialogHeader>
-            <Form {...formMethods}>
-              <form
-                onSubmit={handleSubmit(handleEditing)}
-                className="gap-4 w-full flex flex-col"
-              >
-                <FormField
-                  control={control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Username</FormLabel>
-                      <FormControl>
-                        <Input placeholder="shadcn" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        This is your public display name.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={control}
-                  name="monthlyPrice"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Username</FormLabel>
-                      <FormControl>
-                        <Input placeholder="shadcn" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        This is your public display name.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className="flex gap-4">
-                  <FormField
-                    control={control}
-                    name="startDate"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <div className="flex flex-col gap-3">
-                            <Label htmlFor="date" className="px-1">
-                              Start Date
-                            </Label>
-                            <Popover
-                              open={startOpen}
-                              onOpenChange={setStartOpen}
-                            >
-                              <PopoverTrigger asChild>
-                                <Button
-                                  variant="outline"
-                                  id="date"
-                                  className="w-48 justify-between font-normal"
-                                >
-                                  {field.value
-                                    ? format(field.value, "yyyy/MM/dd")
-                                    : "Select date"}
-                                  <ChevronDownIcon />
-                                </Button>
-                              </PopoverTrigger>
-                              <PopoverContent
-                                className="w-auto overflow-hidden p-0"
-                                align="start"
-                              >
-                                <Calendar
-                                  mode="single"
-                                  selected={field.value}
-                                  captionLayout="dropdown"
-                                  onSelect={(date) => {
-                                    field.onChange(date);
-                                    setStartOpen(false);
-                                  }}
-                                />
-                              </PopoverContent>
-                            </Popover>
-                          </div>
-                        </FormControl>
-                        <FormDescription>
-                          This is your public display name.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={control}
-                    name="endDate"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <div className="flex flex-col gap-3">
-                            <Label htmlFor="date" className="px-1">
-                              End Date
-                            </Label>
-                            <Popover open={endOpen} onOpenChange={setEndOpen}>
-                              <PopoverTrigger asChild>
-                                <Button
-                                  variant="outline"
-                                  id="date"
-                                  className="w-48 justify-between font-normal"
-                                >
-                                  {field.value
-                                    ? format(field.value, "yyyy/MM/dd")
-                                    : "Select date"}
-                                  <ChevronDownIcon />
-                                </Button>
-                              </PopoverTrigger>
-                              <PopoverContent
-                                className="w-auto overflow-hidden p-0"
-                                align="start"
-                              >
-                                <Calendar
-                                  mode="single"
-                                  selected={field.value ?? undefined}
-                                  captionLayout="dropdown"
-                                  {...field}
-                                  onSelect={(date) => {
-                                    field.onChange(date);
-                                    setEndOpen(false);
-                                  }}
-                                />
-                              </PopoverContent>
-                            </Popover>
-                          </div>
-                        </FormControl>
-                        <FormDescription>
-                          This is your public display name.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                {isSubmitting ? (
-                  <div className="flex gap-2 justify-end">
-                    <Button
-                      disabled={isSubmitting}
-                      className="disabled:bg-slate-400"
-                      type="button"
-                    >
-                      送信中...
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="flex gap-2 justify-end">
-                    <Button
-                      disabled={!isValid}
-                      className="bg-green-500 hover:bg-green-400"
-                      type="submit"
-                    >
-                      {buttonText}
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={"secondary"}
-                      onClick={handleCancel}
-                    >
-                      キャンセル
-                    </Button>
-                  </div>
-                )}
-              </form>
-            </Form>
+            <SubscriptionForm
+            formMethods={formMethods}
+            submitSubscription={handleEditing}
+            handleCancel={handleCancel}
+            startOpen={startOpen}
+            setStartOpen={setStartOpen}
+            endOpen={endOpen}
+            setEndOpen={setEndOpen}
+            submitButtonText={buttonText}
+            />
           </DialogContent>
         </Dialog>
       </DropdownMenuContent>

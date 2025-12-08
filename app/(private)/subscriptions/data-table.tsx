@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import AddSubscription from "./components/AddSubscription";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -49,7 +50,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <div>
+      <div className="flex items-center gap-4">
         <Input
           placeholder="FIlter subscriptions..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -57,6 +58,7 @@ export function DataTable<TData, TValue>({
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
         />
+        <AddSubscription />
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table>
