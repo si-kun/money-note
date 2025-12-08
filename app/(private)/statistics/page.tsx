@@ -220,7 +220,7 @@ const StatisticsPage = () => {
               dataKey="category"
               tickLine={false}
               tickMargin={10}
-              axisLine={false}
+              axisLine={true}
             />
             <YAxis />
             <ChartTooltip content={<ChartTooltipContent />} />
