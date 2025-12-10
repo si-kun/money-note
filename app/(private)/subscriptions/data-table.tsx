@@ -49,7 +49,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 h-full flex flex-col flex-1">
       <div className="flex items-center gap-4">
         <Input
           placeholder="FIlter subscriptions..."
@@ -60,9 +60,9 @@ export function DataTable<TData, TValue>({
         />
         <AddSubscription />
       </div>
-      <div className="overflow-hidden rounded-md border">
+      <div className="flex-1 overflow-y-auto rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="sticky top-0 bg-background z-10">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {

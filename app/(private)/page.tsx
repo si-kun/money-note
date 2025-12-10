@@ -2,44 +2,26 @@
 
 import FullCalendar from "@fullcalendar/react";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChevronDownIcon, CirclePlus, List } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useEffect, useRef, useState } from "react";
 import { getIncome } from "../server-aciton/balance/getIncome";
 import { getPayment } from "../server-aciton/balance/getPayment";
 import { DateClickArg } from "@fullcalendar/interaction";
 import { EventClickArg } from "@fullcalendar/core";
 import BalanceCalendar from "@/components/calendar/Calendar";
-import { Calendar } from "@/components/ui/calendar";
 import {
   IncomeWithCategory,
   PaymentWithCategory,
 } from "../types/balance/balance";
+import {
+  getSubscription,
+  SubscriptionResponse,
+} from "../server-aciton/balance/getSubscription";
+import Summary from "./components/Summary";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import SummaryCard from "./components/SummaryCard";
+import SubscriptionCard from "./components/SubscriptionCard";
 
 type BalanceData = Record<
   string,
@@ -50,7 +32,7 @@ type BalanceData = Record<
   }
 >;
 
-interface SelectedData {
+export interface SelectedData {
   date: string;
   incomes: IncomeWithCategory[];
   payments: PaymentWithCategory[];
@@ -72,11 +54,18 @@ export interface EventData {
 
 export default function Home() {
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [date, setDate] = useState<Date>(new Date());
 
   const [incomeData, setIncomeData] = useState<IncomeWithCategory[]>([]);
+  const [monthlyIncomeTotal, setMonthlyIncomeTotal] = useState<number>(0);
   const [paymentData, setPaymentData] = useState<PaymentWithCategory[]>([]);
+  const [monthlyPaymentTotal, setMonthlyPaymentTotal] = useState<number>(0);
   const [balanceData, setBalanceData] = useState<BalanceData | null>(null);
+  const [monthlySubscription, setMonthlySubscription] =
+    useState<SubscriptionResponse>({
+      subscription: [],
+      totalAmount: 0,
+    });
   const [events, setEvents] = useState<EventData[]>([]);
 
   // 日付
@@ -85,7 +74,14 @@ export default function Home() {
   const [month, setMonth] = useState<number>(today.getMonth() + 1);
 
   const todayKey = today.toISOString().split("T")[0];
-  const [selectedDate, setSelectedDate] = useState<SelectedData | null>();
+  const [selectedDate, setSelectedDate] = useState<SelectedData>({
+    date: "",
+    incomes: [],
+    payments: [],
+    totalIncome: 0,
+    totalPayment: 0,
+    balance: 0,
+  });
 
   const calendarRef = useRef<FullCalendar>(null);
 
@@ -109,6 +105,12 @@ export default function Home() {
             }
             tempBalanceData[datekey].payment += payment.amount;
           });
+          setMonthlyPaymentTotal(() => {
+            return paymentResult.data.reduce(
+              (acc, payment) => acc + payment.amount,
+              0
+            );
+          });
           // 支出データの処理
           incomeResult.data.forEach((income) => {
             const datekey = income.incomeDate.toISOString().split("T")[0];
@@ -117,7 +119,12 @@ export default function Home() {
             }
             tempBalanceData[datekey].income += income.amount;
           });
-
+          setMonthlyIncomeTotal(() => {
+            return incomeResult.data.reduce(
+              (acc, income) => acc + income.amount,
+              0
+            );
+          });
           // 残高の計算
           Object.keys(tempBalanceData).forEach((datekey) => {
             const data = tempBalanceData[datekey];
@@ -126,7 +133,6 @@ export default function Home() {
           setBalanceData(tempBalanceData);
 
           // 当日のデータを選択状態にする
-
           const todayYear = today.getFullYear();
           const todayMonth = today.getMonth() + 1;
 
@@ -175,7 +181,6 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [year, month]);
 
-
   useEffect(() => {
     if (!balanceData) return;
     Object.entries(balanceData).forEach(([date, data]) => {
@@ -194,6 +199,22 @@ export default function Home() {
       ]);
     });
   }, [balanceData]);
+
+  // 月ごとのサブスクを取得
+  useEffect(() => {
+    const fetchMonthlySubscriptions = async () => {
+      try {
+        const result = await getSubscription({ year, month });
+
+        if (result.success) {
+          setMonthlySubscription(result.data);
+        }
+      } catch (error) {
+        console.error("Error fetching monthly subscriptions:", error);
+      }
+    };
+    fetchMonthlySubscriptions();
+  }, [year, month]);
 
   const handlePrevMonth = () => {
     if (month === 1) {
@@ -215,14 +236,13 @@ export default function Home() {
   };
 
   const handleSelectedDate = (clickedDate: string) => {
-
     const selectedIncomes = incomeData.filter((income) => {
       return income.incomeDate.toISOString().split("T")[0] === clickedDate;
-    })
+    });
 
     const selectedPayments = paymentData.filter((payment) => {
       return payment.paymentDate.toISOString().split("T")[0] === clickedDate;
-    })
+    });
 
     const totalIncome = selectedIncomes.reduce(
       (sum, income) => sum + income.amount,
@@ -244,11 +264,11 @@ export default function Home() {
 
   const handleDateClick = (arg: DateClickArg) => {
     handleSelectedDate(arg.dateStr);
-  }
+  };
 
   const handleEventClick = (arg: EventClickArg) => {
     handleSelectedDate(arg.event.startStr);
-  }
+  };
 
   return (
     <div className="w-full h-full flex gap-4 overflow-hidden">
@@ -262,172 +282,48 @@ export default function Home() {
         events={events}
         calendarRef={calendarRef}
       />
-      <div className="flex-1 h-full overflow-y-hidden">
-        <Card className="h-full">
-          <CardHeader>
-            <CardTitle>日付:{selectedDate?.date}</CardTitle>
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col space-y-4 overflow-y-auto">
-            {/* 収入、支出、残高のカード */}
-            <div className="grid grid-cols-2 gap-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>収入</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  ¥{selectedDate?.totalIncome.toLocaleString()}
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>支出</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  ¥{selectedDate?.totalPayment.toLocaleString()}
-                </CardContent>
-              </Card>
-              <Card className="col-span-full">
-                <CardHeader>
-                  <CardTitle>残高</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  ¥{selectedDate?.balance.toLocaleString()}
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* 追加ボタン */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gapx-3 py-1">
-                <List />
-                <span className="font-semibold">内訳</span>
+      <Tabs defaultValue="account" className="basis-[35%]">
+        <TabsList>
+          <TabsTrigger value="day">日次</TabsTrigger>
+          <TabsTrigger value="month">月次</TabsTrigger>
+        </TabsList>
+        <TabsContent value="day">
+          <Summary
+            selectedDate={selectedDate}
+            date={date}
+            setDate={setDate}
+            open={open}
+            setOpen={setOpen}
+          />
+        </TabsContent>
+        <TabsContent value="month">
+          <Card className="h-full">
+            <CardHeader>
+              <CardTitle>
+                {year}年{month}月
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 flex flex-col space-y-4 overflow-y-auto">
+              {/* 収入、支出、残高のカード */}
+              <div className="flex flex-col gap-4 w-full">
+                <div className="flex items-center justify-between gap-4">
+                  <SummaryCard title={"収入"} amount={monthlyIncomeTotal} />
+                  <SummaryCard title={"支出"} amount={monthlyPaymentTotal} />
+                </div>
+                <SubscriptionCard monthlySubscription={monthlySubscription} />
+                <SummaryCard
+                  title={"残高"}
+                  amount={
+                    monthlyIncomeTotal -
+                    monthlyPaymentTotal -
+                    monthlySubscription.totalAmount
+                  }
+                />
               </div>
-              <Dialog>
-                <DialogTrigger
-                  asChild
-                  className="text-blue-500 hover:cursor-pointer hover:bg-blue-400 hover:text-white"
-                >
-                  <Button type="button" variant={"secondary"}>
-                    <CirclePlus />
-                    内訳を追加
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="w-[80vw] h-[80vh] flex flex-col py-5">
-                  <DialogHeader>
-                    <DialogTitle>2025-11-30の収支を追加する</DialogTitle>
-                  </DialogHeader>
-                  <form className="flex flex-col gap-5">
-                    <div className="grid grid-cols-2">
-                      <Button
-                        type="button"
-                        variant={"secondary"}
-                        className="w-full bg-blue-200 py-5"
-                      >
-                        収入
-                      </Button>
-                      <Button
-                        type="button"
-                        variant={"secondary"}
-                        className="w-full bg-red-200 py-5"
-                      >
-                        支出
-                      </Button>
-                    </div>
-                    <div className="relative">
-                      <Label className="absolute bg-white px-3 py-1 z-10 -top-3 left-5 text-sm text-gray-400">
-                        金額
-                      </Label>
-                      <Popover open={open} onOpenChange={setOpen}>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            id="date"
-                            className="w-full justify-between font-normal h-14"
-                          >
-                            {date ? date.toLocaleDateString() : "Select date"}
-                            <ChevronDownIcon />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent
-                          className="w-auto overflow-hidden p-0"
-                          align="start"
-                        >
-                          <Calendar
-                            mode="single"
-                            selected={date}
-                            captionLayout="dropdown"
-                            onSelect={(date) => {
-                              setDate(date);
-                              setOpen(false);
-                            }}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </div>
-                    <div className="relative">
-                      <Label className="absolute bg-white px-3 py-1 z-10 -top-3 left-5 text-sm text-gray-400">
-                        カテゴリー
-                      </Label>
-                      <Select>
-                        <SelectTrigger className="w-full data-[size=default]:h-14 p-4">
-                          <SelectValue placeholder="Theme" />
-                        </SelectTrigger>
-                        <SelectContent className="">
-                          <SelectItem value="light">Light</SelectItem>
-                          <SelectItem value="dark">Dark</SelectItem>
-                          <SelectItem value="system">System</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="relative">
-                      <Label className="absolute bg-white px-3 py-1 z-10 -top-3 left-5 text-sm text-gray-400">
-                        金額
-                      </Label>
-                      <Input type="text" className="p-4 h-14" />
-                    </div>
-                    <div className="relative">
-                      <Label className="absolute bg-white px-3 py-1 z-10 -top-3 left-5 text-sm text-gray-400">
-                        内容
-                      </Label>
-                      <Input type="text" className="p-4 h-14" />
-                    </div>
-                    <Button type="submit" className="bg-green-500">
-                      保存
-                    </Button>
-                  </form>
-                </DialogContent>
-              </Dialog>
-            </div>
-
-            {/* 内訳リスト */}
-            <div className="flex flex-col gap-3 py-1 overflow-y-auto">
-              {selectedDate?.incomes?.map((income) => (
-                <Card className="bg-blue-200" key={income.id}>
-                  <CardContent className="flex">
-                    <span className="w-[30%]">{income.category.name}</span>
-                    <span className="w-[40%]">{income.title || ""}</span>
-                    <span className="ml-auto">
-                      ¥{income.amount.toLocaleString()}
-                    </span>
-                  </CardContent>
-                </Card>
-              ))}
-
-              {selectedDate?.payments?.map((payment) => (
-                <Card className="bg-red-200" key={payment.id}>
-                  <CardContent className="flex">
-                    <span className="w-[30%]">{payment.category.name}</span>
-                    <span className="w-[40%]">{payment.title || ""}</span>
-                    <span className="ml-auto">
-                      ¥{payment.amount.toLocaleString()}
-                    </span>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
