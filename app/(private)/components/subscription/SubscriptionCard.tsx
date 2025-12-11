@@ -1,11 +1,15 @@
 "use client";
-import { getSubscription, SubscriptionResponse } from "@/app/server-aciton/balance/getSubscription";
+import {
+  SubscriptionResponse,
+} from "@/app/server-aciton/balance/getSubscription";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -13,44 +17,22 @@ import {
 import { ScanSearch } from "lucide-react";
 import { DataTable } from "../../subscriptions/data-table";
 import { columns } from "../../subscriptions/columns";
-import { useEffect, useState } from "react";
 
 interface SubscriptionCardProps {
   monthlySubscription: SubscriptionResponse;
   year: number;
   month: number;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
 }
 
 const SubscriptionCard = ({
   monthlySubscription,
   year,
   month,
+  isOpen,
+  setIsOpen,
 }: SubscriptionCardProps) => {
-
-  const [isOpen,setIsOpen] = useState(false);
-  const [displayData,setDisplayData] = useState<SubscriptionResponse>(monthlySubscription);
-
-  const fetchData = async () => {
-    const result = await getSubscription({year,month});
-    if(result.success) {
-      setDisplayData(result.data);
-    }
-  }
-
-  useEffect(() => {
-    const handleUpdate = () => {
-      if(isOpen){
-        fetchData();
-      }
-    }
-
-    window.addEventListener("subscriptionUpdated", handleUpdate);
-
-    return () => {
-      window.removeEventListener("subscriptionUpdated", handleUpdate);
-    }
-  },[isOpen,year,month])
-
 
   return (
     <Card className="flex-1">
@@ -84,11 +66,20 @@ const SubscriptionCard = ({
                 account and remove your data from our servers.
               </DialogDescription>
             </DialogHeader>
+            <div className="flex-1 overflow-hidden">
               <DataTable
-                data={displayData.subscription}
+                data={monthlySubscription.subscription}
                 columns={columns}
-                maxHeight="65vh"
+                maxHeight="100%"
               />
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type="button" variant={"secondary"}>
+                  Close
+                </Button>
+              </DialogClose>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
       </CardContent>

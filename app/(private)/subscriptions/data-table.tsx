@@ -62,7 +62,7 @@ export function DataTable<TData, TValue>({
         />
         <AddSubscription />
       </div>
-      <div className="flex-1 overflow-y-auto rounded-md border">
+      <div className=" overflow-y-auto rounded-md border">
         <Table>
           <TableHeader className="sticky top-0 bg-background z-10">
             {table.getHeaderGroups().map((headerGroup) => (

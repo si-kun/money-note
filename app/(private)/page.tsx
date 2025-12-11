@@ -73,6 +73,9 @@ export default function Home() {
   const [year, setYear] = useState<number>(today.getFullYear());
   const [month, setMonth] = useState<number>(today.getMonth() + 1);
 
+  // ダイアログの開閉フラグ
+  const [isOpen, setIsOpen] = useState(false);
+
   const todayKey = today.toISOString().split("T")[0];
   const [selectedDate, setSelectedDate] = useState<SelectedData>({
     date: "",
@@ -84,6 +87,10 @@ export default function Home() {
   });
 
   const calendarRef = useRef<FullCalendar>(null);
+
+  useEffect(() => {
+    console.log("isOpen:", isOpen);
+  }, [isOpen]);
 
   useEffect(() => {
     const fetchBalanceData = async () => {
@@ -201,19 +208,33 @@ export default function Home() {
   }, [balanceData]);
 
   // 月ごとのサブスクを取得
-  useEffect(() => {
-    const fetchMonthlySubscriptions = async () => {
-      try {
-        const result = await getSubscription({ year, month });
+  const fetchMonthlySubscriptions = async () => {
+    try {
+      const result = await getSubscription({ year, month });
 
-        if (result.success) {
-          setMonthlySubscription(result.data);
-        }
-      } catch (error) {
-        console.error("Error fetching monthly subscriptions:", error);
+      if (result.success) {
+        setMonthlySubscription(result.data);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching monthly subscriptions:", error);
+    }
+  };
+  useEffect(() => {
     fetchMonthlySubscriptions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, year, month]);
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      fetchMonthlySubscriptions();
+    };
+
+    window.addEventListener("subscriptionUpdated", handleUpdate);
+
+    return () => {
+      window.removeEventListener("subscriptionUpdated", handleUpdate);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [year, month]);
 
   const handlePrevMonth = () => {
@@ -310,7 +331,13 @@ export default function Home() {
                   <SummaryCard title={"収入"} amount={monthlyIncomeTotal} />
                   <SummaryCard title={"支出"} amount={monthlyPaymentTotal} />
                 </div>
-                <SubscriptionCard monthlySubscription={monthlySubscription} year={year} month={month} />
+                <SubscriptionCard
+                  monthlySubscription={monthlySubscription}
+                  year={year}
+                  month={month}
+                  isOpen={isOpen}
+                  setIsOpen={setIsOpen}
+                />
                 <SummaryCard
                   title={"残高"}
                   amount={
