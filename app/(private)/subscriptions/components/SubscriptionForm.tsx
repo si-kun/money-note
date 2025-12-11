@@ -64,7 +64,7 @@ const SubscriptionForm = ({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Subscription Title</FormLabel>
               <FormControl>
                 <Input placeholder="shadcn" {...field} />
               </FormControl>
@@ -80,9 +80,11 @@ const SubscriptionForm = ({
           name="monthlyPrice"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>MonthlyPrice</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="shadcn" {...field} />
+                <Input type="number" placeholder="shadcn" {...field}
+                onChange={(e) => field.onChange(Number(e.target.value))}
+                />
               </FormControl>
               <FormDescription>
                 This is your public display name.

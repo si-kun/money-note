@@ -25,11 +25,13 @@ import AddSubscription from "./components/AddSubscription";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  maxHeight?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  maxHeight = "100%",
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setClolumnFilters] = useState<ColumnFiltersState>([]);
@@ -49,7 +51,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="space-y-4 h-full flex flex-col flex-1">
+    <div className="space-y-4 h-full flex flex-col flex-1" style={{ maxHeight }}>
       <div className="flex items-center gap-4">
         <Input
           placeholder="FIlter subscriptions..."

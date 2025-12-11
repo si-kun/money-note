@@ -51,6 +51,7 @@ function ActionsCell({ row }: { row: Subscription }) {
         console.log("Subscription deleted successfully");
         toast.success("Subscription deleted successfully");
         router.refresh();
+        window.dispatchEvent(new Event("subscriptionUpdated"));
       } else {
         console.error("Failed to delete subscription:", response.message);
         toast.error("Failed to delete subscription:" + response.message);
@@ -72,6 +73,7 @@ function ActionsCell({ row }: { row: Subscription }) {
         setIsDropdownOpen(false);
         router.refresh();
         reset();
+        window.dispatchEvent(new Event("subscriptionUpdated"));
       }
     } catch (error) {
       console.error("Error editing subscription:", error);

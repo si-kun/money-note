@@ -21,7 +21,7 @@ import {
 import Summary from "./components/Summary";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SummaryCard from "./components/SummaryCard";
-import SubscriptionCard from "./components/SubscriptionCard";
+import SubscriptionCard from "./components/subscription/SubscriptionCard";
 
 type BalanceData = Record<
   string,
@@ -282,7 +282,7 @@ export default function Home() {
         events={events}
         calendarRef={calendarRef}
       />
-      <Tabs defaultValue="account" className="basis-[35%]">
+      <Tabs defaultValue="day" className="flex-1">
         <TabsList>
           <TabsTrigger value="day">日次</TabsTrigger>
           <TabsTrigger value="month">月次</TabsTrigger>
@@ -310,7 +310,7 @@ export default function Home() {
                   <SummaryCard title={"収入"} amount={monthlyIncomeTotal} />
                   <SummaryCard title={"支出"} amount={monthlyPaymentTotal} />
                 </div>
-                <SubscriptionCard monthlySubscription={monthlySubscription} />
+                <SubscriptionCard monthlySubscription={monthlySubscription} year={year} month={month} />
                 <SummaryCard
                   title={"残高"}
                   amount={
