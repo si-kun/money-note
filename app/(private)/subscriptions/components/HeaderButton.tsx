@@ -1,15 +1,14 @@
 import { Button } from "@/components/ui/button"
-import { Subscription } from "@prisma/client"
 import { Column, SortDirection } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
 
-interface HeaderButtonProps {
-    column: Column<Subscription>
+interface HeaderButtonProps<TData> {
+    column: Column<TData, unknown>
     text: string
     isSorted? :boolean | SortDirection
 }
 
-const HeaderButton = ({column,text,isSorted}:HeaderButtonProps) => {
+const HeaderButton = <TData,>({column,text,isSorted}:HeaderButtonProps<TData>) => {
   return (
     <Button className={`${isSorted ? "bg-blue-400 text-white" : ""}`} variant={"ghost"}
     onClick={() => column.toggleSorting (column.getIsSorted() === "asc")}

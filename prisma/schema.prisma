@@ -24,6 +24,8 @@ model User {
   categories    Category[]
   payments      Payment[]
   incomes       Income[]
+  shoppingCarts     ShoppingCart[]
+  shoppingHistories ShoppingHistory[]
 }
 
 // 支払い履歴
@@ -37,34 +39,54 @@ model Payment {
   // リレーション
   userId     String
   categoryId String
-  user     User      @relation(fields: [userId], references: [id],onDelete: Cascade)
-  category   Category @relation(fields: [categoryId], references: [id],onDelete: Cascade)
+
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category        Category         @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  shoppingHistory ShoppingHistory?
 }
 
 // 収入履歴
 model Income {
   id         String   @id @default(uuid())
-  title       String?
-  memo        String?
+  title      String?
+  memo       String?
   amount     Int // 収入金額
   incomeDate DateTime @default(now())
 
   // リレーション 
   categoryId String
   userId     String
-  user     User      @relation(fields: [userId], references: [id],onDelete: Cascade)
-  category   Category @relation(fields: [categoryId], references: [id],onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
 // サブスクリプション
 model Subscription {
-  id           String @id @default(uuid())
+  id           String    @id @default(uuid())
   name         String
-  startDate    DateTime @default(now())
+  startDate    DateTime  @default(now())
   endDate      DateTime?
   monthlyPrice Int
   userId       String
-  user     User      @relation(fields: [userId], references: [id],onDelete: Cascade)
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// カテゴリー
+model Category {
+  id   String       @id @default(uuid())
+  name String
+  type CategoryType
+
+  // リレーション
+  userId   String
+  payments Payment[]
+  incomes  Income[]
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum CategoryType {
+  EXPENSE
+  INCOME
 }
 
 // 在庫管理
@@ -77,28 +99,47 @@ model Stock {
   unitPrice   Int? // 値段
 
   // リレーション
-  categoryId String
-  category   Category @relation(fields: [categoryId], references: [id],onDelete: Cascade)
+  items ShoppingCartItem[]
 
   userId String
-  user     User      @relation(fields: [userId], references: [id],onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-// カテゴリー
-model Category {
-  id   String @id @default(uuid())
-  name String
-  type CategoryType
-
-  // リレーション
-  userId   String
-  payments Payment[]
-  incomes  Income[]
-  stocks   Stock[]
-  user     User      @relation(fields: [userId], references: [id],onDelete: Cascade)
+// 買い物カート(買う前のリスト)
+model ShoppingCart {
+  id     String             @id @default(uuid())
+  items  ShoppingCartItem[]
+  userId String
+  user   User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-enum CategoryType {
-  EXPENSE
-  INCOME
+// 買い物履歴(買った後の記録)
+model ShoppingHistory {
+  id         String             @id @default(uuid())
+  date       DateTime           @default(now())
+  totalPrice Int?
+  items      ShoppingCartItem[]
+  paymentId  String?            @unique
+  payment    Payment?           @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// 商品(カートにも履歴にも使う)
+model ShoppingCartItem {
+  id       String  @id @default(uuid())
+  itemName String
+  quantity Int
+  unit     String
+  checked  Boolean @default(false)
+  memo     String?
+
+  // どちらかに属する(両方nullは禁止)
+  cartId    String?
+  cart      ShoppingCart?    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  historyId String?
+  history   ShoppingHistory? @relation(fields: [historyId], references: [id], onDelete: Cascade)
+
+  stockId String?
+  stock   Stock?  @relation(fields: [stockId], references: [id], onDelete: Cascade)
 }
