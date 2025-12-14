@@ -17,17 +17,17 @@ import {
 import { useState } from "react";
 import { Ellipsis } from "lucide-react";
 import { Row } from "@tanstack/react-table";
+import StockForm from "@/app/(private)/stock/components/StockForm";
+import { Stock } from "@prisma/client";
 
 interface ActionsCellProps<T> {
-  row: Row<T>;
+  row: Row<Stock>;
   onClickDelete?: () => void;
-  children?: React.ReactNode;
 }
 
 const ActionsCell = <T extends {name: string}>({
   row,
   onClickDelete,
-  children,
 }: ActionsCellProps<T>) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -62,7 +62,7 @@ const ActionsCell = <T extends {name: string}>({
               </DialogDescription>
             </DialogHeader>
 
-            {children}
+            <StockForm row={row} setIsDialogOpen={setIsDialogOpen} />
           </DialogContent>
         </Dialog>
       </DropdownMenuContent>

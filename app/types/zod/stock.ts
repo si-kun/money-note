@@ -1,6 +1,7 @@
 import z from "zod";
 
 export const stockSchema = z.object({
+    id: z.string().optional(),
     name: z.string().min(1, "Name is required"),
     quantity: z.number().min(0, "Quantity must be non-negative"),
     unit: z.string().min(1, "Unit is required"),

@@ -77,9 +77,7 @@ export const stockColumns: ColumnDef<Stock>[] = [
         }
       }
       return (
-        <ActionsCell row={row} onClickDelete={handleDelete}>
-          <StockForm row={row} />
-        </ActionsCell>
+        <ActionsCell row={row} onClickDelete={handleDelete} />
       );
     },
   },

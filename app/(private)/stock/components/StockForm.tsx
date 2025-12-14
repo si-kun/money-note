@@ -1,27 +1,31 @@
 "use client";
 
+import { editStock } from "@/app/server-aciton/stock/editStock";
 import { StockFormType, stockSchema } from "@/app/types/zod/stock";
 import { Button } from "@/components/ui/button";
 import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Stock } from "@prisma/client";
 import { Row } from "@tanstack/react-table";
-import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface StockFormProps {
   row?: Row<Stock>;
+  setIsDialogOpen: (open: boolean) => void;
 }
 
-const StockForm = ({ row }: StockFormProps) => {
+const StockForm = ({ row,setIsDialogOpen }: StockFormProps) => {
+  const router = useRouter();
+
   const form = useForm<StockFormType>({
     resolver: zodResolver(stockSchema),
     defaultValues: {
@@ -31,7 +35,6 @@ const StockForm = ({ row }: StockFormProps) => {
       unitPrice: row ? Number(row.getValue("unitPrice")) : 0,
     },
   });
-  console.log(row)
 
   const FROM_VALUES = [
     {
@@ -55,46 +58,56 @@ const StockForm = ({ row }: StockFormProps) => {
       name: "unitPrice",
     },
   ];
+  console.log(row)
 
-  const onSubmit = () => {
-    console.log("submit");
+  const onSubmit = async () => {
+    try {
+      await editStock({
+        id: row?.original.id as string,
+        data: form.getValues(),
+      });
+
+      toast.success("在庫が正常に編集されました。");
+      setIsDialogOpen(false);
+      router.refresh();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {FROM_VALUES.map((fromField) => (
-          <FormField
-            key={fromField.name}
-            control={form.control}
-            name={fromField.name as keyof StockFormType}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{fromField.label}</FormLabel>
-                <FormControl>
-                  <Input
-                    type={fromField.type}
-                    placeholder={fromField.label}
-                    {...field}
-                    value={field.value || ""}
-                    onChange={(e) =>
-                      fromField.type === "number"
-                        ? Number(field.onChange(Number(e.target.value)))
-                        : field.onChange(e.target.value)
-                    }
-                  />
-                </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        ))}
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
+    <form onSubmit={form.handleSubmit(onSubmit)}>
+      {FROM_VALUES.map((formField) => (
+        <Controller
+          key={formField.name}
+          name={formField.name as keyof StockFormType}
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>{formField.label}</FieldLabel>
+              <Input
+                {...field}
+                id={field.name}
+                type={formField.type}
+                aria-invalid={fieldState.invalid}
+                placeholder="Login button not working on mobile"
+                autoComplete="off"
+                onChange={(e) =>
+                  formField.type === "number"
+                    ? field.onChange(Number(e.target.value))
+                    : field.onChange(e.target.value)
+                }
+              />
+              <FieldDescription>
+                Provide a concise title for your bug report.
+              </FieldDescription>
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+      ))}
+      <Button type="submit">更新</Button>
+    </form>
   );
 };
 
