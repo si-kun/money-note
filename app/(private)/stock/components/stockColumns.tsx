@@ -4,7 +4,6 @@ import { Stock } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import HeaderButton from "../../subscriptions/components/HeaderButton";
 import ActionsCell from "@/components/dataTable/ActionsCell";
-import StockForm from "./StockForm";
 import { deleteStock } from "@/app/server-aciton/stock/deleteStock";
 import { toast } from "sonner";
 

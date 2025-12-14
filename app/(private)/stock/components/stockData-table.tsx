@@ -25,6 +25,7 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Stock } from "@prisma/client";
 import { useRouter } from "next/navigation";
+import AddStockButton from "./AddStockButton";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -68,15 +69,16 @@ export function StockDataTable<TData extends Stock, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center justify-center py-4 gap-4">
         <Input
           placeholder="Filter names..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="flex-1"
         />
+        <AddStockButton />
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table>

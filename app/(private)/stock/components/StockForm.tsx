@@ -1,5 +1,6 @@
 "use client";
 
+import { addStock } from "@/app/server-aciton/stock/addStock";
 import { editStock } from "@/app/server-aciton/stock/editStock";
 import { StockFormType, stockSchema } from "@/app/types/zod/stock";
 import { Button } from "@/components/ui/button";
@@ -7,14 +8,12 @@ import {
   Field,
   FieldDescription,
   FieldError,
-  FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Stock } from "@prisma/client";
 import { Row } from "@tanstack/react-table";
-import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -23,8 +22,7 @@ interface StockFormProps {
   setIsDialogOpen: (open: boolean) => void;
 }
 
-const StockForm = ({ row,setIsDialogOpen }: StockFormProps) => {
-  const router = useRouter();
+const StockForm = ({ row, setIsDialogOpen }: StockFormProps) => {
 
   const form = useForm<StockFormType>({
     resolver: zodResolver(stockSchema),
@@ -53,23 +51,32 @@ const StockForm = ({ row,setIsDialogOpen }: StockFormProps) => {
       name: "unit",
     },
     {
+      label: "最小在庫設定数",
+      type: "number",
+      name: "minQuantity",
+    },
+    {
       label: "商品単価",
       type: "number",
       name: "unitPrice",
     },
   ];
-  console.log(row)
 
   const onSubmit = async () => {
     try {
-      await editStock({
-        id: row?.original.id as string,
-        data: form.getValues(),
-      });
+      if (row) {
+        await editStock({
+          id: row?.original.id as string,
+          data: form.getValues(),
+        });
+        toast.success("在庫が正常に編集されました。");
+      } else {
+        await addStock(form.getValues());
+        toast.success("在庫が正常に追加されました。");
+      }
 
-      toast.success("在庫が正常に編集されました。");
       setIsDialogOpen(false);
-      router.refresh();
+      window.dispatchEvent(new Event("stockUpdated"));
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -106,7 +113,11 @@ const StockForm = ({ row,setIsDialogOpen }: StockFormProps) => {
           )}
         />
       ))}
-      <Button type="submit">更新</Button>
+
+        <Button type="submit">{row ? "更新" : "登録する"}</Button>
+
+
+
     </form>
   );
 };
