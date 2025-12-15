@@ -23,7 +23,6 @@ interface StockFormProps {
 }
 
 const StockForm = ({ row, setIsDialogOpen }: StockFormProps) => {
-
   const form = useForm<StockFormType>({
     resolver: zodResolver(stockSchema),
     defaultValues: {
@@ -34,7 +33,7 @@ const StockForm = ({ row, setIsDialogOpen }: StockFormProps) => {
     },
   });
 
-  const FROM_VALUES = [
+  const FORM_VALUES = [
     {
       label: "商品名",
       type: "text",
@@ -84,7 +83,7 @@ const StockForm = ({ row, setIsDialogOpen }: StockFormProps) => {
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
-      {FROM_VALUES.map((formField) => (
+      {FORM_VALUES.map((formField) => (
         <Controller
           key={formField.name}
           name={formField.name as keyof StockFormType}
@@ -114,10 +113,7 @@ const StockForm = ({ row, setIsDialogOpen }: StockFormProps) => {
         />
       ))}
 
-        <Button type="submit">{row ? "更新" : "登録する"}</Button>
-
-
-
+      <Button type="submit">{row ? "更新" : "登録する"}</Button>
     </form>
   );
 };

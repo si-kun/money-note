@@ -18,9 +18,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import AddSubscription from "./components/AddSubscription";
+import { useRouter } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -33,8 +34,21 @@ export function DataTable<TData, TValue>({
   data,
   maxHeight = "100%",
 }: DataTableProps<TData, TValue>) {
+  const router = useRouter();
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setClolumnFilters] = useState<ColumnFiltersState>([]);
+
+  useEffect(() => {
+    const handleSubscriptionUpdate = () => {
+      router.refresh();
+    }
+
+    window.addEventListener("subscriptionUpdated", handleSubscriptionUpdate);
+
+    return () => {
+      window.removeEventListener("subscriptionUpdated", handleSubscriptionUpdate);
+    };
+  },[router])
 
   const table = useReactTable({
     data,

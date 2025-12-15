@@ -6,6 +6,7 @@ import HeaderButton from "../../subscriptions/components/HeaderButton";
 import ActionsCell from "@/components/dataTable/ActionsCell";
 import { deleteStock } from "@/app/server-aciton/stock/deleteStock";
 import { toast } from "sonner";
+import StockForm from "./StockForm";
 
 export const stockColumns: ColumnDef<Stock>[] = [
   {
@@ -66,17 +67,21 @@ export const stockColumns: ColumnDef<Stock>[] = [
     header: "Actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const handleDelete = async() => {
+      const handleDelete = async () => {
         try {
           await deleteStock(row.original.id);
           toast.success("Stock deleted successfully");
           window.dispatchEvent(new Event("stockUpdated"));
-        } catch(error) {
+        } catch (error) {
           console.error("Error deleting stock:", error);
         }
-      }
+      };
       return (
-        <ActionsCell row={row} onClickDelete={handleDelete} />
+        <ActionsCell row={row} onClickDelete={handleDelete}>
+          {({ row, setIsDialogOpen }) => (
+            <StockForm row={row} setIsDialogOpen={setIsDialogOpen} />
+          )}
+        </ActionsCell>
       );
     },
   },

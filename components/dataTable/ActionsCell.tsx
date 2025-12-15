@@ -17,20 +17,30 @@ import {
 import { useState } from "react";
 import { Ellipsis } from "lucide-react";
 import { Row } from "@tanstack/react-table";
-import StockForm from "@/app/(private)/stock/components/StockForm";
-import { Stock } from "@prisma/client";
 
 interface ActionsCellProps<T> {
-  row: Row<Stock>;
+  row: Row<T>;
   onClickDelete?: () => void;
+  children: (props: {
+    row: Row<T>;
+    setIsDialogOpen: (open: boolean) => void;
+  }) => React.ReactNode;
 }
 
-const ActionsCell = <T extends {name: string}>({
+const ActionsCell = <T extends { name: string }>({
   row,
   onClickDelete,
+  children,
 }: ActionsCellProps<T>) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const handleDialogChange = (open: boolean) => {
+    setIsDialogOpen(open);
+    if (!open) {
+      setIsDropdownOpen(false);
+    }
+  }
 
   return (
     <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
@@ -42,12 +52,10 @@ const ActionsCell = <T extends {name: string}>({
           delete
         </DropdownMenuItem>
 
-        <Dialog open={isDialogOpen} onOpenChange={(open) => {
-            setIsDialogOpen(open)
-            if(!open) {
-              setIsDropdownOpen(false)
-            }
-        }}>
+        <Dialog
+          open={isDialogOpen}
+          onOpenChange={handleDialogChange}
+        >
           <DialogTrigger asChild>
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               edit
@@ -61,8 +69,7 @@ const ActionsCell = <T extends {name: string}>({
                 account and remove your data from our servers.
               </DialogDescription>
             </DialogHeader>
-
-            <StockForm row={row} setIsDialogOpen={setIsDialogOpen} />
+            {children({ row, setIsDialogOpen: handleDialogChange })}
           </DialogContent>
         </Dialog>
       </DropdownMenuContent>

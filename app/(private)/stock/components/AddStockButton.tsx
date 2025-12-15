@@ -20,7 +20,7 @@ const AddStockButton = () => {
           新規登録
         </Button>
       </DialogTrigger>
-      <DialogContent className="min-w-[50vw]">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Are you absolutely sure?</DialogTitle>
           <DialogDescription>
