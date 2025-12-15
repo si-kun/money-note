@@ -9,6 +9,9 @@ export const getAllStock = async ():Promise<ApiResponse<Stock[]>> => {
         const response = await prisma.stock.findMany({
             where: {
                 userId: "test-user-id",
+            },
+            orderBy: {
+                quantity: "desc",
             }
         })
 
