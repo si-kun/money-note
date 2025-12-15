@@ -7,10 +7,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import SubscriptionForm from "./SubscriptionForm";
 import { useState } from "react";
 
-const AddSubscription = () => {
+interface AddButtonProps {
+    children: (setIsDialogOpen: (open: boolean) => void) => React.ReactNode;
+}
+
+const AddButton = ({children}:AddButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
@@ -28,10 +31,9 @@ const AddSubscription = () => {
             account and remove your data from our servers.
           </DialogDescription>
         </DialogHeader>
-        <SubscriptionForm setIsDialogOpen={setIsDialogOpen} />
+        {children(setIsDialogOpen)}
       </DialogContent>
     </Dialog>
   );
 };
-
-export default AddSubscription;
+export default AddButton

@@ -25,7 +25,8 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Stock } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import AddStockButton from "./AddStockButton";
+import AddButton from "@/components/button/AddButton";
+import StockForm from "./StockForm";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -44,13 +45,13 @@ export function StockDataTable<TData extends Stock, TValue>({
   useEffect(() => {
     const handleStockUpdate = () => {
       router.refresh();
-    }
+    };
     window.addEventListener("stockUpdated", handleStockUpdate);
 
     return () => {
       window.removeEventListener("stockUpdated", handleStockUpdate);
     };
-  },[router])
+  }, [router]);
 
   const table = useReactTable({
     data,
@@ -78,7 +79,9 @@ export function StockDataTable<TData extends Stock, TValue>({
           }
           className="flex-1"
         />
-        <AddStockButton />
+        <AddButton >
+          {(setIsDialogOpen) => <StockForm setIsDialogOpen={setIsDialogOpen} />}
+        </AddButton>
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table>

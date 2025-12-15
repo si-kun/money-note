@@ -20,8 +20,9 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import AddSubscription from "./components/AddSubscription";
 import { useRouter } from "next/navigation";
+import AddButton from "@/components/button/AddButton";
+import SubscriptionForm from "./components/SubscriptionForm";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -74,7 +75,11 @@ export function DataTable<TData, TValue>({
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
         />
-        <AddSubscription />
+        <AddButton>
+          {(setIsDialogOpen) => (
+            <SubscriptionForm setIsDialogOpen={setIsDialogOpen}  />
+          )}
+        </AddButton>
       </div>
       <div className=" overflow-y-auto rounded-md border">
         <Table>
