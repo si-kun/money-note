@@ -117,7 +117,6 @@ model ShoppingCart {
 model ShoppingHistory {
   id         String             @id @default(uuid())
   date       DateTime           @default(now())
-  totalPrice Int?
   items      ShoppingCartItem[]
   paymentId  String?            @unique
   payment    Payment?           @relation(fields: [paymentId], references: [id], onDelete: Cascade)
