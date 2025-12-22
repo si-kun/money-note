@@ -8,6 +8,9 @@ import { columns } from "./shoppingColumns";
 import AddCartDialog from "./AddCartDialog";
 import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/getShoppingCart";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { buyShoppingCart } from "@/app/server-aciton/shopping/buyShoppingCart";
+import { toast } from "sonner";
 
 interface ShoppingClientProps {
   cartData: ShoppingCartWithItems[];
@@ -43,12 +46,29 @@ export default function ShoppingClient({
     };
   }, [router]);
 
-  const selectedItem = selectedItemId ? (activeTab === "cart" ? cartData: historyData).find(
-    (item) => item.id === selectedItemId
-  ) : null;
+  const selectedItem = selectedItemId
+    ? (activeTab === "cart" ? cartData : historyData).find(
+        (item) => item.id === selectedItemId
+      )
+    : null;
 
   const handleSelectItem = (id: string) => {
     setSelectedItemId(id);
+  };
+
+  const handleAddHistory = async() => {
+    try {
+      const response = await buyShoppingCart(selectedItemId as string);
+      if(response.success) {
+        router.refresh();
+        toast.success("購入が完了しました");
+      } else {
+        toast.error("購入に失敗しました");
+      }
+    } catch(error) {
+      console.error("Error purchasing cart:", error);
+      toast.error("購入中にエラーが発生しました");
+    }
   }
 
   return (
@@ -142,11 +162,23 @@ export default function ShoppingClient({
                 </div>
                 <AddCartDialog />
               </CardHeader>
-              <CardContent>
+              <CardContent className="flex flex-col gap-4">
                 <ShoppingItemTable
                   items={selectedItem.items || []}
                   columns={columns}
                 />
+                <Button
+                  disabled={
+                    selectedItem.items?.filter((item) => item.checked)
+                      .length === 0
+                  }
+                  type="button"
+                  className="ml-auto bg-green-500 hover:bg-green-400 disabled:bg-slate-400"
+                  variant={"secondary"}
+                  onClick={handleAddHistory}
+                >
+                  選択中のアイテムを購入
+                </Button>
               </CardContent>
             </Card>
           ) : (

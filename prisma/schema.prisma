@@ -118,6 +118,7 @@ model ShoppingHistory {
   id         String             @id @default(uuid())
   date       DateTime           @default(now())
   items      ShoppingCartItem[]
+  totalPrice Int?
   paymentId  String?            @unique
   payment    Payment?           @relation(fields: [paymentId], references: [id], onDelete: Cascade)
   userId     String
@@ -130,6 +131,7 @@ model ShoppingCartItem {
   itemName String
   quantity Int
   unit     String
+  unitPrice Int?
   checked  Boolean @default(false)
   memo     String?
 
