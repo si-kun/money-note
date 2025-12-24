@@ -8,15 +8,6 @@ import { deleteStock } from "@/app/server-aciton/stock/deleteStock";
 import { toast } from "sonner";
 import StockForm from "./StockForm";
 
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import SelectedCart from "./SelectedCart";
 
@@ -121,11 +112,24 @@ export const stockColumns: ColumnDef<Stock>[] = [
   {
     accessorKey: "cartSelection",
     header: "カート選択",
-    cell: ({ table }) => {
+    cell: ({ row, table }) => {
       const carts = table.options.meta?.carts || [];
+      const stock = row.original;
+
+      const cartWithStock = carts.find((cart) => {
+        return cart.items.some((item) => item.stockId === stock.id)
+      })
 
       return (
-          <SelectedCart carts={carts} />
+          <div>
+            {cartWithStock ? (
+              <span>
+                {cartWithStock.id}
+              </span>
+            ): (
+              <span>-</span>
+            )}
+          </div>
       );
     },
   },
