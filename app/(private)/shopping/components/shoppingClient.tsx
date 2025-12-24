@@ -18,8 +18,6 @@ interface ShoppingClientProps {
 }
 
 export default function ShoppingClient({
-  // cartData: initialCartData,
-  // historyData: initialHistroryData,
   cartData,
   historyData,
 }: ShoppingClientProps) {
@@ -70,6 +68,8 @@ export default function ShoppingClient({
       toast.error("購入中にエラーが発生しました");
     }
   }
+
+  console.log(selectedItem)
 
   return (
     <div className="flex w-full gap-6 h-full overflow-hidden">
@@ -185,19 +185,19 @@ export default function ShoppingClient({
             <Card>
               <CardHeader>
                 <CardTitle>
-                  {activeTab === "history"
-                    ? selectedItem.id
-                    : new Date(selectedItem.date).toLocaleDateString()}
+                  {activeTab === "history" &&
+                    new Date(selectedItem.date).toLocaleDateString()}
                 </CardTitle>
                 <p className="text-sm text-muted-foreground">
                   {selectedItem.items?.length || 0}件のアイテム
                 </p>
               </CardHeader>
-              <CardContent>
+              <CardContent className="flex flex-col gap-4">
                 <ShoppingItemTable
                   items={selectedItem.items || []}
                   columns={columns}
                 />
+                <span className="font-semibold ml-auto">合計金額：¥{selectedItem.totalPrice.toLocaleString()}</span>
               </CardContent>
             </Card>
           )

@@ -10,6 +10,7 @@ import {
   getSortedRowModel,
   getFilteredRowModel,
   useReactTable,
+  RowData,
 } from "@tanstack/react-table";
 
 import {
@@ -27,20 +28,35 @@ import { Stock } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import AddButton from "@/components/button/AddButton";
 import StockForm from "./StockForm";
+import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/getShoppingCart";
+import AddStockDialog from "./AddStockDialog";
+
+declare module "@tanstack/react-table" {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface TableMeta<TData extends RowData> {
+    carts?: ShoppingCartWithItems[];
+  }
+}
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  carts: ShoppingCartWithItems[];
 }
 
 export function StockDataTable<TData extends Stock, TValue>({
   columns,
   data,
+  carts,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
+  const [rowSelection, setRowSelection] = useState({});
+
   const router = useRouter();
+
+  console.log(data)
 
   useEffect(() => {
     const handleStockUpdate = () => {
@@ -57,6 +73,7 @@ export function StockDataTable<TData extends Stock, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    enableRowSelection: true,
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
@@ -65,6 +82,11 @@ export function StockDataTable<TData extends Stock, TValue>({
     state: {
       sorting,
       columnFilters,
+      rowSelection,
+    },
+    onRowSelectionChange: setRowSelection,
+    meta: {
+      carts,
     },
   });
 
@@ -79,7 +101,7 @@ export function StockDataTable<TData extends Stock, TValue>({
           }
           className="flex-1"
         />
-        <AddButton >
+        <AddButton>
           {(setIsDialogOpen) => <StockForm setIsDialogOpen={setIsDialogOpen} />}
         </AddButton>
       </div>
@@ -142,21 +164,24 @@ export function StockDataTable<TData extends Stock, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center gap-2 mt-4">
-        <Button
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.previousPage()}
-          className="bg-blue-500 hover:bg-blue-600 text-white disabled:bg-slate-400"
-        >
-          prev
-        </Button>
-        <Button
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.nextPage()}
-          className="bg-blue-500 hover:bg-blue-600 text-white disabled:bg-slate-400"
-        >
-          next
-        </Button>
+      <div className="flex items-center justify-between mt-4">
+        <div className="flex items-center gap-2">
+          <Button
+            disabled={!table.getCanPreviousPage()}
+            onClick={() => table.previousPage()}
+            className="bg-blue-500 hover:bg-blue-600 text-white disabled:bg-slate-400"
+          >
+            prev
+          </Button>
+          <Button
+            disabled={!table.getCanNextPage()}
+            onClick={() => table.nextPage()}
+            className="bg-blue-500 hover:bg-blue-600 text-white disabled:bg-slate-400"
+          >
+            next
+          </Button>
+        </div>
+        <AddStockDialog table={table} carts={carts} />
       </div>
     </div>
   );

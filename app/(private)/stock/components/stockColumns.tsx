@@ -8,7 +8,40 @@ import { deleteStock } from "@/app/server-aciton/stock/deleteStock";
 import { toast } from "sonner";
 import StockForm from "./StockForm";
 
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import SelectedCart from "./SelectedCart";
+
 export const stockColumns: ColumnDef<Stock>[] = [
+  {
+    id: "select",  // ← "checked"ではなく"select"
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    size: 50,
+  },
   {
     accessorKey: "name",
     header: "商品名",
@@ -82,6 +115,17 @@ export const stockColumns: ColumnDef<Stock>[] = [
             <StockForm row={row} setIsDialogOpen={setIsDialogOpen} />
           )}
         </ActionsCell>
+      );
+    },
+  },
+  {
+    accessorKey: "cartSelection",
+    header: "カート選択",
+    cell: ({ table }) => {
+      const carts = table.options.meta?.carts || [];
+
+      return (
+          <SelectedCart carts={carts} />
       );
     },
   },

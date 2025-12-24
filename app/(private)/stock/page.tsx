@@ -2,6 +2,7 @@ import { StockDataTable } from "@/app/(private)/stock/components/stockData-table
 import { Stock } from "@prisma/client"
 import { stockColumns } from "./components/stockColumns"
 import { getAllStock } from "@/app/server-aciton/stock/getAllStock"
+import { getShoppingCart } from "@/app/server-aciton/shopping/getShoppingCart"
 
  
 async function getData(): Promise<Stock[]> {
@@ -21,10 +22,12 @@ async function getData(): Promise<Stock[]> {
 const StockPage = async () => {
 
   const data = await getData()
+  const cartsResponse = await getShoppingCart()
+  const carts = cartsResponse.data || []
 
   return (
     <div className="container mx-auto py-10">
-      <StockDataTable columns={stockColumns} data={data} />
+      <StockDataTable columns={stockColumns} data={data} carts={carts} />
     </div>
   )
 }
