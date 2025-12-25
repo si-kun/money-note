@@ -9,11 +9,11 @@ import { toast } from "sonner";
 import StockForm from "./StockForm";
 
 import { Checkbox } from "@/components/ui/checkbox";
-import SelectedCart from "./SelectedCart";
+import Link from "next/link";
 
 export const stockColumns: ColumnDef<Stock>[] = [
   {
-    id: "select",  // ← "checked"ではなく"select"
+    id: "select", // ← "checked"ではなく"select"
     header: ({ table }) => (
       <Checkbox
         checked={
@@ -24,13 +24,24 @@ export const stockColumns: ColumnDef<Stock>[] = [
         aria-label="Select all"
       />
     ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
+    cell: ({ row, table }) => {
+      const carts = table.options.meta?.carts || [];
+      const stock = row.original;
+
+      // カートに存在する在庫は選択不可にする
+      const isInCart = carts.some((cart) =>
+        cart.items.some((item) => item.stockId === stock.id)
+      );
+
+      return (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+          disabled={isInCart}
+        />
+      );
+    },
     size: 50,
   },
   {
@@ -111,25 +122,25 @@ export const stockColumns: ColumnDef<Stock>[] = [
   },
   {
     accessorKey: "cartSelection",
-    header: "カート選択",
+    header: "カート",
     cell: ({ row, table }) => {
       const carts = table.options.meta?.carts || [];
       const stock = row.original;
 
       const cartWithStock = carts.find((cart) => {
-        return cart.items.some((item) => item.stockId === stock.id)
-      })
+        return cart.items.some((item) => item.stockId === stock.id);
+      });
 
       return (
-          <div>
-            {cartWithStock ? (
-              <span>
-                {cartWithStock.id}
-              </span>
-            ): (
-              <span>-</span>
-            )}
-          </div>
+        <div>
+          {cartWithStock ? (
+            <Link href={`/shopping/cart/${cartWithStock.id}`} className="text-blue-600 hover:underline font-medium">
+              {cartWithStock.id}
+            </Link>
+          ) : (
+            <span>-</span>
+          )}
+        </div>
       );
     },
   },
