@@ -1,10 +1,14 @@
 "use client";
 
 import { updateShoppingChecked } from "@/app/server-aciton/shopping/updateShoppingChecked";
+import ActionsCell from "@/components/dataTable/ActionsCell";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { ShoppingCartItem } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
+import EditShopping from "./EditShopping";
+import { deleteShoppingCart } from "@/app/server-aciton/shopping/deleteShoppinCart";
+import { toast } from "sonner";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -50,7 +54,7 @@ export const columns: ColumnDef<ShoppingCartItem>[] = [
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         <span>{row.original.quantity}</span>
-        <Input type="number"  className="w-[60px]" />
+        <Input type="number" className="w-[60px]" />
       </div>
     ),
   },
@@ -58,5 +62,28 @@ export const columns: ColumnDef<ShoppingCartItem>[] = [
     accessorKey: "unitPrice",
     header: "値段",
     cell: ({ row }) => `${row.original.unitPrice?.toLocaleString()}円`,
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      const handleDelete = async () => {
+        try {
+          const result = await deleteShoppingCart(row.original.id);
+          if (result.success) {
+            toast.success("Item deleted successfully");
+          }
+        } catch (error) {
+          console.error("Error deleting shopping cart item:", error);
+        }
+      };
+      return (
+        <ActionsCell onClickDelete={handleDelete} row={row}>
+          {({ row, setIsDialogOpen }) => (
+            <EditShopping row={row} setIsDialogOpen={setIsDialogOpen} />
+          )}
+        </ActionsCell>
+      );
+    },
   },
 ];

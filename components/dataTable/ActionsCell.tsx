@@ -27,7 +27,7 @@ interface ActionsCellProps<T> {
   }) => React.ReactNode;
 }
 
-const ActionsCell = <T extends { name: string }>({
+const ActionsCell =<T,>({
   row,
   onClickDelete,
   children,
@@ -63,7 +63,7 @@ const ActionsCell = <T extends { name: string }>({
           </DialogTrigger>
           <DialogContent className="w-full">
             <DialogHeader>
-              <DialogTitle>{row.original.name}</DialogTitle>
+              <DialogTitle>編集</DialogTitle>
               <DialogDescription>
                 This action cannot be undone. This will permanently delete your
                 account and remove your data from our servers.

@@ -20,7 +20,6 @@ const ShoppingDetailPage = async({params} : CartDetailPageProps) => {
 
   const selectedCart = carts.find((cart) => cart.id === id);
   console.log("selectedCart", carts);
-  console.log(params)
 
   if (!selectedCart) {
     return (
