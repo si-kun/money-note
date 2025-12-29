@@ -5,7 +5,8 @@ import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePath } from "next/cache";
 
 export const deleteShoppingCartItem = async (
-  itemId: string
+  itemId: string,
+  cartId: string | null
 ): Promise<ApiResponse<null>> => {
   try {
     await prisma.shoppingCartItem.delete({
@@ -13,6 +14,23 @@ export const deleteShoppingCartItem = async (
         id: itemId,
       },
     });
+
+    // カートの中身が空になったらカート自体も削除する
+    if (cartId) {
+      const remainingItems = await prisma.shoppingCartItem.count({
+        where: {
+          cartId,
+        },
+      });
+
+      if (remainingItems === 0) {
+        await prisma.shoppingCart.delete({
+          where: {
+            id: cartId,
+          },
+        });
+      }
+    }
 
     revalidatePath("/shopping");
 

@@ -1,7 +1,7 @@
 import { getShoppingHistory } from "@/app/server-aciton/shopping/getShoppingHistory";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ShoppingItemTable } from "../../components/shoppingData-table";
-import { columns } from "../../components/shoppingColumns";
+import { historyColumns } from "../components/historyColumn";
 
 interface HistroyDetailPage {
     params: Promise<{
@@ -39,7 +39,7 @@ const HistroyDetailPage = async({params}:HistroyDetailPage) => {
         </div>
       </CardHeader>
       <CardContent>
-        <ShoppingItemTable items={selectedHistory.items || []} columns={columns} />
+        <ShoppingItemTable items={selectedHistory.items || []} columns={historyColumns} />
       </CardContent>
       <CardFooter>
         <div className="w-full flex justify-end">

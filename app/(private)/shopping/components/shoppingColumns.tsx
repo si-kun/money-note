@@ -19,11 +19,7 @@ export const columns: ColumnDef<ShoppingCartItem>[] = [
         className="data-[state=checked]:bg-green-400 data-[state=checked]:border-none"
         checked={row.original.checked}
         onCheckedChange={async () => {
-         await updateShoppingChecked(
-            row.original.id,
-            !row.original.checked
-          );
-
+          await updateShoppingChecked(row.original.id, !row.original.checked);
         }}
       />
     ),
@@ -53,7 +49,10 @@ export const columns: ColumnDef<ShoppingCartItem>[] = [
     cell: ({ row }) => {
       const handleDelete = async () => {
         try {
-          const result = await deleteShoppingCartItem(row.original.id);
+          const result = await deleteShoppingCartItem(
+            row.original.id,
+            row.original.cartId
+          );
           if (result.success) {
             toast.success("Item deleted successfully");
           }

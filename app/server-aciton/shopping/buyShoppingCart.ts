@@ -28,14 +28,6 @@ export const buyShoppingCart = async (
         date: new Date(),
         userId: "test-user-id",
         totalPrice,
-        items: {
-          create: cartItems.map((item) => ({
-            itemName: item.itemName,
-            quantity: item.quantity,
-            unit: item.unit,
-            unitPrice: item.unitPrice,
-          })),
-        },
       },
       include: {
         items: true,
@@ -54,13 +46,19 @@ export const buyShoppingCart = async (
       }
     })
 
-    // ShoppingCartからチェックがtrueのアイテムを削除
-    await prisma.shoppingCartItem.deleteMany({
+    // カートの中身が空になったらカート自体も削除する
+    const remainingItems = await prisma.shoppingCartItem.count({
       where: {
         cartId,
-        checked: true,
       },
     });
+    if (remainingItems === 0) {
+      await prisma.shoppingCart.delete({
+        where: {
+          id: cartId,
+        },
+      });
+    }
 
     revalidatePath("/shopping");
 

@@ -11,7 +11,6 @@ interface BuyButtonProps {
 
 const BuyButton = ({selectedCart}:BuyButtonProps) => {
 
-   
   const handlebuyItems = async () => {
     try {
       await buyShoppingCart(selectedCart.id);
