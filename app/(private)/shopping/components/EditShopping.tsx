@@ -1,9 +1,7 @@
 "use client";
-import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,29 +13,14 @@ import {
 } from "@/components/ui/card";
 import {
   Field,
-  FieldDescription,
-  FieldError,
   FieldGroup,
-  FieldLabel,
 } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroupTextarea,
-} from "@/components/ui/input-group";
-const formSchema = z.object({
-  itemName: z.string().min(1, "Item name is required."),
-  quantity: z.number().min(1, "Quantity must be at least 1."),
-  unit: z.string().min(1, "Unit is required."),
-  unitPrice: z.optional(z.number().min(0, "Unit price must be at least 0.")),
-  memo: z.optional(z.string()),
-});
 
 import { ShoppingCartItem } from "@prisma/client";
 import { Row } from "@tanstack/react-table";
 import FormControllerStrNum from "@/components/form/FormControllerStrNum";
+import { editShoppingCartItem } from "@/app/server-aciton/shopping/editShoppingCartItem";
+import { ShoppingCartItemInput, shoppingCartItemSchema } from "@/app/types/zod/shoppingCartItem";
 
 interface EditShoppingProps {
   row: Row<ShoppingCartItem>;
@@ -45,32 +28,35 @@ interface EditShoppingProps {
 }
 
 const EditShopping = ({ row, setIsDialogOpen }: EditShoppingProps) => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<ShoppingCartItemInput>({
+    resolver: zodResolver(shoppingCartItemSchema),
     defaultValues: {
       itemName: row.original.itemName,
       quantity: row.original.quantity,
       unit: row.original.unit,
-      unitPrice: row.original.unitPrice ?? undefined,
-      memo: row.original.memo ?? undefined,
+      unitPrice: row.original.unitPrice || 0,
+      memo: row.original.memo || "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    toast("You submitted the following values:", {
-      description: (
-        <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-          <code>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-      position: "bottom-right",
-      classNames: {
-        content: "flex flex-col gap-2",
-      },
-      style: {
-        "--border-radius": "calc(var(--radius)  + 4px)",
-      } as React.CSSProperties,
-    });
+  const onSubmit = async (data: ShoppingCartItemInput) => {
+    try {
+      await editShoppingCartItem({
+        itemId: row.original.id,
+        data: {
+          itemName: data.itemName,
+          quantity: Number(data.quantity),
+          unit: data.unit,
+          unitPrice: data.unitPrice,
+          memo: data.memo,
+        }
+      })
+      toast.success("ショッピングアイテムを更新しました");
+      setIsDialogOpen(false);
+    } catch(error) {
+      console.error("Error updating shopping item:", error);
+      toast.error("更新中にエラーが発生しました");
+    }
   }
   return (
     <Card className="w-full sm:max-w-md">
@@ -93,7 +79,6 @@ const EditShopping = ({ row, setIsDialogOpen }: EditShoppingProps) => {
                 name="quantity"
                 label="Quantity"
                 control={form.control}
-                type="number"
               />
               <FormControllerStrNum
                 name="unit"
@@ -104,7 +89,6 @@ const EditShopping = ({ row, setIsDialogOpen }: EditShoppingProps) => {
                 name="unitPrice"
                 label="Unit Price"
                 control={form.control}
-                type="number"
               />
             </div>
             <FormControllerStrNum

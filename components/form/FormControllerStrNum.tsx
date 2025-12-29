@@ -20,12 +20,12 @@ const FormControllerStrNum = ({name,label,control}:FormControllerStrNumProps) =>
     control={control}
     render={({ field, fieldState }) => (
       <Field data-invalid={fieldState.invalid}>
-        <FieldLabel htmlFor="form-rhf-demo-title">
+        <FieldLabel htmlFor={name}>
           {label}
         </FieldLabel>
         <Input
           {...field}
-          id="form-rhf-demo-title"
+          id={name}
           aria-invalid={fieldState.invalid}
           placeholder="Login button not working on mobile"
           autoComplete="off"

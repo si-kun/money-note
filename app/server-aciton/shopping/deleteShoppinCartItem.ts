@@ -4,7 +4,7 @@ import { ApiResponse } from "@/app/types/api/api";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePath } from "next/cache";
 
-export const deleteShoppingCart = async (
+export const deleteShoppingCartItem = async (
   itemId: string
 ): Promise<ApiResponse<null>> => {
   try {

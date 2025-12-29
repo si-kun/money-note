@@ -7,17 +7,8 @@ import { Input } from "@/components/ui/input";
 import { ShoppingCartItem } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import EditShopping from "./EditShopping";
-import { deleteShoppingCart } from "@/app/server-aciton/shopping/deleteShoppinCart";
+import { deleteShoppingCartItem } from "@/app/server-aciton/shopping/deleteShoppinCartItem";
 import { toast } from "sonner";
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
 
 export const columns: ColumnDef<ShoppingCartItem>[] = [
   {
@@ -69,7 +60,7 @@ export const columns: ColumnDef<ShoppingCartItem>[] = [
     cell: ({ row }) => {
       const handleDelete = async () => {
         try {
-          const result = await deleteShoppingCart(row.original.id);
+          const result = await deleteShoppingCartItem(row.original.id);
           if (result.success) {
             toast.success("Item deleted successfully");
           }
