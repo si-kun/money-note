@@ -19,18 +19,11 @@ export const columns: ColumnDef<ShoppingCartItem>[] = [
         className="data-[state=checked]:bg-green-400 data-[state=checked]:border-none"
         checked={row.original.checked}
         onCheckedChange={async () => {
-          console.log(
-            "チェック変更開始:",
+         await updateShoppingChecked(
             row.original.id,
             !row.original.checked
           );
-          const result = await updateShoppingChecked(
-            row.original.id,
-            !row.original.checked
-          );
-          console.log("Server Actionの結果:", result);
-          window.dispatchEvent(new Event("shoppingCartUpdated"));
-          console.log("イベント発火完了");
+
         }}
       />
     ),

@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import AddCartDialog from "../../components/AddCartDialog";
 import { ShoppingItemTable } from "../../components/shoppingData-table";
 import { columns } from "../../components/shoppingColumns";
+import BuyButton from "../../components/BuyButton";
 
 interface CartDetailPageProps {
   params: Promise<{
@@ -10,16 +11,13 @@ interface CartDetailPageProps {
   }>;
 }
 
-
-const ShoppingDetailPage = async({params} : CartDetailPageProps) => {
-
-  const {id} = await params;
+const ShoppingDetailPage = async ({ params }: CartDetailPageProps) => {
+  const { id } = await params;
 
   const cartResponse = await getShoppingCart();
   const carts = cartResponse?.data || [];
 
   const selectedCart = carts.find((cart) => cart.id === id);
-  console.log("selectedCart", carts);
 
   if (!selectedCart) {
     return (
@@ -31,25 +29,24 @@ const ShoppingDetailPage = async({params} : CartDetailPageProps) => {
     );
   }
 
+
   return (
     <Card className="h-full">
-    <CardHeader className="flex items-start justify-between">
-      <div className="flex flex-col gap-2">
-        <CardTitle>{selectedCart.id}</CardTitle>
-        <p className="text-sm text-muted-foreground">
-          {selectedCart.items?.length || 0}件のアイテム
-        </p>
-      </div>
-      <AddCartDialog />
-    </CardHeader>
-    <CardContent>
-      <ShoppingItemTable
-        items={selectedCart.items || []}
-        columns={columns}
-      />
-    </CardContent>
-  </Card>
-  )
-}
+      <CardHeader className="flex items-start justify-between">
+        <div className="flex flex-col gap-2">
+          <CardTitle>{selectedCart.id}</CardTitle>
+          <p className="text-sm text-muted-foreground">
+            {selectedCart.items?.length || 0}件のアイテム
+          </p>
+        </div>
+        <AddCartDialog />
+      </CardHeader>
+      <CardContent>
+        <ShoppingItemTable items={selectedCart.items || []} columns={columns} />
+        <BuyButton selectedCart={selectedCart} />
+      </CardContent>
+    </Card>
+  );
+};
 
-export default ShoppingDetailPage
+export default ShoppingDetailPage;

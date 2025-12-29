@@ -15,8 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 interface ShoppingItemTableProps<TData> {
   items: TData[];
