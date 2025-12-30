@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Stock } from "@prisma/client";
 import { Table } from "@tanstack/react-table";
 import SelectedCart from "./SelectedCart";
-import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/getShoppingCart";
+import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
 import {  useState } from "react";
 import { addStocksToCart } from "@/app/server-aciton/stock/addStocksToCart";
 import { useRouter } from "next/navigation";

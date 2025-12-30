@@ -6,10 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ShoppingItemTable } from "./shoppingData-table";
 import { columns } from "./shoppingColumns";
 import AddCartDialog from "./AddCartDialog";
-import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/getShoppingCart";
+import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { buyShoppingCart } from "@/app/server-aciton/shopping/buyShoppingCart";
+import { buyShoppingCart } from "@/app/server-aciton/shopping/cart/buyShoppingCart";
 import { toast } from "sonner";
 
 interface ShoppingClientProps {

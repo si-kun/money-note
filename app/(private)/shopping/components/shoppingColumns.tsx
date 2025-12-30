@@ -1,13 +1,13 @@
 "use client";
 
-import { updateShoppingChecked } from "@/app/server-aciton/shopping/updateShoppingChecked";
+import { updateShoppingChecked } from "@/app/server-aciton/shopping/cart/updateShoppingChecked";
 import ActionsCell from "@/components/dataTable/ActionsCell";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { ShoppingCartItem } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import EditShopping from "./EditShopping";
-import { deleteShoppingCartItem } from "@/app/server-aciton/shopping/deleteShoppinCartItem";
+import { deleteShoppingCartItem } from "@/app/server-aciton/shopping/cart/deleteShoppinCartItem";
 import { toast } from "sonner";
 
 export const columns: ColumnDef<ShoppingCartItem>[] = [

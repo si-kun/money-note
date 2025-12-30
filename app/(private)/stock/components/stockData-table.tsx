@@ -28,7 +28,7 @@ import { Stock } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import AddButton from "@/components/button/AddButton";
 import StockForm from "./StockForm";
-import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/getShoppingCart";
+import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
 import AddStockDialog from "./AddStockDialog";
 
 declare module "@tanstack/react-table" {

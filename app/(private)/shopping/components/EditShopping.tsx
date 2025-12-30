@@ -19,7 +19,7 @@ import {
 import { ShoppingCartItem } from "@prisma/client";
 import { Row } from "@tanstack/react-table";
 import FormControllerStrNum from "@/components/form/FormControllerStrNum";
-import { editShoppingCartItem } from "@/app/server-aciton/shopping/editShoppingCartItem";
+import { editShoppingCartItem } from "@/app/server-aciton/shopping/cart/editShoppingCartItem";
 import { ShoppingCartItemInput, shoppingCartItemSchema } from "@/app/types/zod/shoppingCartItem";
 
 interface EditShoppingProps {

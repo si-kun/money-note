@@ -1,4 +1,4 @@
-import { getShoppingHistory } from "@/app/server-aciton/shopping/getShoppingHistory";
+import { getShoppingHistory } from "@/app/server-aciton/shopping/history/getShoppingHistory";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ShoppingItemTable } from "../../components/shoppingData-table";
 import { historyColumns } from "../components/historyColumn";

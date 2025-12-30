@@ -1,4 +1,4 @@
-import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/getShoppingCart";
+import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
 
 import {
   Select,

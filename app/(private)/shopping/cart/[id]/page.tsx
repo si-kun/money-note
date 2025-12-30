@@ -1,4 +1,4 @@
-import { getShoppingCart } from "@/app/server-aciton/shopping/getShoppingCart";
+import { getShoppingCart } from "@/app/server-aciton/shopping/cart/getShoppingCart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import AddCartDialog from "../../components/AddCartDialog";
 import { ShoppingItemTable } from "../../components/shoppingData-table";

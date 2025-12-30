@@ -2,7 +2,7 @@ import { StockDataTable } from "@/app/(private)/stock/components/stockData-table
 import { Stock } from "@prisma/client"
 import { stockColumns } from "./components/stockColumns"
 import { getAllStock } from "@/app/server-aciton/stock/getAllStock"
-import { getShoppingCart } from "@/app/server-aciton/shopping/getShoppingCart"
+import { getShoppingCart } from "@/app/server-aciton/shopping/cart/getShoppingCart"
 
  
 async function getData(): Promise<Stock[]> {
