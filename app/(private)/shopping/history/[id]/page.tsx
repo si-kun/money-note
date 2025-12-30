@@ -32,7 +32,7 @@ const HistroyDetailPage = async({params}:HistroyDetailPage) => {
     <Card className="h-full">
       <CardHeader className="flex items-start justify-between">
         <div className="flex flex-col gap-2">
-          <CardTitle>{selectedHistory.id}</CardTitle>
+          <CardTitle>{selectedHistory.name}</CardTitle>
           <p className="text-sm text-muted-foreground">
             {selectedHistory.items?.length || 0}件のアイテム
           </p>

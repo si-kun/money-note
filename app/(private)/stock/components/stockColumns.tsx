@@ -135,7 +135,7 @@ export const stockColumns: ColumnDef<Stock>[] = [
         <div>
           {cartWithStock ? (
             <Link href={`/shopping/cart/${cartWithStock.id}`} className="text-blue-600 hover:underline font-medium">
-              {cartWithStock.id}
+              {cartWithStock.name}
             </Link>
           ) : (
             <span>-</span>

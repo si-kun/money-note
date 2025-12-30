@@ -4,15 +4,16 @@ import { ApiResponse } from "@/app/types/api/api";
 import { ShoppingHistoryWithItems } from "./getShoppingHistory";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePath } from "next/cache";
+import { ShoppingCart } from "@prisma/client";
 
 export const buyShoppingCart = async (
-  cartId: string
+  cart: ShoppingCart,
 ): Promise<ApiResponse<ShoppingHistoryWithItems | null>> => {
   try {
     // チェックがtrueのShoppingCartItemを取得
     const cartItems = await prisma.shoppingCartItem.findMany({
       where: {
-        cartId,
+        cartId: cart.id,
         checked: true,
       },
     });
@@ -25,6 +26,7 @@ export const buyShoppingCart = async (
     // ShoppingHistoryに追加
     const history = await prisma.shoppingHistory.create({
       data: {
+        name: cart.name,
         date: new Date(),
         userId: "test-user-id",
         totalPrice,
@@ -49,13 +51,13 @@ export const buyShoppingCart = async (
     // カートの中身が空になったらカート自体も削除する
     const remainingItems = await prisma.shoppingCartItem.count({
       where: {
-        cartId,
+        cartId: cart.id,
       },
     });
     if (remainingItems === 0) {
       await prisma.shoppingCart.delete({
         where: {
-          id: cartId,
+          id: cart.id
         },
       });
     }

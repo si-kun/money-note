@@ -34,7 +34,7 @@ const ShoppingDetailPage = async ({ params }: CartDetailPageProps) => {
     <Card className="h-full">
       <CardHeader className="flex items-start justify-between">
         <div className="flex flex-col gap-2">
-          <CardTitle>{selectedCart.id}</CardTitle>
+          <CardTitle>{selectedCart.name}</CardTitle>
           <p className="text-sm text-muted-foreground">
             {selectedCart.items?.length || 0}件のアイテム
           </p>

@@ -19,11 +19,11 @@ model User {
   email    String @unique
   userName String
 
-  subscriptions Subscription[]
-  stocks        Stock[]
-  categories    Category[]
-  payments      Payment[]
-  incomes       Income[]
+  subscriptions     Subscription[]
+  stocks            Stock[]
+  categories        Category[]
+  payments          Payment[]
+  incomes           Income[]
   shoppingCarts     ShoppingCart[]
   shoppingHistories ShoppingHistory[]
 }
@@ -108,6 +108,7 @@ model Stock {
 // 買い物カート(買う前のリスト)
 model ShoppingCart {
   id     String             @id @default(uuid())
+  name   String             @default("買い物リスト")
   items  ShoppingCartItem[]
   userId String
   user   User               @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -116,6 +117,7 @@ model ShoppingCart {
 // 買い物履歴(買った後の記録)
 model ShoppingHistory {
   id         String             @id @default(uuid())
+  name       String?            @default("買い物履歴")
   date       DateTime           @default(now())
   items      ShoppingCartItem[]
   totalPrice Int?
@@ -127,13 +129,13 @@ model ShoppingHistory {
 
 // 商品(カートにも履歴にも使う)
 model ShoppingCartItem {
-  id       String  @id @default(uuid())
-  itemName String
-  quantity Int
-  unit     String
+  id        String  @id @default(uuid())
+  itemName  String
+  quantity  Int
+  unit      String
   unitPrice Int?
-  checked  Boolean @default(false)
-  memo     String?
+  checked   Boolean @default(false)
+  memo      String?
 
   // どちらかに属する(両方nullは禁止)
   cartId    String?

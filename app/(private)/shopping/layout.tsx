@@ -41,7 +41,7 @@ export default async function ShoppingLayout({
                   className="cursor-pointer hover:bg-accent transition-colors"
                 >
                   <CardHeader>
-                    <CardTitle className="text-base">{cart.id}</CardTitle>
+                    <CardTitle className="text-base">{cart.name}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-muted-foreground">
@@ -63,12 +63,9 @@ export default async function ShoppingLayout({
                   key={history.id}
                   className="cursor-pointer hover:bg-accent transition-colors"
                 >
-                  <CardHeader>
-                    <CardTitle className="text-base">
-                      {history.date
-                        ? new Date(history.date).toLocaleDateString()
-                        : "日付不明"}
-                    </CardTitle>
+                  <CardHeader className="flex items-center justify-between">
+                    <CardTitle className="text-base">{history.name}</CardTitle>
+                    <span>{new Date(history.date).toLocaleDateString()}</span>
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-muted-foreground">
