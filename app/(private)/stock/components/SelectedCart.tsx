@@ -28,7 +28,7 @@ const SelectedCart = ({ carts,selectedCartId,setSelectedCartId }: SelectedCartPr
           <SelectLabel>Carts</SelectLabel>
             {carts.map((cart) => (
               <SelectItem key={cart.id} value={cart.id} >
-                {cart.id} ({cart.items.length || 0}件)
+                {cart.name} ({cart.items.length || 0}件)
               </SelectItem>
             ))}
         </SelectGroup>

@@ -14,7 +14,7 @@ import { Stock } from "@prisma/client";
 import { Table } from "@tanstack/react-table";
 import SelectedCart from "./SelectedCart";
 import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/getShoppingCart";
-import { useState } from "react";
+import {  useState } from "react";
 import { addStocksToCart } from "@/app/server-aciton/stock/addStocksToCart";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -30,6 +30,23 @@ const AddStockDialog = ({ table, carts }: AddStockDialogProps) => {
 
   const selectedRows = table.getSelectedRowModel().rows;
   const [selectedCartId, setSelectedCartId] = useState<string | null>(null);
+  const [selectedQuantity, setSelectedQuantity] = useState<Record<string, number>>({});
+
+  const handleOpenDialog = () => {
+    const initialQuantities: Record<string, number> = {};
+    selectedRows.forEach((row) => {
+      initialQuantities[row.id] = 1;
+    })
+    setSelectedQuantity(initialQuantities)
+  }
+
+  const handleQuantityChange = (rowId: string, quantity: number) => {
+    setSelectedQuantity((prev) => ({
+      ...prev,
+      [rowId]: quantity,
+    }))
+  }
+
 
   const [newCartMode, setNewCartMode] = useState(false);
   const [newCartName, setNewCartName] = useState("");
@@ -58,7 +75,7 @@ const AddStockDialog = ({ table, carts }: AddStockDialogProps) => {
         items: selectedRows.map((row) => {
           return {
             itemName: row.original.name,
-            quantity: 1,
+            quantity: selectedQuantity[row.id] || 1,
             unit: row.original.unit,
             unitPrice: row.original.unitPrice ?? 0,
             stockId: row.original.id,
@@ -89,6 +106,7 @@ const AddStockDialog = ({ table, carts }: AddStockDialogProps) => {
           className="bg-green-500 hover:bg-green-400 disabled:bg-slate-400"
           variant={"secondary"}
           type="button"
+          onClick={handleOpenDialog}
         >
           選択したアイテムをカートに追加
         </Button>
@@ -129,6 +147,10 @@ const AddStockDialog = ({ table, carts }: AddStockDialogProps) => {
                   min={1}
                   defaultValue={1}
                   className="w-20"
+                  value={selectedQuantity.find}
+                  onChange={(e) =>
+                    handleQuantityChange(row.id, Number(e.target.value))
+                  }
                 />
               </div>
             ))}
