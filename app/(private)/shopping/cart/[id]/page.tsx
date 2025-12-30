@@ -41,7 +41,7 @@ const ShoppingDetailPage = async ({ params }: CartDetailPageProps) => {
         </div>
         <AddCartDialog />
       </CardHeader>
-      <CardContent>
+      <CardContent className="overflow-y-auto">
         <ShoppingItemTable items={selectedCart.items || []} columns={columns} />
         <BuyButton selectedCart={selectedCart} />
       </CardContent>

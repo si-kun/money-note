@@ -38,7 +38,7 @@ const HistroyDetailPage = async({params}:HistroyDetailPage) => {
           </p>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="overflow-y-auto">
         <ShoppingItemTable items={selectedHistory.items || []} columns={historyColumns} />
       </CardContent>
       <CardFooter>
