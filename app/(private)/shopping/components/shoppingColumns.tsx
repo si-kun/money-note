@@ -3,7 +3,6 @@
 import { updateShoppingChecked } from "@/app/server-aciton/shopping/cart/updateShoppingChecked";
 import ActionsCell from "@/components/dataTable/ActionsCell";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
 import { ShoppingCartItem } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import EditShopping from "./EditShopping";
@@ -30,11 +29,10 @@ export const columns: ColumnDef<ShoppingCartItem>[] = [
   },
   {
     accessorKey: "quantity",
-    header: "個数(購入個数)",
+    header: "購入予定数",
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         <span>{row.original.quantity}</span>
-        <Input type="number" className="w-[60px]" />
       </div>
     ),
   },
