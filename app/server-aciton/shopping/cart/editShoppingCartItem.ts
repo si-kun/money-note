@@ -28,7 +28,7 @@ export const editShoppingCartItem = async ({
       },
     });
 
-    revalidatePath("/shopping");
+    revalidatePath("/shopping", "layout");
 
     return {
       success: true,

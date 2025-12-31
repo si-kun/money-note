@@ -7,8 +7,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ShoppingItemTable } from "../../components/shoppingData-table";
-import { historyColumns } from "../components/historyColumn";
 import EditHistoryDialog from "../components/EditHistoryDialog";
+import { historyColumns } from "../components/historyColumn";
 
 interface HistroyDetailPage {
   params: Promise<{

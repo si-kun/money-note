@@ -21,13 +21,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ShoppingItemTable } from "../../components/shoppingData-table";
-import { historyColumns } from "./historyColumn";
 import { ShoppingHistoryWithItems } from "@/app/server-aciton/shopping/history/getShoppingHistory";
 import { useState } from "react";
 import { editShoppingHistory } from "@/app/server-aciton/shopping/history/editShoppingHIstory";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { historyEditColumns } from "./historyEditColumn";
 
 interface EditHistoryDialogProps {
   selectedHistory: ShoppingHistoryWithItems;
@@ -118,7 +118,7 @@ const EditHistoryDialog = ({ selectedHistory }: EditHistoryDialogProps) => {
         </DialogHeader>
         <ShoppingItemTable
           items={selectedHistory.items || []}
-          columns={historyColumns}
+          columns={historyEditColumns}
         />
         <DialogFooter>
           <Button type="submit" onClick={handleEdit} variant="outline">
