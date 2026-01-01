@@ -3,13 +3,17 @@
 import { updateShoppingChecked } from "@/app/server-aciton/shopping/cart/updateShoppingChecked";
 import ActionsCell from "@/components/dataTable/ActionsCell";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ShoppingCartItem } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import EditShopping from "./EditShopping";
 import { deleteShoppingCartItem } from "@/app/server-aciton/shopping/cart/deleteShoppinCartItem";
 import { toast } from "sonner";
 
-export const columns: ColumnDef<ShoppingCartItem>[] = [
+export type ShoppingCartItemWithStock = Prisma.ShoppingCartItemGetPayload<{
+  include: { stock: true };
+}>;
+
+export const columns: ColumnDef<ShoppingCartItemWithStock>[] = [
   {
     accessorKey: "checked",
     header: "選択",

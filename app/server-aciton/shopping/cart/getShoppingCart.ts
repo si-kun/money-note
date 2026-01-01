@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma/prisma";
 import { Prisma } from "@prisma/client";
 
 export type ShoppingCartWithItems = Prisma.ShoppingCartGetPayload<{
-  include: { items: true };
+  include: { items: { include : { stock: true}} };
 }>;
 
 export const getShoppingCart = async (): Promise<
@@ -17,7 +17,11 @@ export const getShoppingCart = async (): Promise<
         userId: "test-user-id",
       },
       include: {
-        items: true,
+        items: {
+          include: {
+            stock: true,
+          }
+        }
       },
     });
 

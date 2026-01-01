@@ -1,4 +1,3 @@
-// components/ShoppingItemTable.tsx
 "use client";
 
 import {
@@ -15,13 +14,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Stock } from "@prisma/client";
 
-interface ShoppingItemTableProps<TData> {
+interface ShoppingItemTableProps<TData extends { stock: Stock | null}> {
   items: TData[];
   columns: ColumnDef<TData, any>[];
 }
 
-export function ShoppingItemTable<TData>({
+export function ShoppingItemTable<TData extends {stock : Stock | null}>({
   items,
   columns,
 }: ShoppingItemTableProps<TData>) {
@@ -31,6 +31,16 @@ export function ShoppingItemTable<TData>({
     getCoreRowModel: getCoreRowModel(),
   });
 
+
+  const getStockBgColor = (stock : Stock | null) => {
+    if(!stock || stock?.minQuantity === null) return "";
+
+    if(stock && stock.quantity < stock.minQuantity) {
+      return "bg-red-200";
+    }
+
+    return ""
+  }
 
 
   return (
@@ -55,7 +65,7 @@ export function ShoppingItemTable<TData>({
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
+              <TableRow key={row.id} className={`${getStockBgColor(row.original.stock)}`}>
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
