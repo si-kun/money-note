@@ -30,6 +30,7 @@ const StockForm = ({ row, setIsDialogOpen }: StockFormProps) => {
       quantity: row ? Number(row.getValue("quantity")) : 0,
       unit: row ? row.original.unit : "",
       unitPrice: row ? Number(row.getValue("unitPrice")) : 0,
+      minQuantity: row ? Number(row.getValue("minQuantity")) : 0,
     },
   });
 

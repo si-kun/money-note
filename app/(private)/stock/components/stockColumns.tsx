@@ -10,10 +10,11 @@ import StockForm from "./StockForm";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
+import StockQuantityButtons from "./StockQuantityButtons";
 
 export const stockColumns: ColumnDef<Stock>[] = [
   {
-    id: "select", // ← "checked"ではなく"select"
+    id: "select",
     header: ({ table }) => (
       <Checkbox
         checked={
@@ -57,13 +58,8 @@ export const stockColumns: ColumnDef<Stock>[] = [
     },
     size: 50,
     cell: ({ row }) => {
-      const quantity = Number(row.getValue("quantity"));
-      const unit = row.original.unit;
       return (
-        <div>
-          {quantity}
-          {unit}
-        </div>
+        <StockQuantityButtons row={row.original} />
       );
     },
   },
@@ -134,7 +130,10 @@ export const stockColumns: ColumnDef<Stock>[] = [
       return (
         <div>
           {cartWithStock ? (
-            <Link href={`/shopping/cart/${cartWithStock.id}`} className="text-blue-600 hover:underline font-medium">
+            <Link
+              href={`/shopping/cart/${cartWithStock.id}`}
+              className="text-blue-600 hover:underline font-medium"
+            >
               {cartWithStock.name}
             </Link>
           ) : (

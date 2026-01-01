@@ -25,7 +25,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Stock } from "@prisma/client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import AddButton from "@/components/button/AddButton";
 import StockForm from "./StockForm";
 import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
@@ -42,12 +42,14 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   carts: ShoppingCartWithItems[];
+  initialPage? :number;
 }
 
 export function StockDataTable<TData extends Stock, TValue>({
   columns,
   data,
   carts,
+  initialPage = 0,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -55,8 +57,11 @@ export function StockDataTable<TData extends Stock, TValue>({
   const [rowSelection, setRowSelection] = useState({});
 
   const router = useRouter();
-
-  console.log(data)
+  const searchParams = useSearchParams();
+  const [pagination, setPagination] = useState({
+    pageIndex: initialPage,
+    pageSize: 10,
+  })
 
   useEffect(() => {
     const handleStockUpdate = () => {
@@ -75,6 +80,7 @@ export function StockDataTable<TData extends Stock, TValue>({
     getCoreRowModel: getCoreRowModel(),
     enableRowSelection: true,
     getPaginationRowModel: getPaginationRowModel(),
+    autoResetPageIndex: false,
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
@@ -83,12 +89,29 @@ export function StockDataTable<TData extends Stock, TValue>({
       sorting,
       columnFilters,
       rowSelection,
+      pagination,
     },
     onRowSelectionChange: setRowSelection,
     meta: {
       carts,
     },
   });
+
+  useEffect(() => {
+    const page = Number(searchParams.get("page") || "0");
+    setPagination((prev) => ({
+      ...prev,
+      pageIndex: page,
+    }))
+  },[searchParams])
+
+  const handlePageChange = (newPageIndex: number) => {
+    setPagination((prev) => ({
+      ...prev,
+      pageIndex: newPageIndex,
+    }))
+    router.push(`?page=${newPageIndex}`);
+  }
 
   return (
     <div>
@@ -168,14 +191,16 @@ export function StockDataTable<TData extends Stock, TValue>({
         <div className="flex items-center gap-2">
           <Button
             disabled={!table.getCanPreviousPage()}
-            onClick={() => table.previousPage()}
+            // onClick={() => table.previousPage()}
+            onClick={() => handlePageChange(pagination.pageIndex - 1)}
             className="bg-blue-500 hover:bg-blue-600 text-white disabled:bg-slate-400"
           >
             prev
           </Button>
           <Button
             disabled={!table.getCanNextPage()}
-            onClick={() => table.nextPage()}
+            // onClick={() => table.nextPage()}
+            onClick={() => handlePageChange(pagination.pageIndex + 1)}
             className="bg-blue-500 hover:bg-blue-600 text-white disabled:bg-slate-400"
           >
             next

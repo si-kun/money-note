@@ -5,6 +5,12 @@ import { getAllStock } from "@/app/server-aciton/stock/getAllStock"
 import { getShoppingCart } from "@/app/server-aciton/shopping/cart/getShoppingCart"
 
  
+interface StockPageProps {
+  searchParams: Promise<{
+    page? :string
+  }>
+}
+
 async function getData(): Promise<Stock[]> {
   // Fetch data from your API here.
   try {
@@ -19,15 +25,18 @@ async function getData(): Promise<Stock[]> {
   }
 }
 
-const StockPage = async () => {
+const StockPage = async ({searchParams}: StockPageProps) => {
 
   const data = await getData()
   const cartsResponse = await getShoppingCart()
   const carts = cartsResponse.data || []
 
+  const params = await searchParams;
+  const currentPage = Number(params.page || "0");
+
   return (
     <div className="container mx-auto py-10">
-      <StockDataTable columns={stockColumns} data={data} carts={carts} />
+      <StockDataTable columns={stockColumns} data={data} carts={carts} initialPage={currentPage} />
     </div>
   )
 }
