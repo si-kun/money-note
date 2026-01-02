@@ -63,16 +63,6 @@ export function StockDataTable<TData extends Stock, TValue>({
     pageSize: 10,
   })
 
-  useEffect(() => {
-    const handleStockUpdate = () => {
-      router.refresh();
-    };
-    window.addEventListener("stockUpdated", handleStockUpdate);
-
-    return () => {
-      window.removeEventListener("stockUpdated", handleStockUpdate);
-    };
-  }, [router]);
 
   const table = useReactTable({
     data,

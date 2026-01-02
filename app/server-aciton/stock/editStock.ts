@@ -3,6 +3,8 @@
 import { ApiResponse } from "@/app/types/api/api";
 import { StockFormType } from "@/app/types/zod/stock";
 import { prisma } from "@/lib/prisma/prisma";
+import { handleStockCartSync } from "./handleStockCartSync";
+import { revalidatePath } from "next/cache";
 
 interface EditStockProps {
   id: string;
@@ -11,15 +13,20 @@ interface EditStockProps {
 
 export const editStock = async ({ id, data }:EditStockProps): Promise<ApiResponse<null>> => {
   try {
-    await prisma.stock.update({
+    const updateStock = await prisma.stock.update({
       where: { id },
       data: {
         name: data.name,
         quantity: data.quantity,
+        minQuantity: data.minQuantity,
         unit: data.unit,
         unitPrice: data.unitPrice,
       },
     });
+
+    await handleStockCartSync(updateStock);
+
+    revalidatePath("/stock");
 
     return {
       success: true,
