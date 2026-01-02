@@ -1,6 +1,6 @@
 "use client";
 
-import { quantityIncrement } from "@/app/server-aciton/stock/quantityIncrement";
+import { updateStockQuantity } from "@/app/server-aciton/stock/updateStockQuantity";
 import { Button } from "@/components/ui/button";
 import { Stock } from "@prisma/client";
 import { useEffect, useRef, useState } from "react";
@@ -16,12 +16,12 @@ const StockQuantityButtons = ({ row }: StockQuantityButtons) => {
   const stockId = useRef(row.id);
 
   useEffect(() => {
-    if(previousQuantity.current !== row.quantity) {
+    if (previousQuantity.current !== row.quantity) {
       setDisplayQuantity(row.quantity);
       previousQuantity.current = row.quantity;
     }
     //  eslint-disable-next-line react-hooks/exhaustive-deps
-  },[row.quantity])
+  }, [row.quantity]);
 
   useEffect(() => {
     // 初回レンダリング時はスキップ
@@ -30,11 +30,11 @@ const StockQuantityButtons = ({ row }: StockQuantityButtons) => {
       return;
     }
 
-    if(displayQuantity === row.quantity) return;
+    if (displayQuantity === row.quantity) return;
 
     const timer = setTimeout(async () => {
       try {
-        await quantityIncrement(stockId.current, displayQuantity);
+        await updateStockQuantity(stockId.current, displayQuantity);
       } catch (error) {
         console.error("Error updating quantity display:", error);
       }
@@ -48,7 +48,7 @@ const StockQuantityButtons = ({ row }: StockQuantityButtons) => {
     setDisplayQuantity((prev) => prev + 1);
   };
   const handleDecrement = () => {
-    if(displayQuantity <= 0) return;
+    if (displayQuantity <= 0) return;
     setDisplayQuantity((prev) => prev - 1);
   };
 
@@ -62,7 +62,12 @@ const StockQuantityButtons = ({ row }: StockQuantityButtons) => {
         <Button onClick={handleIncrement} variant={"outline"} size={"icon-sm"}>
           +
         </Button>
-        <Button disabled={displayQuantity <= 0} onClick={handleDecrement} variant={"outline"} size={"icon-sm"}>
+        <Button
+          disabled={displayQuantity <= 0}
+          onClick={handleDecrement}
+          variant={"outline"}
+          size={"icon-sm"}
+        >
           -
         </Button>
       </div>
