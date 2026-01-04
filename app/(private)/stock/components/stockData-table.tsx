@@ -10,7 +10,6 @@ import {
   getSortedRowModel,
   getFilteredRowModel,
   useReactTable,
-  RowData,
 } from "@tanstack/react-table";
 
 import {
@@ -28,20 +27,13 @@ import { Stock } from "@prisma/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import AddButton from "@/components/button/AddButton";
 import StockForm from "./StockForm";
-import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
 import AddStockDialog from "./AddStockDialog";
-
-declare module "@tanstack/react-table" {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface TableMeta<TData extends RowData> {
-    carts?: ShoppingCartWithItems[];
-  }
-}
+import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  carts: ShoppingCartWithItems[];
+  carts: ShoppingCartWithItems[],
   initialPage? :number;
 }
 
@@ -196,7 +188,7 @@ export function StockDataTable<TData extends Stock, TValue>({
             next
           </Button>
         </div>
-        <AddStockDialog table={table} carts={carts} />
+        <AddStockDialog table={table} />
       </div>
     </div>
   );

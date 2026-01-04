@@ -2,7 +2,7 @@ import { getShoppingCart } from "@/app/server-aciton/shopping/cart/getShoppingCa
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 // import AddCartDialog from "../../components/AddCartDialog";
 import { ShoppingItemTable } from "../../components/shoppingData-table";
-import { columns } from "../../components/shoppingColumns";
+import { columns, lowStockColumns } from "../../components/shoppingColumns";
 import BuyButton from "../../components/BuyButton";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -31,6 +31,8 @@ const ShoppingDetailPage = async ({ params }: CartDetailPageProps) => {
     );
   }
 
+  // 今表示しているカートが「在庫不足」かどうか判定
+  const isLowStockCart = selectedCart.name === "在庫不足";
 
   return (
     <Card className="h-full">
@@ -43,13 +45,17 @@ const ShoppingDetailPage = async ({ params }: CartDetailPageProps) => {
         </div>
         {/* あとでダイアログで追加機能を実装。今はLinkで対応 */}
         <Link href={"/stock"}>
-        <Button variant={"secondary"}>商品を追加</Button>
+          <Button variant={"secondary"}>商品を追加</Button>
         </Link>
         {/* <AddCartDialog />  */}
       </CardHeader>
       <CardContent className="overflow-y-auto">
-        <ShoppingItemTable items={selectedCart.items || []} columns={columns} />
-        <BuyButton selectedCart={selectedCart} />
+        <ShoppingItemTable
+          items={selectedCart.items || []}
+          columns={isLowStockCart ? lowStockColumns : columns}
+        />
+        {/* 「在庫不足」カートでは非表示 */}
+        {!isLowStockCart && <BuyButton selectedCart={selectedCart} />}
       </CardContent>
     </Card>
   );

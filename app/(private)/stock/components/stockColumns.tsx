@@ -11,6 +11,16 @@ import StockForm from "./StockForm";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import StockQuantityButtons from "./StockQuantityButtons";
+import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
+
+// TableMetaの型を拡張
+declare module "@tanstack/react-table" {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface TableMeta<TData> {
+    carts?: ShoppingCartWithItems[];
+  }
+}
+
 
 export const stockColumns: ColumnDef<Stock>[] = [
   {

@@ -9,25 +9,59 @@ export const deleteShoppingCartItem = async (
   cartId: string | null
 ): Promise<ApiResponse<null>> => {
   try {
-    await prisma.shoppingCartItem.delete({
-      where: {
-        id: itemId,
-      },
+    // 1. 削除と同時に stock 情報も取得
+    const deleteItem = await prisma.shoppingCartItem.delete({
+      where: { id: itemId },
+      include: { stock: true },
     });
 
-    // カートの中身が空になったらカート自体も削除する
+    // 2. アイテムが在庫不足かどうかチェック
+    if (
+      deleteItem.stock &&
+      deleteItem.stock.minQuantity !== null &&
+      deleteItem.stock.quantity < deleteItem.stock.minQuantity
+    ) {
+      // 3. 在庫不足カートを取得または作成
+      let lowStockCart = await prisma.shoppingCart.findFirst({
+        where: {
+          name: "在庫不足",
+          userId: "test-user-id",
+        },
+      });
+
+      if (!lowStockCart) {
+        lowStockCart = await prisma.shoppingCart.create({
+          data: {
+            name: "在庫不足",
+            userId: "test-user-id",
+          },
+        });
+      }
+
+      // 4. 在庫不足カートにアイテムを追加
+      await prisma.shoppingCartItem.create({
+        data: {
+          itemName: deleteItem.itemName,
+          quantity: deleteItem.quantity,
+          unit: deleteItem.unit,
+          unitPrice: deleteItem.unitPrice,
+          checked: false,
+          memo: deleteItem.memo,
+          cartId: lowStockCart.id,
+          stockId: deleteItem.stockId,
+        },
+      });
+    }
+
+    // 5. カートの中身が空になったらカート自体も削除
     if (cartId) {
       const remainingItems = await prisma.shoppingCartItem.count({
-        where: {
-          cartId,
-        },
+        where: { cartId },
       });
 
       if (remainingItems === 0) {
         await prisma.shoppingCart.delete({
-          where: {
-            id: cartId,
-          },
+          where: { id: cartId },
         });
       }
     }

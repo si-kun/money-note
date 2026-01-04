@@ -12,8 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Stock } from "@prisma/client";
 import { Table } from "@tanstack/react-table";
-import SelectedCart from "./SelectedCart";
-import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
+import SelectedCart from "../../../../components/select/SelectedCart";
 import {  useState } from "react";
 import { addStocksToCart } from "@/app/server-aciton/stock/addStocksToCart";
 import { useRouter } from "next/navigation";
@@ -22,10 +21,9 @@ import { Switch } from "@/components/ui/switch";
 
 interface AddStockDialogProps {
   table: Table<Stock>;
-  carts: ShoppingCartWithItems[];
 }
 
-const AddStockDialog = ({ table, carts }: AddStockDialogProps) => {
+const AddStockDialog = ({ table }: AddStockDialogProps) => {
   const router = useRouter();
 
   const selectedRows = table.getSelectedRowModel().rows;
@@ -53,8 +51,6 @@ const AddStockDialog = ({ table, carts }: AddStockDialogProps) => {
 
   // ダイアログ開閉
   const [isOpen, setIsOpen] = useState(false);
-
-  console.log(selectedRows);
 
   const handleAddToCart = async () => {
     if (newCartMode && !newCartName.trim()) {
@@ -132,7 +128,6 @@ const AddStockDialog = ({ table, carts }: AddStockDialogProps) => {
               />
             ) : (
               <SelectedCart
-                carts={carts}
                 selectedCartId={selectedCartId}
                 setSelectedCartId={setSelectedCartId}
               />
