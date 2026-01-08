@@ -173,7 +173,6 @@ export function StockDataTable<TData extends Stock, TValue>({
         <div className="flex items-center gap-2">
           <Button
             disabled={!table.getCanPreviousPage()}
-            // onClick={() => table.previousPage()}
             onClick={() => handlePageChange(pagination.pageIndex - 1)}
             className="bg-blue-500 hover:bg-blue-600 text-white disabled:bg-slate-400"
           >
@@ -181,7 +180,6 @@ export function StockDataTable<TData extends Stock, TValue>({
           </Button>
           <Button
             disabled={!table.getCanNextPage()}
-            // onClick={() => table.nextPage()}
             onClick={() => handlePageChange(pagination.pageIndex + 1)}
             className="bg-blue-500 hover:bg-blue-600 text-white disabled:bg-slate-400"
           >

@@ -53,7 +53,7 @@ model Income {
   amount     Int // 収入金額
   incomeDate DateTime @default(now())
 
-  // リレーション 
+  // リレーション
   categoryId String
   userId     String
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -85,7 +85,7 @@ model Category {
 }
 
 enum CategoryType {
-  EXPENSE
+  PAYMENT
   INCOME
 }
 

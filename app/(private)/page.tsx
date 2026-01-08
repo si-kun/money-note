@@ -21,7 +21,8 @@ import {
 import Summary from "./components/Summary";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SummaryCard from "./components/SummaryCard";
-import SubscriptionCard from "./components/subscription/SubscriptionCard";
+import SubscriptionCard from "./subscriptions/components/SubscriptionCard";
+import { format } from "date-fns";
 
 type BalanceData = Record<
   string,
@@ -53,9 +54,6 @@ export interface EventData {
 }
 
 export default function Home() {
-  const [open, setOpen] = useState(false);
-  const [date, setDate] = useState<Date>(new Date());
-
   const [incomeData, setIncomeData] = useState<IncomeWithCategory[]>([]);
   const [monthlyIncomeTotal, setMonthlyIncomeTotal] = useState<number>(0);
   const [paymentData, setPaymentData] = useState<PaymentWithCategory[]>([]);
@@ -78,7 +76,7 @@ export default function Home() {
 
   const todayKey = today.toISOString().split("T")[0];
   const [selectedDate, setSelectedDate] = useState<SelectedData>({
-    date: "",
+    date: format(today, "yyyy-MM-dd"),
     incomes: [],
     payments: [],
     totalIncome: 0,
@@ -311,10 +309,6 @@ export default function Home() {
         <TabsContent value="day">
           <Summary
             selectedDate={selectedDate}
-            date={date}
-            setDate={setDate}
-            open={open}
-            setOpen={setOpen}
           />
         </TabsContent>
         <TabsContent value="month">

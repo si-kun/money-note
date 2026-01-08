@@ -58,12 +58,13 @@ async function main() {
   console.log("カテゴリーの作成を開始");
   await prisma.category.createMany({
     data: [
-      { id: "cat-1", name: "食費", type: "EXPENSE", userId: "test-user-id" },
-      { id: "cat-2", name: "交通費", type: "EXPENSE", userId: "test-user-id" },
-      { id: "cat-3", name: "娯楽", type: "EXPENSE", userId: "test-user-id" },
-      { id: "cat-4", name: "光熱費", type: "EXPENSE", userId: "test-user-id" },
-      { id: "cat-5", name: "その他", type: "EXPENSE", userId: "test-user-id" },
+      { id: "cat-1", name: "食費", type: "PAYMENT", userId: "test-user-id" },
+      { id: "cat-2", name: "交通費", type: "PAYMENT", userId: "test-user-id" },
+      { id: "cat-3", name: "娯楽", type: "PAYMENT", userId: "test-user-id" },
+      { id: "cat-4", name: "光熱費", type: "PAYMENT", userId: "test-user-id" },
+      { id: "cat-5", name: "その他", type: "PAYMENT", userId: "test-user-id" },
       { id: "cat-6", name: "給料", type: "INCOME", userId: "test-user-id" },
+      { id: "cat-7", name: "買い物", type: "PAYMENT", userId: "test-user-id" },
     ],
   });
   console.log("カテゴリーの作成が完了しました");
