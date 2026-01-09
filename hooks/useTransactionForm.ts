@@ -7,7 +7,6 @@ import {
 } from "@/app/types/zod/transaction";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Category } from "@prisma/client";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
@@ -17,7 +16,6 @@ export const useTransactionForm = () => {
   const [histories, setHistories] = useState<ShoppingHistoryWithItems[]>([]);
   const [open, setOpen] = useState(false);
 
-  const router = useRouter();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -45,8 +43,6 @@ export const useTransactionForm = () => {
       historyId: null,
     },
   });
-
-  console.log("errors:", form.formState.errors);
 
   const typeValue = useWatch({
     control: form.control,
@@ -92,8 +88,6 @@ export const useTransactionForm = () => {
         form.reset();
         setHistories([]);
         setOpen(false);
-        router.refresh();
-        window.dispatchEvent(new Event("transactionUpdated"));
         toast.success(result.message || "取引が正常に作成されました");
       } else {
         toast.error(result.message || "取引の作成に失敗しました");

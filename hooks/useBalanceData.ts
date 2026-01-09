@@ -17,11 +17,19 @@ import { EventClickArg } from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
 import { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
+import { HomeClientProps } from "@/app/(private)/components/HomeClient";
 
-export const useBalanceData = () => {
-  const [incomeData, setIncomeData] = useState<IncomeWithCategory[]>([]);
+export const useBalanceData = ({
+  initialIncomeData,
+  initialPaymentData,
+  initialYear,
+  initialMonth,
+}: HomeClientProps) => {
+  const [incomeData, setIncomeData] =
+    useState<IncomeWithCategory[]>(initialIncomeData);
   const [monthlyIncomeTotal, setMonthlyIncomeTotal] = useState<number>(0);
-  const [paymentData, setPaymentData] = useState<PaymentWithCategory[]>([]);
+  const [paymentData, setPaymentData] =
+    useState<PaymentWithCategory[]>(initialPaymentData);
   const [monthlyPaymentTotal, setMonthlyPaymentTotal] = useState<number>(0);
   const [balanceData, setBalanceData] = useState<BalanceData | null>(null);
   const [monthlySubscription, setMonthlySubscription] =
@@ -33,8 +41,8 @@ export const useBalanceData = () => {
 
   // 日付
   const today = new Date();
-  const [year, setYear] = useState<number>(today.getFullYear());
-  const [month, setMonth] = useState<number>(today.getMonth() + 1);
+  const [year, setYear] = useState<number>(initialYear);
+  const [month, setMonth] = useState<number>(initialMonth);
 
   // ダイアログの開閉フラグ
   const [isOpen, setIsOpen] = useState(false);
@@ -50,6 +58,11 @@ export const useBalanceData = () => {
   });
 
   const calendarRef = useRef<FullCalendar>(null);
+
+  useEffect(() => {
+    fetchBalanceData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialIncomeData, initialPaymentData]);
 
   useEffect(() => {
     console.log("isOpen:", isOpen);
@@ -196,18 +209,6 @@ export const useBalanceData = () => {
     window.addEventListener("subscriptionUpdated", handleUpdate);
     return () => {
       window.removeEventListener("subscriptionUpdated", handleUpdate);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [year, month]);
-
-  // 収支（トランザクション）更新時
-  useEffect(() => {
-    const handleUpdate = () => {
-      fetchBalanceData();
-    };
-    window.addEventListener("transactionUpdated", handleUpdate);
-    return () => {
-      window.removeEventListener("transactionUpdated", handleUpdate);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [year, month]);
