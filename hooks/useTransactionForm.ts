@@ -93,6 +93,7 @@ export const useTransactionForm = () => {
         setHistories([]);
         setOpen(false);
         router.refresh();
+        window.dispatchEvent(new Event("transactionUpdated"));
         toast.success(result.message || "取引が正常に作成されました");
       } else {
         toast.error(result.message || "取引の作成に失敗しました");
