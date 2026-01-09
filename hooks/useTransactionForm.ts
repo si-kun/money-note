@@ -1,3 +1,4 @@
+import { createTransaction } from "@/app/server-aciton/balance/createTransaction";
 import { getCategory } from "@/app/server-aciton/balance/getCategory";
 import { ShoppingHistoryWithItems } from "@/app/server-aciton/shopping/history/getShoppingHistory";
 import {
@@ -6,13 +7,17 @@ import {
 } from "@/app/types/zod/transaction";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Category } from "@prisma/client";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
+import { toast } from "sonner";
 
 export const useTransactionForm = () => {
   const [category, setCategory] = useState<Category[]>([]);
   const [histories, setHistories] = useState<ShoppingHistoryWithItems[]>([]);
   const [open, setOpen] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -80,12 +85,27 @@ export const useTransactionForm = () => {
       ? categoryIdValue
       : null;
 
-  const onsubmit = () => {
-    console.log(form.getValues());
+  const onSubmit = async (data: TransactionsFormType) => {
+    try {
+      const result = await createTransaction(data);
+      if (result.success) {
+        form.reset();
+        setHistories([]);
+        setOpen(false);
+        router.refresh();
+        toast.success(result.message || "取引が正常に作成されました");
+      } else {
+        toast.error(result.message || "取引の作成に失敗しました");
+      }
+    } catch (error) {
+      console.error("Error submitting transaction:", error);
+      toast.error("取引の作成中にエラーが発生しました");
+    }
   };
+
   return {
     form,
-    onsubmit,
+    onSubmit,
     filteredCategory,
     shoppingCategoryId,
     typeValue,

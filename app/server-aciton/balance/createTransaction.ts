@@ -1,49 +1,44 @@
 "use server";
 
 import { ApiResponse } from "@/app/types/api/api";
+import { TransactionsFormType } from "@/app/types/zod/transaction";
 import { prisma } from "@/lib/prisma/prisma";
-import { Income, Payment } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
-interface CreateTransaction {
-  type: "income" | "payment";
-  incomeData?: Omit<Income, "id" | "userId">;
-  paymentData?: Omit<Payment, "id" | "userId">;
-  historyId?: string | null;
-}
-
-export const createTransaction = async ({
-  type,
-  incomeData,
-  paymentData,
-  historyId,
-}: CreateTransaction): Promise<ApiResponse<null>> => {
+export const createTransaction = async (
+  data: TransactionsFormType
+): Promise<ApiResponse<null>> => {
   try {
+    const { type, historyId, categoryId, amount, memo } = data;
     const userId = "test-user-id";
 
     // incomeの場合
-    if (type === "income" && incomeData) {
+    if (type === "INCOME") {
       await prisma.income.create({
         data: {
-          ...incomeData,
+          categoryId,
+          amount,
+          memo,
           userId: userId,
         },
       });
     }
     // expenseの場合
-    else if (type === "payment" && paymentData) {
-      const payment =  await prisma.payment.create({
+    else if (type === "PAYMENT") {
+      const payment = await prisma.payment.create({
         data: {
-          ...paymentData,
+          categoryId,
+          amount,
+          memo,
           userId: userId,
         },
       });
 
-      if(payment && historyId) {
+      if (payment && historyId) {
         await prisma.shoppingHistory.update({
-          where: { id: historyId},
-          data: {paymentId: payment.id,date: payment.paymentDate}
-        })
+          where: { id: historyId },
+          data: { paymentId: payment.id, date: payment.paymentDate },
+        });
       }
     } else {
       return {
@@ -53,11 +48,11 @@ export const createTransaction = async ({
       };
     }
 
-    revalidatePath("/");
+    revalidatePath("/", "page");
 
     return {
       success: true,
-      message: `${type === "income" ? "収入" : "支出"}を登録しました`,
+      message: `${type === "INCOME" ? "収入" : "支出"}を登録しました`,
       data: null,
     };
   } catch (error) {

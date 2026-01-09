@@ -38,7 +38,7 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
 
   const {
     form,
-    onsubmit,
+    onSubmit,
     filteredCategory,
     shoppingCategoryId,
     typeValue,
@@ -66,7 +66,7 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
       </DialogTrigger>
 
       <DialogContent className="w-[80vw] h-[80vh] flex flex-col py-5 overflow-y-auto">
-        <form onSubmit={form.handleSubmit(onsubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
             <Field>
               <DialogHeader>

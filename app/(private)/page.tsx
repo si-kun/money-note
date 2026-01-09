@@ -301,17 +301,15 @@ export default function Home() {
         events={events}
         calendarRef={calendarRef}
       />
-      <Tabs defaultValue="day" className="flex-1">
+      <Tabs defaultValue="day" className="flex-1 flex flex-col">
         <TabsList>
           <TabsTrigger value="day">日次</TabsTrigger>
           <TabsTrigger value="month">月次</TabsTrigger>
         </TabsList>
-        <TabsContent value="day">
-          <Summary
-            selectedDate={selectedDate}
-          />
+        <TabsContent value="day" className="flex-1 overflow-hidden">
+          <Summary selectedDate={selectedDate} />
         </TabsContent>
-        <TabsContent value="month">
+        <TabsContent value="month" className="flex-1 overflow-hidden">
           <Card className="h-full">
             <CardHeader>
               <CardTitle>

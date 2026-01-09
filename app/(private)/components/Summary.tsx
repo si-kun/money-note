@@ -12,11 +12,11 @@ interface SummaryProps {
 
 const Summary = ({ selectedDate }: SummaryProps) => {
   return (
-    <Card className="h-full">
+    <Card className="h-full flex flex-col">
       <CardHeader>
         <CardTitle>日付:{selectedDate?.date}</CardTitle>
       </CardHeader>
-      <CardContent className="flex-1 flex flex-col space-y-4 overflow-y-auto">
+      <CardContent className="flex-1 flex flex-col space-y-4 overflow-hidden">
         {/* 収入、支出、残高のカード */}
         <div className="flex flex-col gap-4 w-full">
           <div className="flex items-center justify-between gap-4">
@@ -28,7 +28,7 @@ const Summary = ({ selectedDate }: SummaryProps) => {
 
         {/* 追加ボタン */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gapx-3 py-1">
+          <div className="flex items-center gap-3 py-1">
             <List />
             <span className="font-semibold">内訳</span>
           </div>
