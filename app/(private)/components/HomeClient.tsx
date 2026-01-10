@@ -14,11 +14,13 @@ import {
   PaymentWithCategory,
 } from "@/app/types/balance/balance";
 
-export interface HomeClientProps {
+interface HomeClientProps {
   initialIncomeData: IncomeWithCategory[];
   initialPaymentData: PaymentWithCategory[];
   initialYear: number;
   initialMonth: number;
+  incomeError: string | null;
+  paymentError: string | null;
 }
 
 const HomeClient = ({
@@ -26,6 +28,8 @@ const HomeClient = ({
   initialPaymentData,
   initialYear,
   initialMonth,
+  incomeError,
+  paymentError,
 }: HomeClientProps) => {
   const {
     year,
@@ -78,10 +82,19 @@ const HomeClient = ({
             </CardHeader>
             <CardContent className="flex-1 flex flex-col space-y-4 overflow-y-auto">
               {/* 収入、支出、残高のカード */}
+
               <div className="flex flex-col gap-4 w-full">
                 <div className="flex items-center justify-between gap-4">
-                  <SummaryCard title={"収入"} amount={monthlyIncomeTotal} />
-                  <SummaryCard title={"支出"} amount={monthlyPaymentTotal} />
+                  <SummaryCard
+                    title={"収入"}
+                    errorText={incomeError}
+                    amount={monthlyIncomeTotal}
+                  />
+                  <SummaryCard
+                    title={"支出"}
+                    errorText={paymentError}
+                    amount={monthlyPaymentTotal}
+                  />
                 </div>
                 <SubscriptionCard
                   monthlySubscription={monthlySubscription}

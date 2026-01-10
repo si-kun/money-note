@@ -3,9 +3,6 @@ import { getPayment } from "../server-aciton/balance/getPayment";
 import HomeClient from "./components/HomeClient";
 
 export default async function Home() {
-
-  console.log("Home Server Component Rendered");
-
   const today = new Date();
   const year = today.getFullYear();
   const month = today.getMonth() + 1;
@@ -14,10 +11,13 @@ export default async function Home() {
   const incomeResult = await getIncome({ year, month });
   const paymentResult = await getPayment({ year, month });
 
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   return (
     <HomeClient
       initialIncomeData={incomeResult.data}
       initialPaymentData={paymentResult.data}
+      incomeError={incomeResult.success ? null : incomeResult.message}
+      paymentError={paymentResult.success ? null : paymentResult.message}
       initialYear={year}
       initialMonth={month}
     />

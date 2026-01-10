@@ -17,14 +17,20 @@ import { EventClickArg } from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
 import { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
-import { HomeClientProps } from "@/app/(private)/components/HomeClient";
+
+interface UseBalanceDataProps {
+  initialIncomeData: IncomeWithCategory[];
+  initialPaymentData: PaymentWithCategory[];
+  initialYear: number;
+  initialMonth: number;
+}
 
 export const useBalanceData = ({
   initialIncomeData,
   initialPaymentData,
   initialYear,
   initialMonth,
-}: HomeClientProps) => {
+}: UseBalanceDataProps) => {
   const [incomeData, setIncomeData] =
     useState<IncomeWithCategory[]>(initialIncomeData);
   const [monthlyIncomeTotal, setMonthlyIncomeTotal] = useState<number>(0);
@@ -63,10 +69,6 @@ export const useBalanceData = ({
     fetchBalanceData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialIncomeData, initialPaymentData]);
-
-  useEffect(() => {
-    console.log("isOpen:", isOpen);
-  }, [isOpen]);
 
   const fetchBalanceData = async () => {
     try {
@@ -166,21 +168,17 @@ export const useBalanceData = ({
 
   useEffect(() => {
     if (!balanceData) return;
-    Object.entries(balanceData).forEach(([date, data]) => {
-      setEvents((prevEvents) => [
-        ...prevEvents,
-        {
-          title: date,
-          start: date,
-          allDay: true,
-          extendedProps: {
-            income: data.income,
-            payment: data.payment,
-            balance: data.balance,
-          },
-        },
-      ]);
-    });
+    const newEvents = Object.entries(balanceData).map(([date, data]) => ({
+      title: date,
+      start: date,
+      allDay: true,
+      extendedProps: {
+        income: data.income,
+        payment: data.payment,
+        balance: data.balance,
+      },
+    }));
+    setEvents(newEvents);
   }, [balanceData]);
 
   // 月ごとのサブスクを取得

@@ -2,10 +2,10 @@
 import { List } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { SelectedData } from "../page";
 import SummaryCard from "./SummaryCard";
 import BreakdownList from "./BreakdownList";
 import TransactionForm from "./TransactionForm";
+import { SelectedData } from "@/app/types/balance/balance";
 interface SummaryProps {
   selectedDate: SelectedData;
 }
