@@ -23,17 +23,20 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import AddButton from "@/components/button/AddButton";
 import SubscriptionForm from "./components/SubscriptionForm";
+import { ShieldAlert } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   maxHeight?: string;
+  errorMessage: string | null;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   maxHeight = "100%",
+  errorMessage,
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const [sorting, setSorting] = useState([]);
@@ -42,14 +45,17 @@ export function DataTable<TData, TValue>({
   useEffect(() => {
     const handleSubscriptionUpdate = () => {
       router.refresh();
-    }
+    };
 
     window.addEventListener("subscriptionUpdated", handleSubscriptionUpdate);
 
     return () => {
-      window.removeEventListener("subscriptionUpdated", handleSubscriptionUpdate);
+      window.removeEventListener(
+        "subscriptionUpdated",
+        handleSubscriptionUpdate
+      );
     };
-  },[router])
+  }, [router]);
 
   const table = useReactTable({
     data,
@@ -66,7 +72,10 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="space-y-4 h-full flex flex-col flex-1" style={{ maxHeight }}>
+    <div
+      className="space-y-4 h-full flex flex-col flex-1"
+      style={{ maxHeight }}
+    >
       <div className="flex items-center gap-4">
         <Input
           placeholder="FIlter subscriptions..."
@@ -77,60 +86,67 @@ export function DataTable<TData, TValue>({
         />
         <AddButton>
           {(setIsDialogOpen) => (
-            <SubscriptionForm setIsDialogOpen={setIsDialogOpen}  />
+            <SubscriptionForm setIsDialogOpen={setIsDialogOpen} />
           )}
         </AddButton>
       </div>
-      <div className=" overflow-y-auto rounded-md border">
-        <Table>
-          <TableHeader className="sticky top-0 bg-background z-10">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+      {errorMessage ? (
+        <span className="text-red-500 flex items-center gap-2 text-sm font-semibold">
+          <ShieldAlert />
+          {errorMessage}
+        </span>
+      ) : (
+        <div className=" overflow-y-auto rounded-md border">
+          <Table>
+            <TableHeader className="sticky top-0 bg-background z-10">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    );
+                  })}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      )}
     </div>
   );
 }

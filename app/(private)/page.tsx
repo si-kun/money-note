@@ -10,8 +10,6 @@ export default async function Home() {
   // サーバーでデータを取得
   const incomeResult = await getIncome({ year, month });
   const paymentResult = await getPayment({ year, month });
-
-  await new Promise((resolve) => setTimeout(resolve, 1000));
   return (
     <HomeClient
       initialIncomeData={incomeResult.data}
