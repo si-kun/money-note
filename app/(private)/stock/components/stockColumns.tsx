@@ -112,7 +112,6 @@ export const stockColumns: ColumnDef<Stock>[] = [
         try {
           await deleteStock(row.original.id);
           toast.success("Stock deleted successfully");
-          window.dispatchEvent(new Event("stockUpdated"));
         } catch (error) {
           console.error("Error deleting stock:", error);
         }

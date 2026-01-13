@@ -80,9 +80,9 @@ const SubscriptionForm = ({ row, setIsDialogOpen }: SubscriptionFormProps) => {
     } finally {
       setIsDialogOpen(false);
       form.reset();
-      window.dispatchEvent(new Event("subscriptionUpdated"));
     }
   };
+
   const onError = (errors: any) => {
     console.error("Form submission errors:", errors);
   };

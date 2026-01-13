@@ -2,6 +2,7 @@
 
 import { ApiResponse } from "@/app/types/api/api";
 import { prisma } from "@/lib/prisma/prisma";
+import { revalidatePath } from "next/cache";
 
 export const deleteSubscription = async (
   id: string
@@ -18,6 +19,8 @@ export const deleteSubscription = async (
     await prisma.subscription.delete({
       where: { id },
     });
+
+    revalidatePath("/subscriptions");
 
     return {
       success: true,

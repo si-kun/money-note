@@ -18,9 +18,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
 import AddButton from "@/components/button/AddButton";
 import SubscriptionForm from "./components/SubscriptionForm";
 import { ShieldAlert } from "lucide-react";
@@ -38,24 +37,8 @@ export function DataTable<TData, TValue>({
   maxHeight = "100%",
   errorMessage,
 }: DataTableProps<TData, TValue>) {
-  const router = useRouter();
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setClolumnFilters] = useState<ColumnFiltersState>([]);
-
-  useEffect(() => {
-    const handleSubscriptionUpdate = () => {
-      router.refresh();
-    };
-
-    window.addEventListener("subscriptionUpdated", handleSubscriptionUpdate);
-
-    return () => {
-      window.removeEventListener(
-        "subscriptionUpdated",
-        handleSubscriptionUpdate
-      );
-    };
-  }, [router]);
 
   const table = useReactTable({
     data,

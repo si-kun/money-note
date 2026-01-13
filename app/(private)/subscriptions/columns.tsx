@@ -76,7 +76,6 @@ export const columns: ColumnDef<Subscription>[] = [
         try {
           await deleteSubscription(row.original.id);
           toast.success("Subscription deleted successfully.");
-          window.dispatchEvent(new Event("subscriptionUpdated"));
         } catch (error) {
           console.error("Error deleting subscription:", error);
         }

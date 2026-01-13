@@ -3,15 +3,17 @@
 import { ApiResponse } from "@/app/types/api/api";
 import { SubscriptionFormType } from "@/app/types/zod/subscription";
 import { prisma } from "@/lib/prisma/prisma";
+import { revalidatePath } from "next/cache";
 
 interface EditSubscriptionProps {
   editingTarget: SubscriptionFormType;
   id: string;
 }
 
-export const editSubscription = async (
-  { editingTarget, id }: EditSubscriptionProps
-): Promise<ApiResponse<null>> => {
+export const editSubscription = async ({
+  editingTarget,
+  id,
+}: EditSubscriptionProps): Promise<ApiResponse<null>> => {
   try {
     await prisma.subscription.update({
       where: { id },
@@ -22,6 +24,8 @@ export const editSubscription = async (
         endDate: editingTarget.endDate,
       },
     });
+
+    revalidatePath("/subscriptions");
 
     return {
       success: true,

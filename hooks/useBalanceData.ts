@@ -199,18 +199,6 @@ export const useBalanceData = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, year, month]);
 
-  // サブスクリプション更新時
-  useEffect(() => {
-    const handleUpdate = () => {
-      fetchMonthlySubscriptions();
-    };
-    window.addEventListener("subscriptionUpdated", handleUpdate);
-    return () => {
-      window.removeEventListener("subscriptionUpdated", handleUpdate);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [year, month]);
-
   const handlePrevMonth = () => {
     if (month === 1) {
       setYear((prev) => prev - 1);

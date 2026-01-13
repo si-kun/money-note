@@ -76,7 +76,6 @@ const StockForm = ({ row, setIsDialogOpen }: StockFormProps) => {
       }
 
       setIsDialogOpen(false);
-      window.dispatchEvent(new Event("stockUpdated"));
     } catch (error) {
       console.error("Error submitting form:", error);
     }
