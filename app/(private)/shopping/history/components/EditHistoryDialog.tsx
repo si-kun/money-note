@@ -49,11 +49,15 @@ const EditHistoryDialog = ({ selectedHistory }: EditHistoryDialogProps) => {
 
   const handleEdit = async () => {
     try {
+
+      const adjustedDate = date ? new Date(date) : new Date();
+      adjustedDate.setHours(12, 0, 0, 0);
+
       const result = await editShoppingHistory({
         historyId: selectedHistory.id,
         data: {
           ...selectedHistory,
-          date: date as Date,
+          date: adjustedDate,
           totalPrice: totalPrice,
         },
       });
