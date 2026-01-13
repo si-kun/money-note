@@ -29,21 +29,6 @@ export default function ShoppingClient({
 
   const router = useRouter();
 
-  useEffect(() => {
-    const handleShoppingCartUpdated = () => {
-      router.refresh();
-    };
-
-    window.addEventListener("shoppingCartUpdated", handleShoppingCartUpdated);
-
-    return () => {
-      window.removeEventListener(
-        "shoppingCartUpdated",
-        handleShoppingCartUpdated
-      );
-    };
-  }, [router]);
-
   const selectedItem = selectedItemId
     ? (activeTab === "cart" ? cartData : historyData).find(
         (item) => item.id === selectedItemId

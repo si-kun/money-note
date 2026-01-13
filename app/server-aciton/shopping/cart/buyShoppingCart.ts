@@ -22,6 +22,22 @@ export const buyShoppingCart = async (
       return sum + (item.unitPrice ?? 0) * item.quantity;
     }, 0);
 
+    // 買い物カテゴリーを取得
+    const shoppingCategory = await prisma.category.findFirst({
+      where: {
+        name: "買い物",
+      },
+    });
+
+    // カテゴリが見つからない場合はエラー
+    if (!shoppingCategory) {
+      return {
+        success: false,
+        message: "買い物カテゴリが見つかりません。管理者に連絡してください。",
+        data: null,
+      };
+    }
+
     // ShoppingHistoryに追加
     const history = await prisma.shoppingHistory.create({
       data: {
@@ -32,6 +48,26 @@ export const buyShoppingCart = async (
       },
       include: {
         items: true,
+      },
+    });
+
+    // paymentを作成
+    const payment = await prisma.payment.create({
+      data: {
+        amount: totalPrice,
+        paymentDate: history.date,
+        userId: "test-user-id",
+        categoryId: shoppingCategory.id,
+      },
+    });
+
+    // historyにpaymentIdを保存
+    await prisma.shoppingHistory.update({
+      where: {
+        id: history.id,
+      },
+      data: {
+        paymentId: payment.id,
       },
     });
 
