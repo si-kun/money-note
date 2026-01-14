@@ -1,42 +1,32 @@
 import { createTransaction } from "@/app/server-aciton/balance/createTransaction";
-import { getCategory } from "@/app/server-aciton/balance/getCategory";
-import { ShoppingHistoryWithItems } from "@/app/server-aciton/shopping/history/getShoppingHistory";import {
+import { ShoppingHistoryWithItems } from "@/app/server-aciton/shopping/history/getShoppingHistory";
+import {
   transactionSchema,
   TransactionsFormType,
 } from "@/app/types/zod/transaction";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Category } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
+import { useCategories } from "./useCategories";
 
 export const useTransactionForm = () => {
-  const [category, setCategory] = useState<Category[]>([]);
   const [histories, setHistories] = useState<ShoppingHistoryWithItems[]>([]);
   const [open, setOpen] = useState(false);
 
+  const { fetchCategories, categories } = useCategories();
 
-
-
+  // カテゴリーを取得
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const result = await getCategory();
-        if (result.success) {
-          setCategory(result.data);
-        }
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-
     fetchCategories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const form = useForm<TransactionsFormType>({
     resolver: zodResolver(transactionSchema),
     mode: "onBlur",
     defaultValues: {
+      title: "",
       type: "PAYMENT",
       categoryId: "",
       amount: 0,
@@ -51,7 +41,7 @@ export const useTransactionForm = () => {
   });
 
   // カテゴリーをincome,paymentで絞り込む
-  const filteredCategory = category.filter((cat) =>
+  const filteredCategory = categories.filter((cat) =>
     typeValue === "INCOME" ? cat.type === "INCOME" : cat.type === "PAYMENT"
   );
 
@@ -78,7 +68,7 @@ export const useTransactionForm = () => {
   }, [historyIdValue, histories]);
 
   const shoppingCategoryId =
-    category.find((cat) => cat.name === "買い物")?.id === categoryIdValue
+    categories.find((cat) => cat.name === "買い物")?.id === categoryIdValue
       ? categoryIdValue
       : null;
 

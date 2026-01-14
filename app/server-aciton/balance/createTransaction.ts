@@ -9,13 +9,14 @@ export const createTransaction = async (
   data: TransactionsFormType
 ): Promise<ApiResponse<null>> => {
   try {
-    const { type, historyId, categoryId, amount, memo } = data;
+    const { title, type, historyId, categoryId, amount, memo } = data;
     const userId = "test-user-id";
 
     // incomeの場合
     if (type === "INCOME") {
       await prisma.income.create({
         data: {
+          title,
           categoryId,
           amount,
           memo,
@@ -27,6 +28,7 @@ export const createTransaction = async (
     else if (type === "PAYMENT") {
       const payment = await prisma.payment.create({
         data: {
+          title,
           categoryId,
           amount,
           memo,

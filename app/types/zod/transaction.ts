@@ -1,6 +1,7 @@
 import z from "zod";
 
 export const transactionSchema = z.object({
+    title: z.string().optional(),
     type: z.enum(["INCOME", "PAYMENT"]),
     categoryId: z.string().min(1,"カテゴリーを選択してください"),
     memo: z.string().optional(),

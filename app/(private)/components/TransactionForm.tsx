@@ -26,16 +26,15 @@ import { Controller } from "react-hook-form";
 import { CirclePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SelectedData } from "../page";
 import { useTransactionForm } from "@/hooks/useTransactionForm";
 import FloatingLabel from "./FloatingLabel";
+import { SelectedData } from "@/app/types/balance/balance";
 
 interface TransactionFormProps {
   selectedDate: SelectedData;
 }
 
 const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
-
   const {
     form,
     onSubmit,
@@ -49,12 +48,15 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
   } = useTransactionForm();
 
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => {
-        if(isOpen === false) {
-            form.reset();
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => {
+        if (isOpen === false) {
+          form.reset();
         }
         setOpen(isOpen);
-    }}>
+      }}
+    >
       <DialogTrigger
         asChild
         className="text-blue-500 hover:cursor-pointer hover:bg-blue-400 hover:text-white"
@@ -72,7 +74,7 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
               <DialogHeader>
                 <DialogTitle>{selectedDate.date}の収支を追加する</DialogTitle>
                 <DialogDescription>
-                    収入・支出の内訳を追加します。
+                  収入・支出の内訳を追加します。
                 </DialogDescription>
               </DialogHeader>
               <div className="flex flex-col gap-5">
@@ -87,11 +89,30 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
                   )}
                 />
                 <Controller
+                  name="title"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field className="relative">
+                      <FloatingLabel label="タイトル" fieldState={fieldState} />
+                      <Input
+                        type="text"
+                        className="p-4 h-14"
+                        value={field.value || ""}
+                        onChange={(e) => field.onChange(e.target.value)}
+                        onBlur={field.onBlur}
+                      />
+                    </Field>
+                  )}
+                />
+                <Controller
                   control={form.control}
                   name="categoryId"
-                  render={({ field,fieldState }) => (
+                  render={({ field, fieldState }) => (
                     <Field className="relative">
-                      <FloatingLabel label="カテゴリー" fieldState={fieldState} />
+                      <FloatingLabel
+                        label="カテゴリー"
+                        fieldState={fieldState}
+                      />
                       <Select
                         value={field.value}
                         onValueChange={(value) => {
@@ -99,8 +120,9 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
                         }}
                       >
                         <SelectTrigger
-                        onBlur={field.onBlur}
-                        className="w-full data-[size=default]:h-14 p-4">
+                          onBlur={field.onBlur}
+                          className="w-full data-[size=default]:h-14 p-4"
+                        >
                           <SelectValue placeholder="Theme" />
                         </SelectTrigger>
                         <SelectContent className="">
@@ -126,7 +148,7 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
                 <Controller
                   control={form.control}
                   name="amount"
-                  render={({ field,fieldState }) => (
+                  render={({ field, fieldState }) => (
                     <Field className="relative">
                       <FloatingLabel label="金額" fieldState={fieldState} />
                       <Input
@@ -142,7 +164,7 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
                 <Controller
                   control={form.control}
                   name="memo"
-                  render={({ field,fieldState }) => (
+                  render={({ field, fieldState }) => (
                     <Field className="relative">
                       <FloatingLabel label="メモ" fieldState={fieldState} />
                       <Textarea
