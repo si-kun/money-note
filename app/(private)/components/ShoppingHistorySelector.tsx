@@ -25,20 +25,24 @@ import {
   ShoppingHistoryWithItems,
 } from "@/app/server-aciton/shopping/history/getShoppingHistory";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { TransactionsFormType } from "@/app/types/zod/transaction";
+import { TransactionsFormType,  } from "@/app/types/zod/transaction";
 
 interface ShoppingHistorySelectorProps {
   control: Control<TransactionsFormType>;
   histories: ShoppingHistoryWithItems[];
   setHistories: Dispatch<SetStateAction<ShoppingHistoryWithItems[]>>;
+  date: string;
 }
 
 const ShoppingHistorySelector = ({
   control,
   histories,
   setHistories,
+  date,
 }: ShoppingHistorySelectorProps) => {
-  const [historyDate, setHistoryDate] = useState<Date | undefined>(new Date());
+  const [historyDate, setHistoryDate] = useState<Date | undefined>(
+    date ? new Date(date) : new Date()
+  );
 
   useEffect(() => {
     const fetchHistories = async () => {
@@ -67,7 +71,8 @@ const ShoppingHistorySelector = ({
     };
 
     fetchHistories();
-  }, [historyDate,setHistories]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [historyDate]);
 
   return (
     <Controller
@@ -75,18 +80,19 @@ const ShoppingHistorySelector = ({
       name="historyId"
       render={({ field }) => (
         <Field>
-          <Card>
+          <Card
+            className={`${field.value ? "border-blue-500 bg-slate-200" : ""}`}
+          >
             <CardHeader>
               <CardTitle>買い物履歴から選択してください。</CardTitle>
               <DialogDescription>
-                日付で絞り込むこともできます。
-                <br />
-                また選択しなくても登録可能です。
+              カートから購入した場合は自動で紐付けられています。<br />
+              手動で追加した支出を、既存の買い物履歴と紐付けたい場合のみ選択してください。
               </DialogDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
               <Popover>
-                <PopoverTrigger asChild>
+                <PopoverTrigger asChild disabled={field.value !== null}>
                   <Button
                     variant="outline"
                     data-empty={!historyDate}
@@ -114,11 +120,16 @@ const ShoppingHistorySelector = ({
                   className={`flex items-center gap-2 w-full border-2 rounded-md p-2 ${
                     field.value === history.id
                       ? "border-blue-500 bg-blue-50"
+                      : field.value !== null
+                      ? "border-slate-200 bg-slate-100 opacity-50"
                       : "border-slate-50 bg-slate-50"
                   }`}
                 >
                   <Checkbox
                     checked={field.value === history.id}
+                    disabled={
+                      field.value !== null
+                    }
                     onCheckedChange={(checked) =>
                       field.onChange(checked ? history.id : null)
                     }

@@ -18,34 +18,39 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field";
 
 import { Textarea } from "@/components/ui/textarea";
-import TypeToggleButton from "./TypeToggleButton";
-import ShoppingHistorySelector from "./ShoppingHistorySelector";
 
 import { Controller } from "react-hook-form";
 
-import { CirclePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useTransactionForm } from "@/hooks/useTransactionForm";
 import FloatingLabel from "./FloatingLabel";
-import { SelectedData } from "@/app/types/balance/balance";
+import {
+  IncomeWithCategory,
+  PaymentWithCategory,
+} from "@/app/types/balance/balance";
+import { useEditTransactionForm } from "@/hooks/useEditTransactionForm";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import HistoryDetail from "./HistoryDetail";
 
-interface TransactionFormProps {
-  selectedDate: SelectedData;
+interface EditTransactionFormProps {
+  transaction: PaymentWithCategory | IncomeWithCategory;
+  type: "INCOME" | "PAYMENT";
+  date: string;
 }
 
-const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
+const EditTransactionForm = ({
+  transaction,
+  type,
+  date,
+}: EditTransactionFormProps) => {
   const {
     form,
+    open,
+    setOpen,
     onSubmit,
     filteredCategory,
     shoppingCategoryId,
-    typeValue,
-    histories,
-    setHistories,
-    open,
-    setOpen,
-  } = useTransactionForm();
+  } = useEditTransactionForm({ transaction, type });
 
   return (
     <Dialog
@@ -59,11 +64,10 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
     >
       <DialogTrigger
         asChild
-        className="text-blue-500 hover:cursor-pointer hover:bg-blue-400 hover:text-white"
+        className="text-blue-500 ml-2 hover:cursor-pointer hover:bg-blue-400 hover:text-white"
       >
         <Button type="button" variant={"secondary"}>
-          <CirclePlus />
-          内訳を追加
+          編集
         </Button>
       </DialogTrigger>
 
@@ -72,22 +76,12 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
           <FieldGroup>
             <Field>
               <DialogHeader>
-                <DialogTitle>{selectedDate.date}の収支を追加する</DialogTitle>
+                <DialogTitle>{date}の収支を変更する</DialogTitle>
                 <DialogDescription>
                   収入・支出の内訳を追加します。
                 </DialogDescription>
               </DialogHeader>
               <div className="flex flex-col gap-5">
-                <Controller
-                  name="type"
-                  control={form.control}
-                  render={({ field }) => (
-                    <div className="grid grid-cols-2">
-                      <TypeToggleButton field={field} type="INCOME" />
-                      <TypeToggleButton field={field} type="PAYMENT" />
-                    </div>
-                  )}
-                />
                 <Controller
                   name="title"
                   control={form.control}
@@ -118,6 +112,9 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
                         onValueChange={(value) => {
                           field.onChange(value);
                         }}
+                        disabled={
+                          shoppingCategoryId === form.watch("categoryId")
+                        }
                       >
                         <SelectTrigger
                           onBlur={field.onBlur}
@@ -137,14 +134,61 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
                   )}
                 />
 
-                {shoppingCategoryId && typeValue === "PAYMENT" && (
-                  <ShoppingHistorySelector
-                    control={form.control}
-                    histories={histories}
-                    setHistories={setHistories}
-                    date={selectedDate.date}
-                  />
-                )}
+                {type === "PAYMENT" &&
+                  (transaction as PaymentWithCategory).shoppingHistory && (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>買い物履歴</CardTitle>
+                        <DialogDescription>
+                          ※買い物履歴と紐付いているため、カテゴリは変更できません
+                        </DialogDescription>
+                      </CardHeader>
+                      <CardContent className="flex flex-col gap-4">
+                        <div>
+                          <div className="w-full flex items-center">
+                            <span>
+                              {
+                                (transaction as PaymentWithCategory)
+                                  .shoppingHistory?.name
+                              }
+                            </span>
+                            <span className="ml-auto">
+                              金額:¥
+                              {(
+                                transaction as PaymentWithCategory
+                              ).shoppingHistory?.totalPrice?.toLocaleString() ||
+                                0}
+                            </span>
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button variant="ghost" className="ml-2">
+                                  【詳細】
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle>
+                                    {
+                                      (transaction as PaymentWithCategory)
+                                        .shoppingHistory?.name
+                                    }
+                                    の詳細
+                                  </DialogTitle>
+                                </DialogHeader>
+
+                                <HistoryDetail
+                                  data={
+                                    (transaction as PaymentWithCategory)
+                                      .shoppingHistory!
+                                  }
+                                />
+                              </DialogContent>
+                            </Dialog>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
 
                 <Controller
                   control={form.control}
@@ -196,4 +240,4 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
   );
 };
 
-export default TransactionForm;
+export default EditTransactionForm;

@@ -9,4 +9,12 @@ export const transactionSchema = z.object({
     historyId: z.string().optional().nullable(),
 })
 
+export const editTransactionSchema = z.object({
+    title: z.string().optional(),
+    categoryId: z.string().min(1,"カテゴリーを選択してください"),
+    memo: z.string().optional(),
+    amount: z.number().min(1,"金額は1以上で入力してください"),
+})
+
 export type TransactionsFormType = z.infer<typeof transactionSchema>;
+export type EditTransactionsFormType = z.infer<typeof editTransactionSchema>;

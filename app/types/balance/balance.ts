@@ -5,7 +5,7 @@ export type IncomeWithCategory = Prisma.IncomeGetPayload<{
   include: { category: true };
 }>;
 export type PaymentWithCategory = Prisma.PaymentGetPayload<{
-  include: { category: true };
+  include: { category: true,shoppingHistory: {include: {items: true}} };
 }>;
 
 export type BalanceData = Record<
