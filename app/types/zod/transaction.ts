@@ -6,7 +6,13 @@ export const transactionSchema = z.object({
     categoryId: z.string().min(1,"カテゴリーを選択してください"),
     memo: z.string().optional(),
     amount: z.number().min(1,"金額は1以上で入力してください"),
-    historyId: z.string().optional().nullable(),
+    addHistories: z.array(z.object({
+        id: z.string(),
+        name: z.string(),
+        price: z.number(),
+        quantity: z.number(),
+        stockAdd: z.boolean(),
+    })).optional(),
 })
 
 export const editTransactionSchema = z.object({

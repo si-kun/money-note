@@ -9,10 +9,36 @@ import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { useCategories } from "./useCategories";
+import { v4 as uuidv4 } from "uuid";
+interface NewProductAdded {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  stockAdd: boolean;
+}
 
 export const useTransactionForm = () => {
   const [histories, setHistories] = useState<ShoppingHistoryWithItems[]>([]);
   const [open, setOpen] = useState(false);
+
+  const [addInputProduct, setAddInputProduct] = useState<string>("");
+  const [newProductAdded, setNewProductAdded] = useState<NewProductAdded[]>([
+    {
+      id: uuidv4(),
+      name: "いちご",
+      price: 150,
+      quantity: 15,
+      stockAdd: true,
+    },
+    {
+      id: uuidv4(),
+      name: "みかん",
+      price: 100,
+      quantity: 10,
+      stockAdd: false,
+    },
+  ]);
 
   const { fetchCategories, categories } = useCategories();
 
@@ -31,9 +57,57 @@ export const useTransactionForm = () => {
       categoryId: "",
       amount: 0,
       memo: "",
-      historyId: null,
+      addHistories: [],
     },
   });
+
+  const watchProducts = useWatch({
+    control: form.control,
+    name: "addHistories",
+  }) || [];
+
+  
+  const newAddProduct = () => {
+    // 空文字だったら追加しない
+    if (addInputProduct.trim() === "") {
+      toast.error("商品名を入力してください");
+      return;
+    }
+
+    // すでに同じ名前の商品が存在していたら追加しない
+    if (
+      watchProducts.some((product) => product.name === addInputProduct.trim())
+    ) {
+      toast.error("同じ名前の商品がすでに存在しています");
+      return;
+    }
+
+    const newProduct = {
+      id: uuidv4(),
+      name: addInputProduct.trim(),
+      price: 0,
+      quantity: 0,
+      stockAdd: false,
+    }
+    form.setValue("addHistories", [
+      ...watchProducts, newProduct,
+    ])
+    toast.success("商品が追加されました");
+    setAddInputProduct("");
+  };
+
+  const updateProduct = (
+    id: string,
+    field: "quantity" | "price",
+    value: number
+  ) => {
+    form.setValue(
+      "addHistories",
+      watchProducts.map((product) =>
+      product.id === id ? {...product, [field]: value} : product)
+    )
+  };
+
 
   const typeValue = useWatch({
     control: form.control,
@@ -49,23 +123,6 @@ export const useTransactionForm = () => {
     control: form.control,
     name: "categoryId",
   });
-
-  const historyIdValue = useWatch({
-    control: form.control,
-    name: "historyId",
-  });
-
-  useEffect(() => {
-    if (historyIdValue) {
-      const selectedHistory = histories.find(
-        (history) => history.id === historyIdValue
-      );
-      if (selectedHistory) {
-        form.setValue("amount", selectedHistory.totalPrice || 0);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [historyIdValue, histories]);
 
   const shoppingCategoryId =
     categories.find((cat) => cat.name === "買い物")?.id === categoryIdValue
@@ -89,6 +146,17 @@ export const useTransactionForm = () => {
     }
   };
 
+  const totalCartPrice = watchProducts.reduce((acc, item) => {
+    return acc + (item.price || 0) * (item.quantity || 0);
+  },0);
+
+
+  useEffect(() => {
+    form.setValue("amount", totalCartPrice);
+    form.trigger("amount");
+  },[totalCartPrice,form])
+
+
   return {
     form,
     onSubmit,
@@ -99,5 +167,12 @@ export const useTransactionForm = () => {
     setHistories,
     open,
     setOpen,
+    newProductAdded,
+    setNewProductAdded,
+    updateProduct,
+    newAddProduct,
+    addInputProduct,
+    setAddInputProduct,
+    totalCartPrice,
   };
 };
