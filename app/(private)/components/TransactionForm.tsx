@@ -48,12 +48,40 @@ import {
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Stock } from "@prisma/client";
+import { useEffect, useState } from "react";
+import { getAllStock } from "@/app/server-aciton/stock/getAllStock";
+import { StockListDataTable } from "./StockListDataTable";
+import { stockListColumns } from "./stockListColumns";
+
+import { v4 as uuidv4 } from "uuid";
+import { toast } from "sonner";
 
 interface TransactionFormProps {
   selectedDate: SelectedData;
 }
 
 const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
+
+  const [stockData, setStockData] = useState<Stock[]>([]);
+  const [stockOpen, setStockOpen] = useState(false);
+
+  useEffect(() => {
+    if(stockOpen === true) {
+      const fetchStockData = async () => {
+        try {
+          const result = await getAllStock();
+          if(result.success && result.data) {
+            setStockData(result.data);
+          }
+        } catch(error) {
+          console.error("Error fetching stock data:", error);
+        }
+      }
+      fetchStockData();
+    }
+  },[stockOpen])
+
   const {
     form,
     onSubmit,
@@ -161,11 +189,55 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
 
                 {shoppingCategoryId && typeValue === "PAYMENT" && (
                   <Card>
-                    <CardHeader>
-                      <CardTitle>買い物リストを作成</CardTitle>
-                      <CardDescription>
-                        リストから選択。または手動で入力
-                      </CardDescription>
+                    <CardHeader className="flex items-center justify-between">
+                      <div>
+                        <CardTitle>買い物リストを作成</CardTitle>
+                        <CardDescription>
+                          リストから選択。または手動で入力
+                        </CardDescription>
+                      </div>
+                      <Dialog open={stockOpen} onOpenChange={setStockOpen}>
+                        <DialogTrigger asChild>
+                          <Button type="button" variant={"secondary"}>
+                            リストから追加
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="min-w-[40vw]">
+                          <DialogHeader>
+                            <DialogTitle>Are you absolutely sure?</DialogTitle>
+                            <DialogDescription>
+                              This action cannot be undone. This will
+                              permanently delete your account and remove your
+                              data from our servers.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <StockListDataTable data={stockData} columns={stockListColumns} onSelectionChange={(selectedRows) => {
+                            const currentHistories = form.getValues("addHistories") || [];
+
+                            // 重複チェック
+                            const newProducts = selectedRows.filter((stock) => !currentHistories.some((item) => item.name === stock.name))
+                            .map((stock) => ({
+                              id: uuidv4(),
+                              name: stock.name,
+                              price: Number(stock.unitPrice),
+                              quantity: 1,
+                              stockAdd: false,
+                            }))
+
+                            // 重複がある場合は、警告
+                            if(newProducts.length < selectedRows.length) {
+                              toast.warning("一部の商品はすでに内訳に存在しているため、追加されませんでした。");
+                            }
+
+                            form.setValue("addHistories", [...currentHistories, ...newProducts]);
+
+                            if(newProducts.length > 0) {
+                              toast.success("選択した商品を内訳に追加しました");
+                            }
+                            setStockOpen(false);
+                          }} />
+                        </DialogContent>
+                      </Dialog>
                     </CardHeader>
                     <CardContent className="flex flex-col gap-2">
                       <div className="space-y-1">
@@ -297,12 +369,10 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
                         {shoppingCategoryId && typeValue === "PAYMENT" && (
                           <Button
                             className="h-14"
-                            onClick={() =>{
-
-                              form.setValue("amount", totalCartPrice)
+                            onClick={() => {
+                              form.setValue("amount", totalCartPrice);
                               form.trigger("amount");
-                            }
-                            }
+                            }}
                             variant={"secondary"}
                             type="button"
                           >

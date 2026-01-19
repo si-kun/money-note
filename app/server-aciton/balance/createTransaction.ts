@@ -71,9 +71,37 @@ export const createTransaction = async (
           userId: "test-user-id",
         }))
 
-        if(stockData.length > 0) {
+        // stockに既に存在していたら数量を更新する
+        const existingStocks = await prisma.stock.findMany({
+          where: {
+            userId: "test-user-id",
+            name: {
+              in: stockData.map(item => item.name)
+            }
+          }
+        })
+
+        for(const existingStock of existingStocks) {
+          const addedStock = stockData.find(item => item.name === existingStock.name)
+
+          if(addedStock) {
+            await prisma.stock.update({
+              where: {
+                id: existingStock.id,
+              },
+              data: {
+                quantity: existingStock.quantity + addedStock.quantity,
+              }
+            })
+          }
+        }
+
+        // 新規作成が必要な商品をフィルタリング
+        const newStockData = stockData.filter(item => !existingStocks.find(stock => stock.name === item.name))
+
+        if(newStockData.length > 0) {
           await prisma.stock.createMany({
-            data: stockData
+            data: newStockData
           })
         }
 
