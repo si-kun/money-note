@@ -220,8 +220,8 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
                               id: uuidv4(),
                               name: stock.name,
                               price: Number(stock.unitPrice),
-                              quantity: 1,
-                              stockAdd: false,
+                              quantity: 0,
+                              stockAdd: true,
                             }))
 
                             // 重複がある場合は、警告
