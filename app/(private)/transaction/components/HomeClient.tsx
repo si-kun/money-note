@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useBalanceData } from "@/hooks/useBalanceData";
 import Summary from "./Summary";
 import SummaryCard from "./SummaryCard";
-import SubscriptionCard from "../subscriptions/components/SubscriptionCard";
+import SubscriptionCard from "../../subscriptions/components/SubscriptionCard";
 import {
   IncomeWithCategory,
   PaymentWithCategory,

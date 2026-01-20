@@ -1,6 +1,6 @@
 import { getIncome } from "../server-aciton/balance/getIncome";
 import { getPayment } from "../server-aciton/balance/getPayment";
-import HomeClient from "./components/HomeClient";
+import HomeClient from "./transaction/components/HomeClient";
 
 export default async function Home() {
   const today = new Date();

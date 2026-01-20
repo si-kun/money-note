@@ -88,14 +88,14 @@ export function StockListDataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  選択可能な商品が見つかりませんでした。
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-      <div>
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Button
             disabled={!table.getCanPreviousPage()}
@@ -116,6 +116,8 @@ export function StockListDataTable<TData, TValue>({
         </div>
         <Button
           type="button"
+          disabled={table.getSelectedRowModel().rows.length === 0}
+          className={`disabled:bg-slate-400 disabled:cursor-not-allowed bg-green-500 hover:bg-green-600 text-white`}
           onClick={() => {
             const selectedRows = table
               .getSelectedRowModel()
@@ -124,7 +126,9 @@ export function StockListDataTable<TData, TValue>({
             setRowSelection({});
           }}
         >
-          選択された商品を追加
+          {table.getSelectedRowModel().rows.length === 0
+            ? "商品を選択してください"
+            : "選択された商品を追加"}
         </Button>
       </div>
     </>

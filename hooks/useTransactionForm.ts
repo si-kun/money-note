@@ -11,6 +11,14 @@ import { toast } from "sonner";
 import { useCategories } from "./useCategories";
 import { v4 as uuidv4 } from "uuid";
 
+export interface ProductValue {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  stockAdd: boolean;
+}
+
 export const useTransactionForm = () => {
   const [histories, setHistories] = useState<ShoppingHistoryWithItems[]>([]);
   const [open, setOpen] = useState(false);
@@ -38,7 +46,18 @@ export const useTransactionForm = () => {
     },
   });
 
-  const watchProducts = useWatch({
+  // watch
+  const typeValue = useWatch({
+    control: form.control,
+    name: "type",
+  });
+
+  const categoryIdValue = useWatch({
+    control: form.control,
+    name: "categoryId",
+  });
+
+  const productsValue = useWatch({
     control: form.control,
     name: "addHistories",
   }) || [];
@@ -53,7 +72,7 @@ export const useTransactionForm = () => {
 
     // すでに同じ名前の商品が存在していたら追加しない
     if (
-      watchProducts.some((product) => product.name === addInputProduct.trim())
+      productsValue.some((product) => product.name === addInputProduct.trim())
     ) {
       toast.error("同じ名前の商品がすでに存在しています");
       return;
@@ -67,49 +86,22 @@ export const useTransactionForm = () => {
       stockAdd: false,
     }
     form.setValue("addHistories", [
-      ...watchProducts, newProduct,
+      ...productsValue, newProduct,
     ])
     toast.success("商品が追加されました");
     setAddInputProduct("");
   };
-
-  const updateProduct = (
-    id: string,
-    field: "quantity" | "price",
-    value: number
-  ) => {
-    form.setValue(
-      "addHistories",
-      watchProducts.map((product) =>
-      product.id === id ? {...product, [field]: value} : product)
-    )
-  };
-
-
-  const typeValue = useWatch({
-    control: form.control,
-    name: "type",
-  });
 
   // カテゴリーをincome,paymentで絞り込む
   const filteredCategory = categories.filter((cat) =>
     typeValue === "INCOME" ? cat.type === "INCOME" : cat.type === "PAYMENT"
   );
 
-  const categoryIdValue = useWatch({
-    control: form.control,
-    name: "categoryId",
-  });
 
   const shoppingCategoryId =
     categories.find((cat) => cat.name === "買い物")?.id === categoryIdValue
       ? categoryIdValue
       : null;
-
-      // リストから削除
-      const handleDeleteProduct = (id: string) => {
-        form.setValue("addHistories", watchProducts.filter((product) => product.id !== id));
-      }
 
   const onSubmit = async (data: TransactionsFormType) => {
     try {
@@ -128,7 +120,7 @@ export const useTransactionForm = () => {
     }
   };
 
-  const totalCartPrice = watchProducts.reduce((acc, item) => {
+  const totalCartPrice = productsValue.reduce((acc, item) => {
     return acc + (item.price || 0) * (item.quantity || 0);
   },0);
 
@@ -149,11 +141,10 @@ export const useTransactionForm = () => {
     setHistories,
     open,
     setOpen,
-    updateProduct,
     newAddProduct,
     addInputProduct,
     setAddInputProduct,
     totalCartPrice,
-    handleDeleteProduct,
+    productsValue,
   };
 };
