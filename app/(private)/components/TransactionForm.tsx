@@ -32,7 +32,7 @@ import TypeToggleButton from "./TypeToggleButton";
 
 import { Controller } from "react-hook-form";
 
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTransactionForm } from "@/hooks/useTransactionForm";
@@ -95,6 +95,7 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
     addInputProduct,
     setAddInputProduct,
     totalCartPrice,
+    handleDeleteProduct,
   } = useTransactionForm();
 
   return (
@@ -117,7 +118,7 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="min-w-[30vw] h-[80vh] flex flex-col py-5 overflow-y-auto">
+      <DialogContent className="min-w-[35vw] h-[80vh] flex flex-col py-5 overflow-y-auto">
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
             <Field>
@@ -268,11 +269,12 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
                           <TableRow>
                             <TableHead>登録</TableHead>
                             <TableHead className="w-[120px]">商品名</TableHead>
-                            <TableHead>個数</TableHead>
-                            <TableHead>値段</TableHead>
+                            <TableHead className="w-[100px]">個数</TableHead>
+                            <TableHead className="w-[100px]">値段</TableHead>
                             <TableHead className="text-right w-[100px]">
                               合計
                             </TableHead>
+                            <TableHead>削除</TableHead>
                           </TableRow>
                         </TableHeader>
                         <Controller
@@ -338,6 +340,11 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
                                     </TableCell>
                                     <TableCell className="text-right">
                                       ¥{totalPrice.toLocaleString()}
+                                    </TableCell>
+                                    <TableCell>
+                                      <Button
+                                      onClick={() => handleDeleteProduct(product.id)}
+                                      type="button" variant={"outline"}><Trash2 /></Button>
                                     </TableCell>
                                   </TableRow>
                                 );

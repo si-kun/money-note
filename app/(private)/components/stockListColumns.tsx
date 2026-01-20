@@ -8,7 +8,7 @@ export const stockListColumns: ColumnDef<Stock>[] = [
   {
     id: "select",
     header: "選択",
-    cell: ({ row, table }) => {
+    cell: ({ row }) => {
       return (
         <Checkbox
           className="data-[state=checked]:bg-green-400 data-[state=checked]:border-none"

@@ -10,35 +10,12 @@ import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { useCategories } from "./useCategories";
 import { v4 as uuidv4 } from "uuid";
-interface NewProductAdded {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  stockAdd: boolean;
-}
 
 export const useTransactionForm = () => {
   const [histories, setHistories] = useState<ShoppingHistoryWithItems[]>([]);
   const [open, setOpen] = useState(false);
 
   const [addInputProduct, setAddInputProduct] = useState<string>("");
-  const [newProductAdded, setNewProductAdded] = useState<NewProductAdded[]>([
-    {
-      id: uuidv4(),
-      name: "いちご",
-      price: 150,
-      quantity: 15,
-      stockAdd: true,
-    },
-    {
-      id: uuidv4(),
-      name: "みかん",
-      price: 100,
-      quantity: 10,
-      stockAdd: false,
-    },
-  ]);
 
   const { fetchCategories, categories } = useCategories();
 
@@ -129,6 +106,11 @@ export const useTransactionForm = () => {
       ? categoryIdValue
       : null;
 
+      // リストから削除
+      const handleDeleteProduct = (id: string) => {
+        form.setValue("addHistories", watchProducts.filter((product) => product.id !== id));
+      }
+
   const onSubmit = async (data: TransactionsFormType) => {
     try {
       const result = await createTransaction(data);
@@ -167,12 +149,11 @@ export const useTransactionForm = () => {
     setHistories,
     open,
     setOpen,
-    newProductAdded,
-    setNewProductAdded,
     updateProduct,
     newAddProduct,
     addInputProduct,
     setAddInputProduct,
     totalCartPrice,
+    handleDeleteProduct,
   };
 };
