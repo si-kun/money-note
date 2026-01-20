@@ -13,6 +13,7 @@ import { useCategories } from "./useCategories";
 import { editPayment } from "@/app/server-aciton/balance/editPayment";
 import { toast } from "sonner";
 import { editIncome } from "@/app/server-aciton/balance/editIncome";
+import { deleteTransaction } from "@/app/server-aciton/balance/deleteTransaction";
 
 interface UseEditTransactionFormReturn {
   transaction: PaymentWithCategory | IncomeWithCategory;
@@ -83,6 +84,23 @@ export const useEditTransactionForm = ({
     (cat) => cat.name === "買い物"
   )?.id;
 
+  // 削除機能
+  const handleDeleteTransaction = async () => {
+    try {
+    
+      const result = await deleteTransaction(transaction.id, type);
+      if(result.success) {
+        toast.success(result.message);
+        setOpen(false);
+      } else {
+        toast.error(result.message);
+      }
+    } catch(error) {
+      console.error("Error deleting transaction:", error);
+      toast.error("取引の削除中にエラーが発生しました");
+    }
+  }
+
   return {
     form,
     open,
@@ -92,5 +110,6 @@ export const useEditTransactionForm = ({
     categories,
     filteredCategory,
     shoppingCategoryId,
+    handleDeleteTransaction,
   };
 };

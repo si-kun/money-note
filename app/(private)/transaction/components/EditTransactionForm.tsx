@@ -32,6 +32,18 @@ import { useEditTransactionForm } from "@/hooks/useEditTransactionForm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import HistoryDetail from "./HistoryDetail";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 interface EditTransactionFormProps {
   transaction: PaymentWithCategory | IncomeWithCategory;
   type: "INCOME" | "PAYMENT";
@@ -50,6 +62,7 @@ const EditTransactionForm = ({
     onSubmit,
     filteredCategory,
     shoppingCategoryId,
+    handleDeleteTransaction,
   } = useEditTransactionForm({ transaction, type });
 
   return (
@@ -231,6 +244,30 @@ const EditTransactionForm = ({
                 >
                   保存
                 </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive">削除</Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        本当にこの取引を削除しますか？
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        この操作は取り消せません。
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={handleDeleteTransaction}
+                        className="bg-red-600 hover:bg-red-700"
+                      >
+                        削除
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </Field>
           </FieldGroup>
