@@ -16,9 +16,37 @@ export const deleteTransaction = async (
     }
 
     if (type === "PAYMENT") {
-      await prisma.payment.delete({
-        where: { id },
+      // カテゴリーが買い物リストの場合、関連する履歴も削除
+      const history = await prisma.shoppingHistory.findUnique({
+        where: { paymentId: id },
+        include: { items: true },
       });
+
+      // 在庫を減らす
+      if (history) {
+        await prisma.$transaction(async (tx) => {
+          for (const item of history.items) {
+            if (item.stockId) {
+              await tx.stock.update({
+                where: { id: item.stockId },
+                data: {
+                  quantity: {
+                    decrement: item.quantity,
+                  },
+                },
+              });
+            }
+          }
+
+          await tx.payment.delete({
+            where: { id },
+          });
+        });
+      } else {
+        await prisma.payment.delete({
+          where: { id },
+        });
+      }
     }
 
     revalidatePath("/");

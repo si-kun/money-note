@@ -24,88 +24,89 @@ export const createTransaction = async (
         },
       });
     }
-    // expenseの場合
+    // paymentの場合
     else if (type === "PAYMENT") {
-      const payment = await prisma.payment.create({
-        data: {
-          title,
-          categoryId,
-          amount,
-          memo,
-          userId: userId,
-        },
-      });
-
-      // 買い物カテゴリーの場合、履歴を追加
-      if (addHistories && addHistories.length > 0) {
-
-        // ShoppingHistoryを作成
-        const history = await prisma.shoppingHistory.create({
+      await prisma.$transaction(async (tx) => {
+        // Paymentを作成
+        const payment = await tx.payment.create({
           data: {
-            name: title || "買い物履歴",
-            totalPrice: amount,
-            userId: "test-user-id",
-            paymentId: payment.id,
-          }
-        })
+            title,
+            categoryId,
+            amount,
+            memo,
+            userId,
+          },
+        });
 
-        // ShoppingCartItemを作成
-        await prisma.shoppingCartItem.createMany({
-          data: addHistories.map((item) => ({
-            itemName: item.name,
-            quantity: item.quantity || 1,
-            unitPrice: item.price || 0,
-            unit: "個",
-            historyId: history.id,
-            checked: false,
-          }))
-        })
+        // 買い物カテゴリーの場合、履歴を追加
+        if (addHistories && addHistories.length > 0) {
+          // ShoppingHistoryを作成
+          const history = await tx.shoppingHistory.create({
+            data: {
+              name: title || "買い物履歴",
+              totalPrice: amount,
+              userId: "test-user-id",
+              paymentId: payment.id,
+            },
+          });
 
-        // stockAddがtrueのだったらstockに追加
-        const stockData = addHistories.filter(item => item.stockAdd).map(item => ({
-          name: item.name,
-          quantity: item.quantity || 1,
-          minQuantity: 0,
-          unit: "個",
-          unitPrice: item.price || 0,
-          userId: "test-user-id",
-        }))
+          // 在庫を処理してstockIdを取得
+          const itemsWithStockId = [];
 
-        // stockに既に存在していたら数量を更新する
-        const existingStocks = await prisma.stock.findMany({
-          where: {
-            userId: "test-user-id",
-            name: {
-              in: stockData.map(item => item.name)
-            }
-          }
-        })
+          for (const item of addHistories) {
+            let stockId = null;
 
-        for(const existingStock of existingStocks) {
-          const addedStock = stockData.find(item => item.name === existingStock.name)
+            if (item.stockAdd) {
+              const existingStock = await tx.stock.findFirst({
+                where: {
+                  userId: "test-user-id",
+                  name: item.name,
+                },
+              });
 
-          if(addedStock) {
-            await prisma.stock.update({
-              where: {
-                id: existingStock.id,
-              },
-              data: {
-                quantity: existingStock.quantity + addedStock.quantity,
+              if (existingStock) {
+                await tx.stock.update({
+                  where: {
+                    id: existingStock.id,
+                  },
+                  data: {
+                    quantity: existingStock.quantity + (item.quantity || 1),
+                  },
+                });
+                stockId = existingStock.id;
+              } else {
+                const newStock = await tx.stock.create({
+                  data: {
+                    name: item.name,
+                    quantity: item.quantity || 1,
+                    minQuantity: 0,
+                    unit: "個",
+                    unitPrice: item.price || 0,
+                    userId: "test-user-id",
+                  },
+                });
+                stockId = newStock.id;
               }
-            })
+            }
+            itemsWithStockId.push({
+              ...item,
+              stockId,
+            });
           }
+          // ShoppingCartItemを作成
+          await tx.shoppingCartItem.createMany({
+            data: itemsWithStockId.map((item) => ({
+              itemName: item.name,
+              quantity: item.quantity || 1,
+              unitPrice: item.price || 0,
+              unit: "個",
+              historyId: history.id,
+              checked: false,
+              stockId: item.stockId,
+            })),
+          });
         }
-
-        // 新規作成が必要な商品をフィルタリング
-        const newStockData = stockData.filter(item => !existingStocks.find(stock => stock.name === item.name))
-
-        if(newStockData.length > 0) {
-          await prisma.stock.createMany({
-            data: newStockData
-          })
-        }
-
-      }
+      });
     } else {
       return {
         success: false,
