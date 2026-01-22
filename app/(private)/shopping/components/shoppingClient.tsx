@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ShoppingItemTable } from "./shoppingData-table";
-import { columns } from "./shoppingColumns";
+import { ShoppingItemTable } from "../cart/components/shoppingCartData-table";
+import { columns } from "../cart/components/shoppingColumns";
 import AddCartDialog from "./AddCartDialog";
 import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
 import { useRouter } from "next/navigation";

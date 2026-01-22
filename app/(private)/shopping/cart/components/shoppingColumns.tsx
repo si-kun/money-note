@@ -5,10 +5,10 @@ import ActionsCell from "@/components/dataTable/ActionsCell";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Prisma } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
-import EditShopping from "./EditShopping";
+import EditShopping from "../../components/EditShopping";
 import { deleteShoppingCartItem } from "@/app/server-aciton/shopping/cart/deleteShoppinCartItem";
 import { toast } from "sonner";
-import SelectedCart from "../../../../components/select/SelectedCart";
+import SelectedCart from "../../../../../components/select/SelectedCart";
 import { lowStockSelectedCart } from "@/app/server-aciton/shopping/cart/lowStockSelectedCart";
 
 export type ShoppingCartItemWithStock = Prisma.ShoppingCartItemGetPayload<{

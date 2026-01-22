@@ -1,11 +1,10 @@
 import { getShoppingCart } from "@/app/server-aciton/shopping/cart/getShoppingCart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// import AddCartDialog from "../../components/AddCartDialog";
-import { ShoppingItemTable } from "../../components/shoppingData-table";
-import { columns, lowStockColumns } from "../../components/shoppingColumns";
+import { columns, lowStockColumns } from "../components/shoppingColumns";
 import BuyButton from "../../components/BuyButton";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ShoppingCartItemTable } from "../components/shoppingCartData-table";
 
 interface CartDetailPageProps {
   params: Promise<{
@@ -50,7 +49,7 @@ const ShoppingDetailPage = async ({ params }: CartDetailPageProps) => {
         {/* <AddCartDialog />  */}
       </CardHeader>
       <CardContent className="overflow-y-auto">
-        <ShoppingItemTable
+        <ShoppingCartItemTable
           items={selectedCart.items || []}
           columns={isLowStockCart ? lowStockColumns : columns}
         />

@@ -1,23 +1,21 @@
-import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getShoppingCart } from "@/app/server-aciton/shopping/cart/getShoppingCart";
-import { getShoppingHistory } from "@/app/server-aciton/shopping/history/getShoppingHistory";
 import Link from "next/link";
 import CreateCart from "./cart/components/CreateCart";
 
 import DeleteDialog from "./components/DeleteDialog";
+import HistoryClient from "./history/components/HistoryClient";
 
 export default async function ShoppingLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+
   const cartResponse = await getShoppingCart();
-  const historyResponse = await getShoppingHistory();
 
   const carts = cartResponse?.data || [];
-  const histories = historyResponse?.data || [];
 
   return (
     <div className="flex w-full gap-6 h-full overflow-hidden">
@@ -58,34 +56,8 @@ export default async function ShoppingLayout({
             ))}
           </TabsContent>
 
-          <TabsContent
-            value="history"
-            className="mt-2 flex flex-col gap-4 flex-1 overflow-y-auto"
-          >
-            {histories.map((history) => (
-              <Link key={history.id} href={`/shopping/history/${history.id}`}>
-                <Card
-                  key={history.id}
-                  className="cursor-pointer hover:bg-accent transition-colors"
-                >
-                  <CardHeader className="flex items-center justify-between">
-                    <CardTitle className="text-base">{history.name}</CardTitle>
-                    <span>{new Date(history.date).toLocaleDateString()}</span>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground">
-                      {history.items?.length || 0}件の商品を購入しました
-                    </p>
-                    {history.totalPrice && (
-                      <p className="text-sm font-semibold mt-1">
-                        合計: ¥{history.totalPrice.toLocaleString()}
-                      </p>
-                    )}
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </TabsContent>
+          {/* 履歴部分 */}
+          <HistoryClient />
         </Tabs>
       </div>
 

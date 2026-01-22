@@ -8,13 +8,22 @@ export type ShoppingHistoryWithItems = Prisma.ShoppingHistoryGetPayload<{
   include: { items: true };
 }>;
 
-export const getShoppingHistory = async (): Promise<
+interface GetShoppingHistory {
+  year: number;
+  month: number;
+}
+
+export const getShoppingHistory = async ({year,month}:GetShoppingHistory): Promise<
   ApiResponse<ShoppingHistoryWithItems[]>
 > => {
   try {
     const response = await prisma.shoppingHistory.findMany({
       where: {
         userId: "test-user-id",
+        date: {
+          gte: new Date(year, month - 1, 1),
+          lt: new Date(year, month, 1),
+        }
       },
       include: {
         items: true,

@@ -14,14 +14,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Stock } from "@prisma/client";
 
-interface ShoppingItemTableProps<TData extends { stock: Stock | null}> {
+interface ShoppingItemTableProps<TData> {
   items: TData[];
-  columns: ColumnDef<TData, any>[];
+  columns: ColumnDef<TData, unknown>[];
 }
 
-export function ShoppingItemTable<TData extends {stock : Stock | null}>({
+export function ShoppinghistoryDataTable<TData>({
   items,
   columns,
 }: ShoppingItemTableProps<TData>) {
@@ -30,18 +29,6 @@ export function ShoppingItemTable<TData extends {stock : Stock | null}>({
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
-
-
-  const getStockBgColor = (stock : Stock | null) => {
-    if(!stock || stock?.minQuantity === null) return "";
-
-    if(stock && stock.quantity < stock.minQuantity) {
-      return "bg-red-200";
-    }
-
-    return ""
-  }
-
 
   return (
     <div className="rounded-md border">
@@ -65,7 +52,7 @@ export function ShoppingItemTable<TData extends {stock : Stock | null}>({
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id} className={`${getStockBgColor(row.original.stock)}`}>
+              <TableRow key={row.id}>
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

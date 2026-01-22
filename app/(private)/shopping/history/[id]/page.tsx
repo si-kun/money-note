@@ -1,4 +1,3 @@
-import { getShoppingHistory } from "@/app/server-aciton/shopping/history/getShoppingHistory";
 import {
   Card,
   CardContent,
@@ -6,9 +5,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ShoppingItemTable } from "../../components/shoppingData-table";
 import EditHistoryDialog from "../components/EditHistoryDialog";
 import { historyColumns } from "../components/historyColumn";
+import { getShoppingHistoryId } from "@/app/server-aciton/shopping/history/getShoppingHistoryId";
+import { ShoppinghistoryDataTable } from "../components/shoppingHistoryDataTable";
 
 interface HistroyDetailPage {
   params: Promise<{
@@ -19,12 +19,10 @@ interface HistroyDetailPage {
 const HistroyDetailPage = async ({ params }: HistroyDetailPage) => {
   const { id } = await params;
 
-  const historyResponse = await getShoppingHistory();
-  const histories = historyResponse?.data || [];
+  const historyResponse = await getShoppingHistoryId(id);
+  const history = historyResponse.data;
 
-  const selectedHistory = histories.find((history) => history.id === id);
-
-  if (!selectedHistory) {
+  if (!historyResponse.success|| !history) {
     return (
       <Card className="h-full">
         <CardContent className="flex items-center justify-center h-full">
@@ -38,22 +36,22 @@ const HistroyDetailPage = async ({ params }: HistroyDetailPage) => {
     <Card className="h-full">
       <CardHeader className="flex items-start justify-between">
         <div className="flex flex-col gap-2">
-          <CardTitle>{selectedHistory.name}</CardTitle>
+          <CardTitle>{history.name}</CardTitle>
           <p className="text-sm text-muted-foreground">
-            {selectedHistory.items?.length || 0}件のアイテム
+            {history.items.length || 0}件のアイテム
           </p>
         </div>
-        <EditHistoryDialog selectedHistory={selectedHistory} />
+        <EditHistoryDialog selectedHistory={history} />
       </CardHeader>
       <CardContent className="overflow-y-auto">
-        <ShoppingItemTable
-          items={selectedHistory.items || []}
+        <ShoppinghistoryDataTable
+          items={history.items || []}
           columns={historyColumns}
         />
       </CardContent>
       <CardFooter>
         <div className="w-full flex justify-end">
-          合計金額: {selectedHistory.totalPrice?.toLocaleString()}円
+          合計金額: {history.totalPrice?.toLocaleString()}円
         </div>
       </CardFooter>
     </Card>

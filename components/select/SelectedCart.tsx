@@ -1,6 +1,6 @@
 "use client";
 
-import { ShoppingCartItemWithStock } from "@/app/(private)/shopping/components/shoppingColumns";
+import { ShoppingCartItemWithStock } from "@/app/(private)/shopping/cart/components/shoppingColumns";
 import {
   getShoppingCart,
   ShoppingCartWithItems,

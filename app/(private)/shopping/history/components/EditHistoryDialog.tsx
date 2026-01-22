@@ -20,7 +20,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ShoppingItemTable } from "../../components/shoppingData-table";
 import { ShoppingHistoryWithItems } from "@/app/server-aciton/shopping/history/getShoppingHistory";
 import { useState } from "react";
 import { editShoppingHistory } from "@/app/server-aciton/shopping/history/editShoppingHIstory";
@@ -28,6 +27,7 @@ import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { historyEditColumns } from "./historyEditColumn";
+import { ShoppinghistoryDataTable } from "./shoppingHistoryDataTable";
 
 interface EditHistoryDialogProps {
   selectedHistory: ShoppingHistoryWithItems;
@@ -120,7 +120,7 @@ const EditHistoryDialog = ({ selectedHistory }: EditHistoryDialogProps) => {
             account and remove your data from our servers.
           </DialogDescription>
         </DialogHeader>
-        <ShoppingItemTable
+        <ShoppinghistoryDataTable
           items={selectedHistory.items || []}
           columns={historyEditColumns}
         />
