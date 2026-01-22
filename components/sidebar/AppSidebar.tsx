@@ -35,7 +35,7 @@ const items = [
   },
   {
     title: "shopping",
-    url: "/shopping",
+    url: "/shopping/cart",
     icon: Settings,
   },
 ];

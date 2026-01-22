@@ -28,9 +28,6 @@ const HistoryClient = () => {
 
   const [histories, setHistories] = useState<ShoppingHistoryWithItems[]>([]);
 
-  console.log("Selected year:", year);
-  console.log("Selected month:", month);
-
   useEffect(() => {
     const fetchHistories = async () => {
       try {
@@ -84,6 +81,11 @@ const HistoryClient = () => {
           </SelectContent>
         </Select>
       </div>
+      {histories.length === 0 && (
+        <p className="text-sm text-muted-foreground">
+          指定された年月の購入履歴はありません。
+        </p>
+      )}
       {histories.map((history) => (
         <Link key={history.id} href={`/shopping/history/${history.id}`}>
           <Card

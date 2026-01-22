@@ -1,4 +1,4 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getShoppingCart } from "@/app/server-aciton/shopping/cart/getShoppingCart";
 import Link from "next/link";
@@ -6,13 +6,13 @@ import CreateCart from "./cart/components/CreateCart";
 
 import DeleteDialog from "./components/DeleteDialog";
 import HistoryClient from "./history/components/HistoryClient";
+import ShoppingTabs from "./components/ShoppingTabs";
 
 export default async function ShoppingLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-
   const cartResponse = await getShoppingCart();
 
   const carts = cartResponse?.data || [];
@@ -21,16 +21,7 @@ export default async function ShoppingLayout({
     <div className="flex w-full gap-6 h-full overflow-hidden">
       {/* 左側: カード/履歴リスト */}
       <div className="w-[30vw] flex flex-col h-full overflow-hidden">
-        <Tabs defaultValue="cart" className="flex flex-col h-full ">
-          <TabsList className="w-full shrink-0">
-            <TabsTrigger value="cart" className="flex-1">
-              カート
-            </TabsTrigger>
-            <TabsTrigger value="history" className="flex-1">
-              履歴
-            </TabsTrigger>
-          </TabsList>
-
+        <ShoppingTabs>
           <TabsContent
             value="cart"
             className="mt-2 flex flex-col gap-4 flex-1 overflow-y-auto"
@@ -58,7 +49,7 @@ export default async function ShoppingLayout({
 
           {/* 履歴部分 */}
           <HistoryClient />
-        </Tabs>
+        </ShoppingTabs>
       </div>
 
       {/* 右側: 選択されたアイテムのテーブル */}
