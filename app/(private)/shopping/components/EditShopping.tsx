@@ -11,16 +11,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Field,
-  FieldGroup,
-} from "@/components/ui/field";
+import { Field, FieldGroup } from "@/components/ui/field";
 
 import { ShoppingCartItem } from "@prisma/client";
 import { Row } from "@tanstack/react-table";
 import FormControllerStrNum from "@/components/form/FormControllerStrNum";
 import { editShoppingCartItem } from "@/app/server-aciton/shopping/cart/editShoppingCartItem";
-import { ShoppingCartItemInput, shoppingCartItemSchema } from "@/app/types/zod/shoppingCartItem";
+import {
+  ShoppingCartItemInput,
+  shoppingCartItemSchema,
+} from "@/app/types/zod/shoppingCartItem";
 
 interface EditShoppingProps {
   row: Row<ShoppingCartItem>;
@@ -36,6 +36,7 @@ const EditShopping = ({ row, setIsDialogOpen }: EditShoppingProps) => {
       unit: row.original.unit,
       unitPrice: row.original.unitPrice || 0,
       memo: row.original.memo || "",
+      stockId: row.original.stockId || null,
     },
   });
 
@@ -48,23 +49,22 @@ const EditShopping = ({ row, setIsDialogOpen }: EditShoppingProps) => {
           quantity: Number(data.quantity),
           unit: data.unit,
           unitPrice: data.unitPrice,
-          memo: data.memo,
-        }
-      })
+          memo: data.memo || "",
+          stockId: row.original.stockId|| null,
+        },
+      });
       toast.success("ショッピングアイテムを更新しました");
       setIsDialogOpen(false);
-    } catch(error) {
+    } catch (error) {
       console.error("Error updating shopping item:", error);
       toast.error("更新中にエラーが発生しました");
     }
-  }
+  };
   return (
     <Card className="w-full sm:max-w-md">
       <CardHeader>
-        <CardTitle>Bug Report</CardTitle>
-        <CardDescription>
-          Help us improve by reporting bugs you encounter.
-        </CardDescription>
+        <CardTitle>ショッピングアイテム編集</CardTitle>
+        <CardDescription>ショッピングアイテムを編集します</CardDescription>
       </CardHeader>
       <CardContent>
         <form id="form-rhf-demo" onSubmit={form.handleSubmit(onSubmit)}>
@@ -73,28 +73,35 @@ const EditShopping = ({ row, setIsDialogOpen }: EditShoppingProps) => {
               name="itemName"
               label="Item Name"
               control={form.control}
+              placeholder="商品名を入力してください"
             />
             <div className="flex items-center gap-4">
               <FormControllerStrNum
                 name="quantity"
                 label="Quantity"
+                type={"number"}
                 control={form.control}
+                placeholder="数量を入力してください"
               />
               <FormControllerStrNum
                 name="unit"
                 label="Unit"
                 control={form.control}
+                placeholder="単位を入力してください"
               />
               <FormControllerStrNum
                 name="unitPrice"
                 label="Unit Price"
                 control={form.control}
+                type={"number"}
+                placeholder="値段を入力してください"
               />
             </div>
             <FormControllerStrNum
               name="memo"
               label="Memo"
               control={form.control}
+              placeholder="メモを入力してください"
             />
           </FieldGroup>
         </form>

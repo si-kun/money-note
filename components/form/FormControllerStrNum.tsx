@@ -11,9 +11,11 @@ interface FormControllerStrNumProps {
     name: string;
     label: string;
     control: any;
+    type?: "text" | "number";
+    placeholder: string;
 }
 
-const FormControllerStrNum = ({name,label,control}:FormControllerStrNumProps) => {
+const FormControllerStrNum = ({name,label,control,type = "text",placeholder}:FormControllerStrNumProps) => {
   return (
     <Controller
     name={name}
@@ -25,9 +27,10 @@ const FormControllerStrNum = ({name,label,control}:FormControllerStrNumProps) =>
         </FieldLabel>
         <Input
           {...field}
+          type={type}
           id={name}
           aria-invalid={fieldState.invalid}
-          placeholder="Login button not working on mobile"
+          placeholder={placeholder}
           autoComplete="off"
         />
         {fieldState.invalid && (

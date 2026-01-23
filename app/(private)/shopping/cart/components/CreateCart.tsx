@@ -40,8 +40,7 @@ const CreateCart = () => {
         <DialogHeader>
           <DialogTitle>カート</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            新しいカートを作成します。カート名を入力してください。
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-2">

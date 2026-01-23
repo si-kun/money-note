@@ -116,8 +116,7 @@ const EditHistoryDialog = ({ selectedHistory }: EditHistoryDialogProps) => {
             <Button type="button" variant={"outline"} onClick={autoTotalPrice}>自動計算を適用</Button>
           </div>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            履歴とアイテムの情報を編集して、保存ボタンをクリックしてください。
           </DialogDescription>
         </DialogHeader>
         <ShoppinghistoryDataTable
