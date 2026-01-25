@@ -9,8 +9,11 @@ export const buyShoppingCart = async (
   cart: ShoppingCart
 ): Promise<ApiResponse<null>> => {
   try {
+
+    await prisma.$transaction(async (tx) => {
+
     // チェックがtrueのShoppingCartItemを取得
-    const cartItems = await prisma.shoppingCartItem.findMany({
+    const cartItems = await tx.shoppingCartItem.findMany({
       where: {
         cartId: cart.id,
         checked: true,
@@ -23,7 +26,7 @@ export const buyShoppingCart = async (
     }, 0);
 
     // 買い物カテゴリーを取得
-    const shoppingCategory = await prisma.category.findFirst({
+    const shoppingCategory = await tx.category.findFirst({
       where: {
         name: "買い物",
       },
@@ -31,15 +34,11 @@ export const buyShoppingCart = async (
 
     // カテゴリが見つからない場合はエラー
     if (!shoppingCategory) {
-      return {
-        success: false,
-        message: "買い物カテゴリが見つかりません。管理者に連絡してください。",
-        data: null,
-      };
+      throw new Error("カテゴリーが見つかりません。")
     }
 
     // ShoppingHistoryに追加
-    const history = await prisma.shoppingHistory.create({
+    const history = await tx.shoppingHistory.create({
       data: {
         name: cart.name,
         date: new Date(),
@@ -52,7 +51,7 @@ export const buyShoppingCart = async (
     });
 
     // paymentを作成
-    const payment = await prisma.payment.create({
+    const payment = await tx.payment.create({
       data: {
         amount: totalPrice,
         paymentDate: history.date,
@@ -62,7 +61,7 @@ export const buyShoppingCart = async (
     });
 
     // historyにpaymentIdを保存
-    await prisma.shoppingHistory.update({
+    await tx.shoppingHistory.update({
       where: {
         id: history.id,
       },
@@ -71,7 +70,7 @@ export const buyShoppingCart = async (
       },
     });
 
-    await prisma.shoppingCartItem.updateMany({
+    await tx.shoppingCartItem.updateMany({
       where: {
         id: {
           in: cartItems.map((item) => item.id),
@@ -86,7 +85,7 @@ export const buyShoppingCart = async (
     // 在庫を増やす
     for (const item of cartItems) {
       if (item.stockId) {
-        await prisma.stock.update({
+        await tx.stock.update({
           where: {
             id: item.stockId,
           },
@@ -100,20 +99,22 @@ export const buyShoppingCart = async (
     }
 
     // カートの中身が空になったらカート自体も削除する
-    const remainingItems = await prisma.shoppingCartItem.count({
+    const remainingItems = await tx.shoppingCartItem.count({
       where: {
         cartId: cart.id,
       },
     });
     if (remainingItems === 0) {
-      await prisma.shoppingCart.delete({
+      await tx.shoppingCart.delete({
         where: {
           id: cart.id,
         },
       });
     }
+  })
 
-    revalidatePath("/shopping");
+
+    revalidatePath("/shopping", "layout");
 
     return {
       success: true,
@@ -122,6 +123,13 @@ export const buyShoppingCart = async (
     };
   } catch (error) {
     console.error("Error buying shopping cart:", error);
+    if(error instanceof Error) {
+      return {
+        success: false,
+        message: error.message,
+        data: null,
+      };
+    }
     return {
       success: false,
       message: "Failed to buy shopping cart.",

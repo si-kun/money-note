@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   getShoppingHistory,
   ShoppingHistoryWithItems,
@@ -28,20 +28,29 @@ const HistoryClient = () => {
 
   const [histories, setHistories] = useState<ShoppingHistoryWithItems[]>([]);
 
-  useEffect(() => {
-    const fetchHistories = async () => {
-      try {
-        const response = await getShoppingHistory({ year, month });
 
-        if (response.success) {
-          setHistories(response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching shopping history:", error);
+  const fetchHistories = useCallback(async () => {
+    try {
+      const response = await getShoppingHistory({ year, month });
+      if (response.success) {
+        setHistories(response.data);
       }
-    };
-    fetchHistories();
+    } catch (error) {
+      console.error("Error fetching shopping history:", error);
+    }
   }, [year, month]);
+  
+// 年月変更時に履歴取得
+useEffect(() => {
+  fetchHistories();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [year, month]);
+
+// 購入イベントを監視
+useEffect(() => {
+  window.addEventListener('historyUpdate', fetchHistories);
+  return () => window.removeEventListener('historyUpdate', fetchHistories);
+}, [fetchHistories]);
 
   return (
     <TabsContent

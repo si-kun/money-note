@@ -13,8 +13,13 @@ const BuyButton = ({selectedCart}:BuyButtonProps) => {
 
   const handlebuyItems = async () => {
     try {
-      await buyShoppingCart(selectedCart);
-      toast.success("購入が完了しました");
+      const result =  await buyShoppingCart(selectedCart);
+      if(result.success) {
+        window.dispatchEvent(new Event("historyUpdate"))
+        toast.success("購入が完了しました");
+      } else {
+        toast.error(result.message || "購入に失敗しました");
+      }
     } catch (error) {
       console.error("Error buying items:", error);
     }
