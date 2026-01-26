@@ -105,6 +105,7 @@ export const stockColumns: ColumnDef<Stock>[] = [
   },
   {
     id: "stockCategory",
+    accessorKey: "stockCategoryId",
     header: "カテゴリー",
     cell: ({ row, table }) => {
       const categories = table.options.meta?.categories || [];

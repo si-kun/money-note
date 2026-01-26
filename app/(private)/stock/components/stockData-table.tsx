@@ -13,6 +13,14 @@ import {
 } from "@tanstack/react-table";
 
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import {
   Table,
   TableBody,
   TableCell,
@@ -108,6 +116,29 @@ export function StockDataTable<TData extends Stock, TValue>({
           }
           className="flex-1"
         />
+        <Select
+          defaultValue="all"
+          value={table.getColumn("stockCategory")?.getFilterValue() as string}
+          onValueChange={(value) => {
+            if (value === "all") {
+              table.getColumn("stockCategory")?.setFilterValue(undefined);
+              return;
+            }
+            table.getColumn("stockCategory")?.setFilterValue(value);
+          }}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Theme" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Categories</SelectItem>
+            {categories.map((cat) => (
+              <SelectItem key={cat.id} value={cat.id}>
+                {cat.categoryName}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <AddButton>
           {(setIsDialogOpen) => <StockForm setIsDialogOpen={setIsDialogOpen} />}
         </AddButton>

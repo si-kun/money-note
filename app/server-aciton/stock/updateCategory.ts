@@ -2,6 +2,7 @@
 
 import { ApiResponse } from "@/app/types/api/api";
 import { prisma } from "@/lib/prisma/prisma";
+import { revalidatePath } from "next/cache";
 
 interface UpdateCategory {
     categoryId: string;
@@ -30,6 +31,8 @@ export const updateCategory = async ({categoryId,stockId}:UpdateCategory):Promis
                 stockCategoryId: categoryId
             }
         })
+
+        revalidatePath("/stock");
 
         return {
             success: true,
