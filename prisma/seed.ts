@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma/prisma";
-import { Stock } from "@prisma/client";
 
 interface PaymentData {
   id: string;
@@ -170,264 +169,67 @@ async function main() {
   });
   console.log("サブスク作成が完了しました");
 
+  // StockCategoryの作成
+  console.log("StockCategoryの作成を開始");
+  await prisma.stockCategory.createMany({
+    data: [
+      { id: "stock-cat-1", categoryName: "野菜", userId: "test-user-id" },
+      { id: "stock-cat-2", categoryName: "果物", userId: "test-user-id" },
+      { id: "stock-cat-3", categoryName: "乳製品", userId: "test-user-id" },
+      { id: "stock-cat-4", categoryName: "調味料", userId: "test-user-id" },
+      { id: "stock-cat-5", categoryName: "日用品", userId: "test-user-id" },
+      { id: "stock-cat-6", categoryName: "穀物・麺類", userId: "test-user-id" },
+      { id: "stock-cat-7", categoryName: "飲料", userId: "test-user-id" },
+    ],
+  });
+  console.log("StockCategoryの作成が完了しました");
+
   // stockデータの作成
   console.log("stockデータの作成を開始");
-  const STOCK_DATA: Stock[] = [
-    {
-      id: "stock-1",
-      name: "リンゴ",
-      quantity: 10,
-      minQuantity: 3,
-      unit: "個",
-      unitPrice: 150,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-2",
-      name: "バナナ",
-      quantity: 6,
-      minQuantity: 2,
-      unit: "房",
-      unitPrice: 120,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-3",
-      name: "牛乳",
-      quantity: 2,
-      minQuantity: 1,
-      unit: "本",
-      unitPrice: 200,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-4",
-      name: "卵",
-      quantity: 1,
-      minQuantity: 1,
-      unit: "パック",
-      unitPrice: 250,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-5",
-      name: "トイレットペーパー",
-      quantity: 4,
-      minQuantity: 2,
-      unit: "ロール",
-      unitPrice: 100,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-6",
-      name: "米",
-      quantity: 3,
-      minQuantity: 1,
-      unit: "kg",
-      unitPrice: 500,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-7",
-      name: "パスタ",
-      quantity: 5,
-      minQuantity: 2,
-      unit: "袋",
-      unitPrice: 180,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-8",
-      name: "玉ねぎ",
-      quantity: 8,
-      minQuantity: 3,
-      unit: "個",
-      unitPrice: 50,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-9",
-      name: "じゃがいも",
-      quantity: 12,
-      minQuantity: 4,
-      unit: "個",
-      unitPrice: 40,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-10",
-      name: "にんじん",
-      quantity: 7,
-      minQuantity: 2,
-      unit: "本",
-      unitPrice: 60,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-11",
-      name: "キャベツ",
-      quantity: 2,
-      minQuantity: 1,
-      unit: "玉",
-      unitPrice: 180,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-12",
-      name: "豆腐",
-      quantity: 3,
-      minQuantity: 1,
-      unit: "丁",
-      unitPrice: 80,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-13",
-      name: "納豆",
-      quantity: 4,
-      minQuantity: 2,
-      unit: "パック",
-      unitPrice: 90,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-14",
-      name: "食パン",
-      quantity: 2,
-      minQuantity: 1,
-      unit: "斤",
-      unitPrice: 150,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-15",
-      name: "バター",
-      quantity: 1,
-      minQuantity: 1,
-      unit: "個",
-      unitPrice: 300,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-16",
-      name: "ヨーグルト",
-      quantity: 3,
-      minQuantity: 1,
-      unit: "個",
-      unitPrice: 120,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-17",
-      name: "チーズ",
-      quantity: 2,
-      minQuantity: 1,
-      unit: "パック",
-      unitPrice: 350,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-18",
-      name: "ティッシュ",
-      quantity: 3,
-      minQuantity: 2,
-      unit: "箱",
-      unitPrice: 180,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-19",
-      name: "洗剤",
-      quantity: 1,
-      minQuantity: 1,
-      unit: "本",
-      unitPrice: 450,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-20",
-      name: "シャンプー",
-      quantity: 2,
-      minQuantity: 1,
-      unit: "本",
-      unitPrice: 600,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-21",
-      name: "砂糖",
-      quantity: 0,
-      minQuantity: 1,
-      unit: "袋",
-      unitPrice: 200,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-22",
-      name: "塩",
-      quantity: 0,
-      minQuantity: 1,
-      unit: "袋",
-      unitPrice: 150,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-23",
-      name: "しょうゆ",
-      quantity: 0,
-      minQuantity: 1,
-      unit: "本",
-      unitPrice: 300,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-24",
-      name: "みりん",
-      quantity: 0,
-      minQuantity: 1,
-      unit: "本",
-      unitPrice: 350,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-25",
-      name: "お茶",
-      quantity: 1,
-      minQuantity: 3,
-      unit: "本",
-      unitPrice: 180,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-26",
-      name: "コーヒー",
-      quantity: 1,
-      minQuantity: 2,
-      unit: "袋",
-      unitPrice: 500,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-27",
-      name: "ラップ",
-      quantity: 0,
-      minQuantity: 1,
-      unit: "個",
-      unitPrice: 250,
-      userId: "test-user-id",
-    },
-    {
-      id: "stock-28",
-      name: "アルミホイル",
-      quantity: 0,
-      minQuantity: 1,
-      unit: "個",
-      unitPrice: 300,
-      userId: "test-user-id",
-    },
-  ];
   await prisma.stock.createMany({
-    data: STOCK_DATA,
+    data: [
+      // 果物
+      { id: "stock-1", name: "リンゴ", quantity: 10, minQuantity: 3, unit: "個", unitPrice: 150, userId: "test-user-id", stockCategoryId: "stock-cat-2" },
+      { id: "stock-2", name: "バナナ", quantity: 6, minQuantity: 2, unit: "房", unitPrice: 120, userId: "test-user-id", stockCategoryId: "stock-cat-2" },
+      
+      // 乳製品
+      { id: "stock-3", name: "牛乳", quantity: 2, minQuantity: 1, unit: "本", unitPrice: 200, userId: "test-user-id", stockCategoryId: "stock-cat-3" },
+      { id: "stock-4", name: "卵", quantity: 1, minQuantity: 1, unit: "パック", unitPrice: 250, userId: "test-user-id", stockCategoryId: "stock-cat-3" },
+      { id: "stock-15", name: "バター", quantity: 1, minQuantity: 1, unit: "個", unitPrice: 300, userId: "test-user-id", stockCategoryId: "stock-cat-3" },
+      { id: "stock-16", name: "ヨーグルト", quantity: 3, minQuantity: 1, unit: "個", unitPrice: 120, userId: "test-user-id", stockCategoryId: "stock-cat-3" },
+      { id: "stock-17", name: "チーズ", quantity: 2, minQuantity: 1, unit: "パック", unitPrice: 350, userId: "test-user-id", stockCategoryId: "stock-cat-3" },
+      
+      // 日用品
+      { id: "stock-5", name: "トイレットペーパー", quantity: 4, minQuantity: 2, unit: "ロール", unitPrice: 100, userId: "test-user-id", stockCategoryId: "stock-cat-5" },
+      { id: "stock-18", name: "ティッシュ", quantity: 3, minQuantity: 2, unit: "箱", unitPrice: 180, userId: "test-user-id", stockCategoryId: "stock-cat-5" },
+      { id: "stock-19", name: "洗剤", quantity: 1, minQuantity: 1, unit: "本", unitPrice: 450, userId: "test-user-id", stockCategoryId: "stock-cat-5" },
+      { id: "stock-20", name: "シャンプー", quantity: 2, minQuantity: 1, unit: "本", unitPrice: 600, userId: "test-user-id", stockCategoryId: "stock-cat-5" },
+      { id: "stock-27", name: "ラップ", quantity: 0, minQuantity: 1, unit: "個", unitPrice: 250, userId: "test-user-id", stockCategoryId: "stock-cat-5" },
+      { id: "stock-28", name: "アルミホイル", quantity: 0, minQuantity: 1, unit: "個", unitPrice: 300, userId: "test-user-id", stockCategoryId: "stock-cat-5" },
+      
+      // 穀物・麺類
+      { id: "stock-6", name: "米", quantity: 3, minQuantity: 1, unit: "kg", unitPrice: 500, userId: "test-user-id", stockCategoryId: "stock-cat-6" },
+      { id: "stock-7", name: "パスタ", quantity: 5, minQuantity: 2, unit: "袋", unitPrice: 180, userId: "test-user-id", stockCategoryId: "stock-cat-6" },
+      { id: "stock-14", name: "食パン", quantity: 2, minQuantity: 1, unit: "斤", unitPrice: 150, userId: "test-user-id", stockCategoryId: "stock-cat-6" },
+      
+      // 野菜
+      { id: "stock-8", name: "玉ねぎ", quantity: 8, minQuantity: 3, unit: "個", unitPrice: 50, userId: "test-user-id", stockCategoryId: "stock-cat-1" },
+      { id: "stock-9", name: "じゃがいも", quantity: 12, minQuantity: 4, unit: "個", unitPrice: 40, userId: "test-user-id", stockCategoryId: "stock-cat-1" },
+      { id: "stock-10", name: "にんじん", quantity: 7, minQuantity: 2, unit: "本", unitPrice: 60, userId: "test-user-id", stockCategoryId: "stock-cat-1" },
+      { id: "stock-11", name: "キャベツ", quantity: 2, minQuantity: 1, unit: "玉", unitPrice: 180, userId: "test-user-id", stockCategoryId: "stock-cat-1" },
+      { id: "stock-12", name: "豆腐", quantity: 3, minQuantity: 1, unit: "丁", unitPrice: 80, userId: "test-user-id", stockCategoryId: "stock-cat-1" },
+      { id: "stock-13", name: "納豆", quantity: 4, minQuantity: 2, unit: "パック", unitPrice: 90, userId: "test-user-id", stockCategoryId: "stock-cat-1" },
+      
+      // 調味料
+      { id: "stock-21", name: "砂糖", quantity: 0, minQuantity: 1, unit: "袋", unitPrice: 200, userId: "test-user-id", stockCategoryId: "stock-cat-4" },
+      { id: "stock-22", name: "塩", quantity: 0, minQuantity: 1, unit: "袋", unitPrice: 150, userId: "test-user-id", stockCategoryId: "stock-cat-4" },
+      { id: "stock-23", name: "しょうゆ", quantity: 0, minQuantity: 1, unit: "本", unitPrice: 300, userId: "test-user-id", stockCategoryId: "stock-cat-4" },
+      { id: "stock-24", name: "みりん", quantity: 0, minQuantity: 1, unit: "本", unitPrice: 350, userId: "test-user-id", stockCategoryId: "stock-cat-4" },
+      
+      // 飲料
+      { id: "stock-25", name: "お茶", quantity: 1, minQuantity: 3, unit: "本", unitPrice: 180, userId: "test-user-id", stockCategoryId: "stock-cat-7" },
+      { id: "stock-26", name: "コーヒー", quantity: 1, minQuantity: 2, unit: "袋", unitPrice: 500, userId: "test-user-id", stockCategoryId: "stock-cat-7" },
+    ],
   });
   console.log("stockデータの作成が完了しました");
 

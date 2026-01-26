@@ -1,6 +1,6 @@
 "use client";
 
-import { Stock } from "@prisma/client";
+import { Stock, StockCategory } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import HeaderButton from "../../subscriptions/components/HeaderButton";
 import ActionsCell from "@/components/dataTable/ActionsCell";
@@ -12,15 +12,17 @@ import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import StockQuantityButtons from "./StockQuantityButtons";
 import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
+import CategorySelect from "./CategorySelect";
+import { getStockCategory } from "@/app/server-aciton/getStockCategory";
 
 // TableMetaの型を拡張
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface TableMeta<TData> {
     carts?: ShoppingCartWithItems[];
+    categories?: StockCategory[];
   }
 }
-
 
 export const stockColumns: ColumnDef<Stock>[] = [
   {
@@ -68,9 +70,7 @@ export const stockColumns: ColumnDef<Stock>[] = [
     },
     size: 50,
     cell: ({ row }) => {
-      return (
-        <StockQuantityButtons row={row.original} />
-      );
+      return <StockQuantityButtons row={row.original} />;
     },
   },
   {
@@ -100,6 +100,22 @@ export const stockColumns: ColumnDef<Stock>[] = [
           {minQuantity}
           {unit}
         </div>
+      );
+    },
+  },
+  {
+    id: "stockCategory",
+    header: "カテゴリー",
+    cell: ({ row, table }) => {
+      const categories = table.options.meta?.categories || [];
+
+      return (
+        <CategorySelect
+          categories={categories}
+          stockName={row.original.name}
+          stockId={row.original.id}
+          categoryId={row.original.stockCategoryId  || undefined}
+        />
       );
     },
   },

@@ -26,6 +26,7 @@ model User {
   incomes           Income[]
   shoppingCarts     ShoppingCart[]
   shoppingHistories ShoppingHistory[]
+  stockCategories  StockCategory[]
 }
 
 // 支払い履歴
@@ -100,7 +101,18 @@ model Stock {
 
   // リレーション
   items ShoppingCartItem[]
+  stockCategoryId String?
+  stockCategory   StockCategory? @relation(fields: [stockCategoryId], references: [id], onDelete: Cascade)
 
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model StockCategory {
+  id String @id @default(uuid())
+  categoryName String
+
+  stocks Stock[]
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

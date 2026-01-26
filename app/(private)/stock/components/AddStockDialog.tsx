@@ -19,11 +19,11 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
 
-interface AddStockDialogProps {
-  table: Table<Stock>;
+interface AddStockDialogProps<TData extends Stock> {
+  table: Table<TData>;
 }
 
-const AddStockDialog = ({ table }: AddStockDialogProps) => {
+const AddStockDialog = <TData extends Stock>({ table }: AddStockDialogProps<TData>) => {
   const router = useRouter();
 
   const selectedRows = table.getSelectedRowModel().rows;

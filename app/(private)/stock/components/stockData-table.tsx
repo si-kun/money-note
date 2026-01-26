@@ -23,7 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Stock } from "@prisma/client";
+import { Stock, StockCategory } from "@prisma/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import AddButton from "@/components/button/AddButton";
 import StockForm from "./StockForm";
@@ -32,15 +32,17 @@ import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShop
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  carts: ShoppingCartWithItems[],
-  initialPage? :number;
+  stocks: TData[];
+  carts: ShoppingCartWithItems[];
+  categories: StockCategory[];
+  initialPage?: number;
 }
 
 export function StockDataTable<TData extends Stock, TValue>({
   columns,
-  data,
+  stocks,
   carts,
+  categories,
   initialPage = 0,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -53,11 +55,10 @@ export function StockDataTable<TData extends Stock, TValue>({
   const [pagination, setPagination] = useState({
     pageIndex: initialPage,
     pageSize: 10,
-  })
-
+  });
 
   const table = useReactTable({
-    data,
+    data: stocks,
     columns,
     getCoreRowModel: getCoreRowModel(),
     enableRowSelection: true,
@@ -76,6 +77,7 @@ export function StockDataTable<TData extends Stock, TValue>({
     onRowSelectionChange: setRowSelection,
     meta: {
       carts,
+      categories,
     },
   });
 
@@ -84,16 +86,16 @@ export function StockDataTable<TData extends Stock, TValue>({
     setPagination((prev) => ({
       ...prev,
       pageIndex: page,
-    }))
-  },[searchParams])
+    }));
+  }, [searchParams]);
 
   const handlePageChange = (newPageIndex: number) => {
     setPagination((prev) => ({
       ...prev,
       pageIndex: newPageIndex,
-    }))
+    }));
     router.push(`?page=${newPageIndex}`);
-  }
+  };
 
   return (
     <div>
