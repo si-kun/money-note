@@ -81,20 +81,20 @@ const EditShopping = ({ row, setIsDialogOpen }: EditShoppingProps) => {
                 label="Quantity"
                 type={"number"}
                 control={form.control}
-                placeholder="数量を入力してください"
+                placeholder="数量を入力"
               />
               <FormControllerStrNum
                 name="unit"
                 label="Unit"
                 control={form.control}
-                placeholder="単位を入力してください"
+                placeholder="単位を入力"
               />
               <FormControllerStrNum
                 name="unitPrice"
                 label="Unit Price"
                 control={form.control}
                 type={"number"}
-                placeholder="値段を入力してください"
+                placeholder="値段を入力"
               />
             </div>
             <FormControllerStrNum

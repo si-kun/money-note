@@ -29,20 +29,9 @@ import {
   PaymentWithCategory,
 } from "@/app/types/balance/balance";
 import { useEditTransactionForm } from "@/hooks/useEditTransactionForm";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import HistoryDetail from "./HistoryDetail";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import DeleteConfirmDialog from "@/components/dialog/DeleteConfirmDialog";
+import ShoppingHistoryCard from "./ShoppingHistoryCard";
 
 interface EditTransactionFormProps {
   transaction: PaymentWithCategory | IncomeWithCategory;
@@ -64,6 +53,9 @@ const EditTransactionForm = ({
     shoppingCategoryId,
     handleDeleteTransaction,
   } = useEditTransactionForm({ transaction, type });
+
+  const payment =
+    type === "PAYMENT" ? (transaction as PaymentWithCategory) : null;
 
   return (
     <Dialog
@@ -147,61 +139,11 @@ const EditTransactionForm = ({
                   )}
                 />
 
-                {type === "PAYMENT" &&
-                  (transaction as PaymentWithCategory).shoppingHistory && (
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>買い物履歴</CardTitle>
-                        <DialogDescription>
-                          ※買い物履歴と紐付いているため、カテゴリは変更できません
-                        </DialogDescription>
-                      </CardHeader>
-                      <CardContent className="flex flex-col gap-4">
-                        <div>
-                          <div className="w-full flex items-center">
-                            <span>
-                              {
-                                (transaction as PaymentWithCategory)
-                                  .shoppingHistory?.name
-                              }
-                            </span>
-                            <span className="ml-auto">
-                              金額:¥
-                              {(
-                                transaction as PaymentWithCategory
-                              ).shoppingHistory?.totalPrice?.toLocaleString() ||
-                                0}
-                            </span>
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <Button variant="ghost" className="ml-2">
-                                  【詳細】
-                                </Button>
-                              </DialogTrigger>
-                              <DialogContent>
-                                <DialogHeader>
-                                  <DialogTitle>
-                                    {
-                                      (transaction as PaymentWithCategory)
-                                        .shoppingHistory?.name
-                                    }
-                                    の詳細
-                                  </DialogTitle>
-                                </DialogHeader>
-
-                                <HistoryDetail
-                                  data={
-                                    (transaction as PaymentWithCategory)
-                                      .shoppingHistory!
-                                  }
-                                />
-                              </DialogContent>
-                            </Dialog>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )}
+                {payment && (
+                  <ShoppingHistoryCard
+                    shoppingHistory={payment.shoppingHistory}
+                  />
+                )}
 
                 <Controller
                   control={form.control}
@@ -244,30 +186,7 @@ const EditTransactionForm = ({
                 >
                   保存
                 </Button>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="destructive">削除</Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        本当にこの取引を削除しますか？
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        この操作は取り消せません。
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>キャンセル</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={handleDeleteTransaction}
-                        className="bg-red-600 hover:bg-red-700"
-                      >
-                        削除
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                <DeleteConfirmDialog onConfirm={handleDeleteTransaction} />
               </div>
             </Field>
           </FieldGroup>
