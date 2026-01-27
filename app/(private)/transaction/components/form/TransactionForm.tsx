@@ -31,7 +31,7 @@ import { SelectedData } from "@/app/types/balance/balance";
 
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
-import ShoppingCartCard from "./ShoppingCartCard";
+import ShoppingCartCard from "../shopping/ShoppingCartCard";
 
 interface TransactionFormProps {
   selectedDate: SelectedData;

@@ -6,8 +6,8 @@ import BalanceCalendar from "@/components/calendar/Calendar";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useBalanceData } from "@/hooks/balance/useBalanceData";
-import Summary from "./Summary";
-import SummaryCard from "./SummaryCard";
+import Summary from "./summary/Summary";
+import SummaryCard from "./summary/SummaryCard";
 import SubscriptionCard from "../../subscriptions/components/SubscriptionCard";
 import {
   IncomeWithCategory,

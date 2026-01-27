@@ -3,8 +3,8 @@ import { List } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SummaryCard from "./SummaryCard";
-import BreakdownList from "./BreakdownList";
-import TransactionForm from "./TransactionForm";
+import BreakdownList from "../form/BreakdownList";
+import TransactionForm from "../form/TransactionForm";
 import { SelectedData } from "@/app/types/balance/balance";
 interface SummaryProps {
   selectedDate: SelectedData;

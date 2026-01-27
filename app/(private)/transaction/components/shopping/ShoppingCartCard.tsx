@@ -5,7 +5,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import StockSelectionDialog from "./StockSelectionDialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -14,17 +13,22 @@ import ProductTable from "./ProductTable";
 import { ProductValue } from "@/hooks/useTransactionForm";
 import { Dispatch, SetStateAction } from "react";
 import { Stock } from "@prisma/client";
+import StockSelectionDialog from "../stock/StockSelectionDialog";
 
 interface ShoppingCartCardProps {
-    productsValue: ProductValue[];
-    addInputProduct: string;
-    setAddInputProduct: Dispatch<SetStateAction<string>>;
-    newAddProduct: () => void;
-    
-    onAddFromStock: (selectedStocks: Stock[]) => void;
-    onCheckedChange: (id: string, checked: boolean) => void;
-    onUpdateProduct: (id: string, field: "quantity" | "price", value: number) => void;
-    onDeleteProduct: (id: string) => void;
+  productsValue: ProductValue[];
+  addInputProduct: string;
+  setAddInputProduct: Dispatch<SetStateAction<string>>;
+  newAddProduct: () => void;
+
+  onAddFromStock: (selectedStocks: Stock[]) => void;
+  onCheckedChange: (id: string, checked: boolean) => void;
+  onUpdateProduct: (
+    id: string,
+    field: "quantity" | "price",
+    value: number
+  ) => void;
+  onDeleteProduct: (id: string) => void;
 }
 
 const ShoppingCartCard = ({

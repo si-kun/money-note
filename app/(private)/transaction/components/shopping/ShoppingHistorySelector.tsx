@@ -19,7 +19,7 @@ import {
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Control, Controller } from "react-hook-form";
-import HistoryDetail from "./HistoryDetail";
+import HistoryDetail from "../HistoryDetail";
 import {
   getShoppingHistory,
   ShoppingHistoryWithItems,

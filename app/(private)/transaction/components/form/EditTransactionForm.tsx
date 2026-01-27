@@ -31,7 +31,7 @@ import {
 import { useEditTransactionForm } from "@/hooks/useEditTransactionForm";
 
 import DeleteConfirmDialog from "@/components/dialog/DeleteConfirmDialog";
-import ShoppingHistoryCard from "./ShoppingHistoryCard";
+import ShoppingHistoryCard from "../shopping/ShoppingHistoryCard";
 
 interface EditTransactionFormProps {
   transaction: PaymentWithCategory | IncomeWithCategory;
