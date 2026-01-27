@@ -62,8 +62,7 @@ const SubscriptionCard = ({
                 {year}年{month}月のサブスク継続一覧
               </DialogTitle>
               <DialogDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
+                登録されているサブスクリプションの一覧です。
               </DialogDescription>
             </DialogHeader>
             <div className="flex-1 overflow-hidden">

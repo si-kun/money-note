@@ -139,7 +139,7 @@ export function StockDataTable<TData extends Stock, TValue>({
             ))}
           </SelectContent>
         </Select>
-        <AddButton>
+        <AddButton title="新しい在庫を追加" description="在庫の詳細を入力して、新しい在庫を追加します。">
           {(setIsDialogOpen) => <StockForm setIsDialogOpen={setIsDialogOpen} />}
         </AddButton>
       </div>

@@ -7,6 +7,7 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
+  SortingState,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -28,7 +29,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   maxHeight?: string;
-  errorMessage: string | null;
+  errorMessage?: string | null;
 }
 
 export function DataTable<TData, TValue>({
@@ -37,7 +38,7 @@ export function DataTable<TData, TValue>({
   maxHeight = "100%",
   errorMessage,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setClolumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
@@ -67,7 +68,10 @@ export function DataTable<TData, TValue>({
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
         />
-        <AddButton>
+        <AddButton
+          title="新しいサブスクリプションを追加"
+          description="サブスクリプションの詳細を入力して、新しいサブスクリプションを追加します。"
+        >
           {(setIsDialogOpen) => (
             <SubscriptionForm setIsDialogOpen={setIsDialogOpen} />
           )}

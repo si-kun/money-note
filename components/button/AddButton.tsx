@@ -11,9 +11,11 @@ import { useState } from "react";
 
 interface AddButtonProps {
     children: (setIsDialogOpen: (open: boolean) => void) => React.ReactNode;
+    title: string;
+    description: string;
 }
 
-const AddButton = ({children}:AddButtonProps) => {
+const AddButton = ({children,title,description}:AddButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
@@ -25,10 +27,11 @@ const AddButton = ({children}:AddButtonProps) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
+          <DialogTitle>
+            {title}
+          </DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            {description}
           </DialogDescription>
         </DialogHeader>
         {children(setIsDialogOpen)}

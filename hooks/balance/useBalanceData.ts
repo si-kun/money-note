@@ -18,6 +18,12 @@ import FullCalendar from "@fullcalendar/react";
 import { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 
+import { calcTodayData } from "./calcTodayData";
+import {
+  aggregateMonthlyIncomeData,
+  aggregateMonthlyPaymentData,
+} from "./aggregateMonthlyData";
+
 interface UseBalanceDataProps {
   initialIncomeData: IncomeWithCategory[];
   initialPaymentData: PaymentWithCategory[];
@@ -53,7 +59,6 @@ export const useBalanceData = ({
   // ダイアログの開閉フラグ
   const [isOpen, setIsOpen] = useState(false);
 
-  const todayKey = today.toISOString().split("T")[0];
   const [selectedDate, setSelectedDate] = useState<SelectedData>({
     date: format(today, "yyyy-MM-dd"),
     incomes: [],
@@ -82,33 +87,19 @@ export const useBalanceData = ({
         setIncomeData(incomeResult.data);
         setPaymentData(paymentResult.data);
         // 収入データの処理
-        paymentResult.data.forEach((payment) => {
-          const datekey = payment.paymentDate.toISOString().split("T")[0];
-          if (!tempBalanceData[datekey]) {
-            tempBalanceData[datekey] = { income: 0, payment: 0, balance: 0 };
-          }
-          tempBalanceData[datekey].payment += payment.amount;
+        const { monthlyIncomeTotal } = aggregateMonthlyIncomeData({
+          data: incomeResult.data,
+          tempBalanceData,
         });
-        setMonthlyPaymentTotal(() => {
-          return paymentResult.data.reduce(
-            (acc, payment) => acc + payment.amount,
-            0
-          );
-        });
+        setMonthlyIncomeTotal(monthlyIncomeTotal);
+
         // 支出データの処理
-        incomeResult.data.forEach((income) => {
-          const datekey = income.incomeDate.toISOString().split("T")[0];
-          if (!tempBalanceData[datekey]) {
-            tempBalanceData[datekey] = { income: 0, payment: 0, balance: 0 };
-          }
-          tempBalanceData[datekey].income += income.amount;
+        const { monthlyPaymentTotal } = aggregateMonthlyPaymentData({
+          data: paymentResult.data,
+          tempBalanceData,
         });
-        setMonthlyIncomeTotal(() => {
-          return incomeResult.data.reduce(
-            (acc, income) => acc + income.amount,
-            0
-          );
-        });
+        setMonthlyPaymentTotal(monthlyPaymentTotal);
+
         // 残高の計算
         Object.keys(tempBalanceData).forEach((datekey) => {
           const data = tempBalanceData[datekey];
@@ -116,42 +107,15 @@ export const useBalanceData = ({
         });
         setBalanceData(tempBalanceData);
 
-        // 当日のデータを選択状態にする
-        const todayYear = today.getFullYear();
-        const todayMonth = today.getMonth() + 1;
-
-        let targetDate: string;
-
-        if (year === todayYear && month === todayMonth) {
-          targetDate = todayKey;
-        } else {
-          targetDate = `${year}-${String(month).padStart(2, "0")}-01`;
-        }
-
-        const selectedIncomes = incomeResult.data.filter((income) => {
-          return income.incomeDate.toISOString().split("T")[0] === targetDate;
+        // 当日のデータを選択
+        const todayData = calcTodayData({
+          today,
+          year,
+          month,
+          incomeData: incomeResult.data,
+          paymentData: paymentResult.data,
         });
-
-        const selectedPayments = paymentResult.data.filter((payment) => {
-          return payment.paymentDate.toISOString().split("T")[0] === targetDate;
-        });
-        const totalIncome = selectedIncomes.reduce(
-          (sum, income) => sum + income.amount,
-          0
-        );
-        const totalPayment = selectedPayments.reduce(
-          (sum, payment) => sum + payment.amount,
-          0
-        );
-
-        setSelectedDate({
-          date: targetDate,
-          incomes: selectedIncomes,
-          payments: selectedPayments,
-          totalIncome,
-          totalPayment,
-          balance: totalIncome - totalPayment,
-        });
+        setSelectedDate(todayData);
       }
 
       return { income: incomeResult, payment: paymentResult };

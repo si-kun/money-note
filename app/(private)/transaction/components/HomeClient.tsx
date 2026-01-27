@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import BalanceCalendar from "@/components/calendar/Calendar";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useBalanceData } from "@/hooks/useBalanceData";
+import { useBalanceData } from "@/hooks/balance/useBalanceData";
 import Summary from "./Summary";
 import SummaryCard from "./SummaryCard";
 import SubscriptionCard from "../../subscriptions/components/SubscriptionCard";
