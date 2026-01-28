@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/card";
 import { Field, FieldGroup } from "@/components/ui/field";
 
-import { ShoppingCartItem } from "@prisma/client";
 import { Row } from "@tanstack/react-table";
 import FormControllerStrNum from "@/components/form/FormControllerStrNum";
 import { editShoppingCartItem } from "@/app/server-aciton/shopping/cart/editShoppingCartItem";
@@ -21,9 +20,10 @@ import {
   ShoppingCartItemInput,
   shoppingCartItemSchema,
 } from "@/app/types/zod/shoppingCartItem";
+import { ShoppingCartItemWithStock } from "../cart/components/shoppingColumns";
 
 interface EditShoppingProps {
-  row: Row<ShoppingCartItem>;
+  row: Row<ShoppingCartItemWithStock>;
   setIsDialogOpen: (open: boolean) => void;
 }
 

@@ -49,7 +49,6 @@ const EditHistoryDialog = ({ selectedHistory }: EditHistoryDialogProps) => {
 
   const handleEdit = async () => {
     try {
-
       const adjustedDate = date ? new Date(date) : new Date();
       adjustedDate.setHours(12, 0, 0, 0);
 
@@ -113,7 +112,9 @@ const EditHistoryDialog = ({ selectedHistory }: EditHistoryDialogProps) => {
                 onChange={(e) => setTotalPrice(Number(e.target.value))}
               />
             </div>
-            <Button type="button" variant={"outline"} onClick={autoTotalPrice}>自動計算を適用</Button>
+            <Button type="button" variant={"outline"} onClick={autoTotalPrice}>
+              自動計算を適用
+            </Button>
           </div>
           <DialogDescription>
             履歴とアイテムの情報を編集して、保存ボタンをクリックしてください。

@@ -30,7 +30,11 @@ export const getPayment = async ({
         category: true,
         shoppingHistory: {
           include: {
-            items: true,
+            items: {
+              include: {
+                stock: true,
+              },
+            }
           }
         },
       },

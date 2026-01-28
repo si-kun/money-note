@@ -10,7 +10,11 @@ export const getShoppingHistoryId = async (
   try {
     const result = await prisma.shoppingHistory.findUnique({
       where: { userId: "test-user-id", id: id },
-      include: { items: true },
+      include: { items: {
+        include: {
+          stock: true,
+        },
+      } },
     });
 
     return {

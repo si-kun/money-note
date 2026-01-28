@@ -44,6 +44,15 @@ export const getAllYearData = async ({
         },
         include: {
           category: true,
+          shoppingHistory: {
+            include: {
+              items: {
+                include: {
+                  stock: true,
+                },
+              },
+            },
+          },
         },
       });
         return { income: incomes, payment: payments };

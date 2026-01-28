@@ -1,11 +1,11 @@
 "use client";
 
 import ActionsCell from "@/components/dataTable/ActionsCell";
-import { ShoppingCartItem } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import EditShopping from "../../components/EditShopping";
+import { ShoppingCartItemWithStock } from "../../cart/components/shoppingColumns";
 
-export const historyEditColumns: ColumnDef<ShoppingCartItem>[] = [
+export const historyEditColumns: ColumnDef<ShoppingCartItemWithStock>[] = [
   {
     accessorKey: "itemName",
     header: "商品名",

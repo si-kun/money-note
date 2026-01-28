@@ -7,8 +7,8 @@ import interractionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { EventClickArg } from "@fullcalendar/core";
 
 import { Button } from "@/components/ui/button";
-import { EventData } from "@/app/(private)/page";
 import { RefObject } from "react";
+import { EventData } from "@/app/types/balance/balance";
 
 interface CalendarProps {
   year: number;

@@ -5,7 +5,9 @@ import { prisma } from "@/lib/prisma/prisma";
 import { Prisma } from "@prisma/client";
 
 export type ShoppingHistoryWithItems = Prisma.ShoppingHistoryGetPayload<{
-  include: { items: true };
+  include: { items: {
+    include:{ stock: true}
+  } };
 }>;
 
 interface GetShoppingHistory {
@@ -26,7 +28,11 @@ export const getShoppingHistory = async ({year,month}:GetShoppingHistory): Promi
         }
       },
       include: {
-        items: true,
+        items: {
+          include: {
+            stock: true,
+          }
+        }
       },
     });
 
