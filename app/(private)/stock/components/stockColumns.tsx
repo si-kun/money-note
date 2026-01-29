@@ -13,7 +13,6 @@ import Link from "next/link";
 import StockQuantityButtons from "./StockQuantityButtons";
 import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
 import CategorySelect from "./CategorySelect";
-import { getStockCategory } from "@/app/server-aciton/getStockCategory";
 
 // TableMetaの型を拡張
 declare module "@tanstack/react-table" {

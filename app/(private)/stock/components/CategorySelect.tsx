@@ -45,8 +45,10 @@ const CategorySelect = ({
 
   return (
     <Select
-      defaultValue={selectedCategory ? selectedCategory.id : undefined}
-      onValueChange={(value) => {handleUpdateCategory(value, stockId)}}
+      value={selectedCategory ? selectedCategory.id : undefined}
+      onValueChange={(value) => {
+        handleUpdateCategory(value, stockId);
+      }}
     >
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="カテゴリーが未選択" />
