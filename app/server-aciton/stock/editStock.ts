@@ -13,20 +13,65 @@ interface EditStockProps {
 
 export const editStock = async ({ id, data }:EditStockProps): Promise<ApiResponse<null>> => {
   try {
-    const updateStock = await prisma.stock.update({
-      where: { id },
-      data: {
-        name: data.name,
-        quantity: data.quantity,
-        minQuantity: data.minQuantity,
-        unit: data.unit,
-        unitPrice: data.unitPrice,
-      },
-    });
 
-    await handleStockCartSync(updateStock);
+    await prisma.$transaction(async (tx) => {
 
-    revalidatePath("/stock");
+      let stockCategoryId = null;
+
+      // カテゴリーが新規の場合
+      if(data.newCategoryName) {
+
+        // 既存のカテゴリーがあるかどうか確認
+        const existingCategory = await tx.stockCategory.findFirst({
+          where: {
+            categoryName: data.newCategoryName,
+          }
+        })
+
+        if(existingCategory) {
+          stockCategoryId = existingCategory.id;
+        } else {
+          // なければ新規作成
+          const newCategory = await tx.stockCategory.create({
+            data: {
+              categoryName: data.newCategoryName,
+              userId: "test-user-id",
+            }
+          })
+          stockCategoryId = newCategory.id;
+        }
+      } else if(data.categoryId) {
+        // 既存カテゴリーが選択されている場合
+        const existingCategory = await tx.stockCategory.findUnique({
+          where: {
+            id: data.categoryId,
+          }
+        })
+        if(existingCategory) {
+          stockCategoryId = existingCategory.id;
+        } else {
+          stockCategoryId = null;
+        }
+      }
+
+      const updateStock = await tx.stock.update({
+        where: { id },
+        data: {
+          name: data.name,
+          quantity: data.quantity,
+          minQuantity: data.minQuantity,
+          unit: data.unit,
+          unitPrice: data.unitPrice,
+  
+          stockCategoryId,
+        },
+      });
+      await handleStockCartSync(updateStock);
+  
+      revalidatePath("/stock");
+    })
+
+
 
     return {
       success: true,

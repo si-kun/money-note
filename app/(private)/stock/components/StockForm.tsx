@@ -39,12 +39,12 @@ const StockForm = ({ row, setIsDialogOpen }: StockFormProps) => {
   const form = useForm<StockFormType>({
     resolver: zodResolver(stockSchema),
     defaultValues: {
-      name: row ? String(row.getValue("name")) : "",
-      quantity: row ? Number(row.getValue("quantity")) : 0,
+      name: row ? row.original.name : "",
+      quantity: row ? row.original.quantity : 0,
       unit: row ? row.original.unit : "",
-      unitPrice: row ? Number(row.getValue("unitPrice")) : 0,
-      minQuantity: row ? Number(row.getValue("minQuantity")) : 0,
-      categoryId: row ? String(row.getValue("category")) : "",
+      unitPrice: row ? row.original.unitPrice ?? 0 : 0,
+      minQuantity: row ? row.original.minQuantity ?? 0 : 0,
+      categoryId: row ? row.original.stockCategoryId ?? "" : "",
       newCategoryName: "",
     },
   });
@@ -88,11 +88,11 @@ const StockForm = ({ row, setIsDialogOpen }: StockFormProps) => {
 
     // toggleがtrueの場合、カテゴリーの選択をリセット
     if (newValue) {
-      form.setValue("categoryId", undefined);
+      form.setValue("categoryId", "");
 
       // toggleがfalseの場合、新しいカテゴリー名をリセット
     } else {
-      form.setValue("newCategoryName", undefined);
+      form.setValue("newCategoryName", "");
     }
   };
 

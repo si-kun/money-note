@@ -65,8 +65,7 @@ const ActionsCell =<T,>({
             <DialogHeader>
               <DialogTitle>編集</DialogTitle>
               <DialogDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
+                在庫情報を編集します。
               </DialogDescription>
             </DialogHeader>
             {children({ row, setIsDialogOpen: handleDialogChange })}

@@ -3,7 +3,6 @@
 import { ApiResponse } from "@/app/types/api/api";
 import { StockFormType } from "@/app/types/zod/stock";
 import { prisma } from "@/lib/prisma/prisma";
-import { revalidatePath } from "next/cache";
 
 interface AddStockParams {
   stock: StockFormType;
