@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# プロジェクトの概要
+このアプリケーションは、**「買い物履歴」「収支カレンダー」「在庫管理」が自動連係する家計管理アプリ**です。
+購入ボタン一つで、在庫が更新され、収支も自動で記録されるため、日々の買い物や家計管理が非常に楽になります。
+**設定した在庫を下回ると専用の買い物リストに自動で追加**されるため、買い忘れ防止にも役立ちます。
 
-## Getting Started
+# 主な機能
++ 在庫管理機能
+    - 在庫が規定数を下回ると自動で専用の買い物リストに追加
+    - カテゴリー検索、キーワード検索
++ 買い物リスト機能
+    - 購入ボタン一つで在庫と収支に反映
+    - 自動計算で購入金額を表示、手動で編集も可能
++ 収支管理機能
+    - 買い物の場合、自動で購入履歴と連携
+    - 年間での収支グラフを表示
 
-First, run the development server:
+# 使用技術
+- **フロントエンド**: Nextjs, React, Tailwind CSS ,shadcn/ui ,TypeScript
+- **バックエンド**: Prisma, Supabase
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+# 実装予定の機能
+- ユーザー認証機能
++ サブスク管理(基本機能は実装済み)
+    - 収支カレンダーとの連携
+- モバイル対応
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
