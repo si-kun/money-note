@@ -27,7 +27,7 @@ const BuyButton = ({selectedCart}:BuyButtonProps) => {
 
   return (
     <Button
-      disabled={!selectedCart.items.some((item) => item.checked)}
+      disabled={!selectedCart.items.some((item:ShoppingCartWithItems) => item.checked)}
       variant={"secondary"}
       className="bg-green-500 hover:bg-green-400 disabled:bg-slate-400 mt-4 ml-auto block"
       onClick={() => handlebuyItems()}

@@ -3,10 +3,8 @@
 import { ApiResponse } from "@/app/types/api/api";
 import { prisma } from "@/lib/prisma/prisma";
 import { Stock } from "@prisma/client";
-import { unstable_noStore as noStore } from "next/cache";
 
 export const getAllStock = async (): Promise<ApiResponse<Stock[]>> => {
-  noStore();
 
   try {
     const response = await prisma.stock.findMany({

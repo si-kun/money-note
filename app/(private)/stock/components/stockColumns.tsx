@@ -42,7 +42,7 @@ export const stockColumns: ColumnDef<Stock>[] = [
 
       // カートに存在する在庫は選択不可にする
       const isInCart = carts.some((cart) =>
-        cart.items.some((item) => item.stockId === stock.id)
+        cart.items.some((item:ShoppingCartWithItems) => item.stockId === stock.id)
       );
 
       return (
@@ -149,7 +149,7 @@ export const stockColumns: ColumnDef<Stock>[] = [
       const stock = row.original;
 
       const cartWithStock = carts.find((cart) => {
-        return cart.items.some((item) => item.stockId === stock.id);
+        return cart.items.some((item:ShoppingCartWithItems["item"][number]) => item.stockId === stock.id);
       });
 
       return (

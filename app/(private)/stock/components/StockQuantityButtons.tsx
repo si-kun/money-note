@@ -10,7 +10,7 @@ interface StockQuantityButtons {
 }
 
 const StockQuantityButtons = ({ row }: StockQuantityButtons) => {
-  const [displayQuantity, setDisplayQuantity] = useState(row.quantity);
+  const [displayQuantity, setDisplayQuantity] = useState<number>(row.quantity);
   const isFirstRender = useRef(true);
   const previousQuantity = useRef(row.quantity);
   const stockId = useRef(row.id);

@@ -41,7 +41,7 @@ const EditHistoryDialog = ({ selectedHistory }: EditHistoryDialogProps) => {
   );
 
   const autoTotalPrice = () => {
-    const total = selectedHistory.items?.reduce((acc, item) => {
+    const total = selectedHistory.items?.reduce((acc: number, item:ShoppingHistoryWithItems["items"][number]) => {
       return acc + (item.unitPrice || 0) * item.quantity;
     }, 0);
     setTotalPrice(total || 0);
