@@ -4,6 +4,7 @@ import { getAllStock } from "@/app/server-aciton/stock/getAllStock"
 import { getShoppingCart } from "@/app/server-aciton/shopping/cart/getShoppingCart"
 import { getStockCategory } from "@/app/server-aciton/getStockCategory"
 
+export const dynamic = 'force-dynamic';
  
 interface StockPageProps {
   searchParams: Promise<{
