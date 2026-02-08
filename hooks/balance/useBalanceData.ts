@@ -70,10 +70,10 @@ export const useBalanceData = ({
 
   const calendarRef = useRef<FullCalendar>(null);
 
-  useEffect(() => {
-    fetchBalanceData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialIncomeData, initialPaymentData]);
+  // useEffect(() => {
+  //   fetchBalanceData();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [initialIncomeData, initialPaymentData]);
 
   const fetchBalanceData = async () => {
     try {
