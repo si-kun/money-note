@@ -2,6 +2,8 @@ import { getIncome } from "../server-aciton/balance/getIncome";
 import { getPayment } from "../server-aciton/balance/getPayment";
 import HomeClient from "./transaction/components/HomeClient";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const today = new Date();
   const year = today.getFullYear();

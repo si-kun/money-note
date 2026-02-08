@@ -19,6 +19,8 @@ import {
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+export const dynamic = "force-dynamic";
+
 const StatisticsPage = () => {
   const today = new Date();
   const currentYear = today.getFullYear();

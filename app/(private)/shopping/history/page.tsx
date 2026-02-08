@@ -1,5 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 
+export const dynamic = "force-dynamic";
+
 const HistoryPage = () => {
   return (
     <Card className="h-full">

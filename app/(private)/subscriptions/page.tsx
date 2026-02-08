@@ -2,6 +2,8 @@ import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import { getAllSubscription } from "@/app/server-aciton/subscription/getAllSubscription";
 
+export const dynamic = "force-dynamic";
+
 const SubscriptionPage = async () => {
 
   const resultSubscriptions = await getAllSubscription();
