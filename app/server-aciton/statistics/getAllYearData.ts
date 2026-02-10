@@ -11,7 +11,7 @@ interface GetAllYearData {
   year: number;
 }
 
-interface YearDataResponse {
+export interface YearDataResponse {
   income: IncomeWithCategory[];
   payment: PaymentWithCategory[];
 }

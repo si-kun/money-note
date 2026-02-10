@@ -50,6 +50,7 @@ export const useBalanceData = ({
       totalAmount: 0,
     });
   const [events, setEvents] = useState<EventData[]>([]);
+  const isInitialMount = useRef(true);
 
   // 日付
   const today = new Date();
@@ -119,35 +120,34 @@ export const useBalanceData = ({
     }
   };
 
-  const isInitialMount = useRef(true);
 
   // yearとmonthが変わるたびにデータを取得
   useEffect(() => {
     if (isInitialMount.current) {
       // 初回は初期データを使うのでfetchしない
       isInitialMount.current = false;
-      
+
       // でも初期データからbalanceDataを計算する
       const tempBalanceData: BalanceData = {};
-      
+
       const { monthlyIncomeTotal } = aggregateMonthlyIncomeData({
         data: initialIncomeData,
         tempBalanceData,
       });
       setMonthlyIncomeTotal(monthlyIncomeTotal);
-  
+
       const { monthlyPaymentTotal } = aggregateMonthlyPaymentData({
         data: initialPaymentData,
         tempBalanceData,
       });
       setMonthlyPaymentTotal(monthlyPaymentTotal);
-  
+
       Object.keys(tempBalanceData).forEach((datekey) => {
         const data = tempBalanceData[datekey];
         data.balance = data.income - data.payment;
       });
       setBalanceData(tempBalanceData);
-  
+
       const todayData = calcTodayData({
         today,
         year,
@@ -156,10 +156,10 @@ export const useBalanceData = ({
         paymentData: initialPaymentData,
       });
       setSelectedDate(todayData);
-      
+
       return;
     }
-    
+
     // 2回目以降（月を変更した時）
     fetchBalanceData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
