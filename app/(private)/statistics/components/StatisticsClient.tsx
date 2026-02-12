@@ -16,7 +16,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { CircleArrowLeft, CircleArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { getCategoryColor } from "../utils/chartHelpers";
+import {
+  calcChartData,
+  calcPaymentCategoryChartData,
+  calcPaymentYearCategoryChartData,
+} from "../utils/chartHelpers";
 import { useCategoryConfig } from "../hooks/useCategoryConfig";
 
 interface StatisticsClientProps {
@@ -31,66 +35,18 @@ const StatisticsClient = ({ data, currentYear }: StatisticsClientProps) => {
   const initialPayment = useMemo(() => data?.payment ?? [], [data?.payment]);
   const categoryConfig = useCategoryConfig({ payments: initialPayment });
 
-  const chartData = Array.from({ length: 12 }, (_, index) => {
-    const month = index + 1;
-    const incomeTotal = initialIncome
-      .filter((income) => income.incomeDate.getMonth() + 1 === month)
-      .reduce((sum, income) => sum + income.amount, 0);
-
-    const paymentTotal = initialPayment
-      .filter((payment) => payment.paymentDate.getMonth() + 1 === month)
-      .reduce((sum, payment) => sum + payment.amount, 0);
-
-    return {
-      month: new Date(currentYear, index).toLocaleString("default", {
-        month: "long",
-        timeZone: "Asia/Tokyo",
-      }),
-      income: incomeTotal,
-      payment: paymentTotal,
-    };
+  const chartData = calcChartData({
+    initialIncome,
+    initialPayment,
+    currentYear,
   });
-  const paymentYearCategoryChartData = Array.from(
-    { length: 12 },
-    (_, index) => {
-      const month = index + 1;
 
-      const categoryTotals = initialPayment
-        .filter((payment) => payment.paymentDate.getMonth() + 1 === month)
-        .reduce((acc, payment) => {
-          const categoryName = payment.category.name;
-          if (!acc[categoryName]) {
-            acc[categoryName] = payment.amount;
-          } else {
-            acc[categoryName] += payment.amount;
-          }
-          return acc;
-        }, {} as Record<string, number>);
+  const paymentYearCategoryChartData = calcPaymentYearCategoryChartData({
+    initialPayment,
+    currentYear,
+  });
 
-      return {
-        month: new Date(currentYear, index).toLocaleString("default", {
-          month: "long",
-        }),
-        ...categoryTotals,
-      };
-    }
-  );
-
-  const paymentCategoryChartData = Object.entries(
-    initialPayment.reduce((acc, payment) => {
-      const categoryName = payment.category.name;
-      if (!acc[categoryName]) {
-        acc[categoryName] = payment.amount;
-      } else {
-        acc[categoryName] += payment.amount;
-      }
-      return acc;
-    }, {} as Record<string, number>)
-  ).map(([category, amount]) => ({
-    category,
-    amount,
-    fill: getCategoryColor(category),
-  }));
+  const paymentCategoryChartData = calcPaymentCategoryChartData(initialPayment);
 
   const chartConfig = {
     income: {
@@ -134,7 +90,10 @@ const StatisticsClient = ({ data, currentYear }: StatisticsClientProps) => {
         </TabsList>
         <TabsContent value="yearData">
           <ChartContainer config={chartConfig} className="h-[80vh] w-full">
-            <BarChart accessibilityLayer data={chartData}>
+            <BarChart
+              accessibilityLayer
+              data={chartData}
+            >
               <CartesianGrid vertical={false} />
               <XAxis
                 dataKey="month"
@@ -153,7 +112,10 @@ const StatisticsClient = ({ data, currentYear }: StatisticsClientProps) => {
         </TabsContent>
         <TabsContent value="yearCategory">
           <ChartContainer config={categoryConfig} className="h-[80vh] w-full">
-            <BarChart accessibilityLayer data={paymentYearCategoryChartData}>
+            <BarChart
+              accessibilityLayer
+              data={paymentYearCategoryChartData}
+            >
               <CartesianGrid vertical={false} />
               <XAxis
                 dataKey="month"
@@ -179,7 +141,10 @@ const StatisticsClient = ({ data, currentYear }: StatisticsClientProps) => {
         </TabsContent>
         <TabsContent value="category">
           <ChartContainer config={categoryConfig} className="h-[80vh] w-full">
-            <BarChart accessibilityLayer data={paymentCategoryChartData}>
+            <BarChart
+              accessibilityLayer
+              data={paymentCategoryChartData}
+            >
               <CartesianGrid vertical={false} />
               <XAxis
                 dataKey="category"
