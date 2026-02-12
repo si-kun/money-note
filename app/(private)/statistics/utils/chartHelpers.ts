@@ -23,7 +23,6 @@ export const calcChartData  = ({
   initialPayment,
   currentYear,
 }: CalcChartDataProps) => {
-  console.log("レンダリング")
   return Array.from({ length: 12 }, (_, index) => {
     const month = index + 1;
     const incomeTotal = initialIncome
