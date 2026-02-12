@@ -16,27 +16,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { CircleArrowLeft, CircleArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { getCategoryColor } from "../utils/chartHelpers";
+import { useCategoryConfig } from "../hooks/useCategoryConfig";
 
 interface StatisticsClientProps {
   data: YearDataResponse | null;
   currentYear: number;
 }
 
-const StatisticsClient = ({
-  data,
-  currentYear,
-}: StatisticsClientProps) => {
-
+const StatisticsClient = ({ data, currentYear }: StatisticsClientProps) => {
   const router = useRouter();
 
-  const initialIncome = useMemo(
-    () => data?.income ?? [],
-    [data?.income]
-  );
-  const initialPayment = useMemo(
-    () => data?.payment ?? [],
-    [data?.payment]
-  );
+  const initialIncome = useMemo(() => data?.income ?? [], [data?.income]);
+  const initialPayment = useMemo(() => data?.payment ?? [], [data?.payment]);
+  const categoryConfig = useCategoryConfig({ payments: initialPayment });
 
   const chartData = Array.from({ length: 12 }, (_, index) => {
     const month = index + 1;
@@ -83,28 +76,6 @@ const StatisticsClient = ({
     }
   );
 
-  const getCategoryColor = (categoryName: string) => {
-    let hash = 0;
-    for (let i = 0; i < categoryName.length; i++) {
-      hash = categoryName.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const hue = Math.abs(hash) % 360;
-    return `hsl(${hue}, 70%, 50%)`;
-  };
-
-  const categoryConfig = useMemo(() => {
-    return initialPayment.reduce((acc, payment) => {
-      const categoryName = payment.category.name;
-      if (!acc[categoryName]) {
-        acc[categoryName] = {
-          label: categoryName,
-          color: getCategoryColor(categoryName),
-        };
-      }
-      return acc;
-    }, {} as Record<string, { label: string; color: string }>);
-  }, [initialPayment]);
-
   const paymentCategoryChartData = Object.entries(
     initialPayment.reduce((acc, payment) => {
       const categoryName = payment.category.name;
@@ -121,19 +92,6 @@ const StatisticsClient = ({
     fill: getCategoryColor(category),
   }));
 
-  const paymentCategoryConfig = useMemo(() => {
-    return initialPayment.reduce((acc, payment) => {
-      const categoryName = payment.category.name;
-      if (!acc[categoryName]) {
-        acc[categoryName] = {
-          label: categoryName,
-          color: getCategoryColor(categoryName),
-        };
-      }
-      return acc;
-    }, {} as Record<string, { label: string; color: string }>);
-  }, [initialPayment]);
-
   const chartConfig = {
     income: {
       label: "income",
@@ -145,15 +103,15 @@ const StatisticsClient = ({
     },
   } satisfies ChartConfig;
 
-  const handleNextYear  = () => {
+  const handleNextYear = () => {
     const nextYear = currentYear + 1;
     router.push(`/statistics?year=${nextYear}`);
-  }
+  };
 
-  const handlePrevYear  = () => {
+  const handlePrevYear = () => {
     const prevYear = currentYear - 1;
     router.push(`/statistics?year=${prevYear}`);
-  }
+  };
 
   return (
     <div>
@@ -220,10 +178,7 @@ const StatisticsClient = ({
           </ChartContainer>
         </TabsContent>
         <TabsContent value="category">
-          <ChartContainer
-            config={paymentCategoryConfig}
-            className="h-[80vh] w-full"
-          >
+          <ChartContainer config={categoryConfig} className="h-[80vh] w-full">
             <BarChart accessibilityLayer data={paymentCategoryChartData}>
               <CartesianGrid vertical={false} />
               <XAxis
