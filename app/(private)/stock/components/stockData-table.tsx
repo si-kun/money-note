@@ -37,6 +37,8 @@ import AddButton from "@/components/button/AddButton";
 import StockForm from "./StockForm";
 import AddStockDialog from "./AddStockDialog";
 import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
+import { toast } from "sonner";
+import { handleStockCartSyncBatch } from "@/app/server-aciton/stock/handleStockCartSyncBatch";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -97,6 +99,22 @@ export function StockDataTable<TData extends Stock, TValue>({
     }));
   }, [searchParams]);
 
+  useEffect(() => {
+    const syncStocks = async () => {
+      try {
+        console.log("Syncing stock quantities with shopping cart...");
+        const result = await handleStockCartSyncBatch(stocks);
+        if (!result.success) {
+          toast.error("在庫数の同期に失敗しました");
+        }
+      } catch (error) {
+        console.error("在庫数の同期中にエラーが発生しました:", error);
+      }
+    };
+    syncStocks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handlePageChange = (newPageIndex: number) => {
     setPagination((prev) => ({
       ...prev,
@@ -139,7 +157,10 @@ export function StockDataTable<TData extends Stock, TValue>({
             ))}
           </SelectContent>
         </Select>
-        <AddButton title="新しい在庫を追加" description="在庫の詳細を入力して、新しい在庫を追加します。">
+        <AddButton
+          title="新しい在庫を追加"
+          description="在庫の詳細を入力して、新しい在庫を追加します。"
+        >
           {(setIsDialogOpen) => <StockForm setIsDialogOpen={setIsDialogOpen} />}
         </AddButton>
       </div>

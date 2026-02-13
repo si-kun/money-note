@@ -3,6 +3,7 @@
 import { ApiResponse } from "@/app/types/api/api";
 import { prisma } from "@/lib/prisma/prisma";
 import { Stock } from "@prisma/client";
+import { handleStockCartSync } from "./handleStockCartSync";
 
 export const getAllStock = async (): Promise<ApiResponse<Stock[]>> => {
 

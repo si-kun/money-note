@@ -3,6 +3,7 @@ import { stockColumns } from "./components/stockColumns"
 import { getAllStock } from "@/app/server-aciton/stock/getAllStock"
 import { getShoppingCart } from "@/app/server-aciton/shopping/cart/getShoppingCart"
 import { getStockCategory } from "@/app/server-aciton/getStockCategory"
+import { handleStockCartSyncBatch } from "@/app/server-aciton/stock/handleStockCartSyncBatch"
 
 export const dynamic = 'force-dynamic';
  
@@ -16,6 +17,7 @@ const StockPage = async ({searchParams}: StockPageProps) => {
 
   const stockResponse = await getAllStock()
   const stocks = stockResponse.data || []
+
   const cartsResponse = await getShoppingCart()
   const carts = cartsResponse.data || []
 
