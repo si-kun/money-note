@@ -18,11 +18,13 @@ import { toast } from "sonner";
 
 const CreateCart = () => {
   const [newCartName, setNewCartName] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleNewCart = async () => {
     try {
       await createShoppingCart(newCartName);
       toast.success(`${newCartName} カートが作成されました`);
+      setIsOpen(false);
       setNewCartName("");
     } catch (error) {
       console.error("カートの作成中にエラーが発生しました:", error);
@@ -30,7 +32,7 @@ const CreateCart = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild className="p-4">
         <Button className="h-20" type="button" variant={"secondary"}>
           カートを作成

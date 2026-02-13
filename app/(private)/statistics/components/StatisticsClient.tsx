@@ -70,7 +70,7 @@ const StatisticsClient = ({ data, currentYear }: StatisticsClientProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 flex-1">
       <div className="flex items-center gap-4">
         <p className="font-bold text-2xl">{currentYear}年のデータ</p>
         <div className="flex items-center gap-2">
@@ -87,9 +87,7 @@ const StatisticsClient = ({ data, currentYear }: StatisticsClientProps) => {
       {/* データがなければなしの表示を */}
       {initialIncome.length === 0 && initialPayment.length === 0 ? (
         <div className="flex items-center justify-center h-[80vh]">
-          <p className="font-bold text-2xl text-center">
-            データがありません
-          </p>
+          <p className="font-bold text-2xl text-center">データがありません</p>
         </div>
       ) : (
         <Tabs defaultValue="yearData" className="">
@@ -156,7 +154,7 @@ const StatisticsClient = ({ data, currentYear }: StatisticsClientProps) => {
                 <YAxis />
                 <ChartTooltip content={<ChartTooltipContent />} />
                 <ChartLegend content={<ChartLegendContent />} />
-                <Bar dataKey="amount" fill="#8884d8" radius={4} />
+                <Bar dataKey="amount" name={"金額"} fill="transparent" radius={4} />
               </BarChart>
             </ChartContainer>
           </TabsContent>

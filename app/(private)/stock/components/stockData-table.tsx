@@ -67,6 +67,9 @@ export function StockDataTable<TData extends Stock, TValue>({
     pageSize: 10,
   });
 
+  // 同期用のstate
+  const [isSyncing, setIsSyncing] = useState(true);
+
   const table = useReactTable({
     data: stocks,
     columns,
@@ -109,6 +112,8 @@ export function StockDataTable<TData extends Stock, TValue>({
         }
       } catch (error) {
         console.error("在庫数の同期中にエラーが発生しました:", error);
+      } finally {
+        setIsSyncing(false);
       }
     };
     syncStocks();
@@ -124,7 +129,14 @@ export function StockDataTable<TData extends Stock, TValue>({
   };
 
   return (
-    <div>
+    <div className="w-full h-full">
+      {isSyncing && (
+        <div className="w-full h-full fixed flex gap-2 items-center justify-center inset-0 bg-gray-200/70 z-50">
+          <div className="animate-spin gap-4 h-8 w-8 border-t-3 border-r-3 rounded-full border-blue-500 border-b-transparent">
+          </div>
+          <p className="font-bold text-2xl">在庫を同期中...</p>
+        </div>
+      )}
       <div className="flex items-center justify-center py-4 gap-4">
         <Input
           placeholder="Filter names..."

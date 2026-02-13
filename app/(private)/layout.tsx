@@ -8,7 +8,7 @@ const layout = ({ children }: layoutProps) => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <div className="p-6 h-screen w-screen overflow-hidden">{children}</div>
+      <div className="p-6 h-screen w-screen flex items-center justify-center overflow-hidden">{children}</div>
     </SidebarProvider>
   );
 };

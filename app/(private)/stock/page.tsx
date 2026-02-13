@@ -1,25 +1,23 @@
-import { StockDataTable } from "@/app/(private)/stock/components/stockData-table"
-import { stockColumns } from "./components/stockColumns"
-import { getAllStock } from "@/app/server-aciton/stock/getAllStock"
-import { getShoppingCart } from "@/app/server-aciton/shopping/cart/getShoppingCart"
-import { getStockCategory } from "@/app/server-aciton/getStockCategory"
-import { handleStockCartSyncBatch } from "@/app/server-aciton/stock/handleStockCartSyncBatch"
+import { StockDataTable } from "@/app/(private)/stock/components/stockData-table";
+import { stockColumns } from "./components/stockColumns";
+import { getAllStock } from "@/app/server-aciton/stock/getAllStock";
+import { getShoppingCart } from "@/app/server-aciton/shopping/cart/getShoppingCart";
+import { getStockCategory } from "@/app/server-aciton/getStockCategory";
 
-export const dynamic = 'force-dynamic';
- 
+export const dynamic = "force-dynamic";
+
 interface StockPageProps {
   searchParams: Promise<{
-    page? :string
-  }>
+    page?: string;
+  }>;
 }
 
-const StockPage = async ({searchParams}: StockPageProps) => {
+const StockPage = async ({ searchParams }: StockPageProps) => {
+  const stockResponse = await getAllStock();
+  const stocks = stockResponse.data || [];
 
-  const stockResponse = await getAllStock()
-  const stocks = stockResponse.data || []
-
-  const cartsResponse = await getShoppingCart()
-  const carts = cartsResponse.data || []
+  const cartsResponse = await getShoppingCart();
+  const carts = cartsResponse.data || [];
 
   const params = await searchParams;
   const currentPage = Number(params.page || "0");
@@ -27,10 +25,14 @@ const StockPage = async ({searchParams}: StockPageProps) => {
   const categories = categoriesResponse.data || [];
 
   return (
-    <div className="container mx-auto py-10">
-      <StockDataTable columns={stockColumns} stocks={stocks} carts={carts} categories={categories} initialPage={currentPage} />
-    </div>
-  )
-}
+    <StockDataTable
+      columns={stockColumns}
+      stocks={stocks}
+      carts={carts}
+      categories={categories}
+      initialPage={currentPage}
+    />
+  );
+};
 
-export default StockPage
+export default StockPage;

@@ -26,7 +26,7 @@ export default async function ShoppingLayout({
             value="cart"
             className="mt-2 flex flex-col gap-4 flex-1 overflow-y-auto"
           >
-            {carts.length === 0 && <CreateCart />}
+            <CreateCart />
             {carts.map((cart) => (
               <Link key={cart.id} href={`/shopping/cart/${cart.id}`}>
                 <Card
