@@ -106,7 +106,6 @@ const StockForm = ({ row, setIsDialogOpen }: StockFormProps) => {
         toast.success("在庫が正常に編集されました。");
       } else {
         await addStock({ stock: form.getValues() });
-        console.log("3. addStock 完了");
       }
       setIsDialogOpen(false);
       // ダイアログが消えてからページをリフレッシュ

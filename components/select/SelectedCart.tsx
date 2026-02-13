@@ -30,11 +30,8 @@ const SelectedCart = ({
   autoSubmit,
   selectedCartId,
   setSelectedCartId,
-  row,
 }: SelectedCartProps) => {
   const [carts, setCarts] = useState<ShoppingCartWithItems[]>([]);
-
-  console.log(row)
 
   useEffect(() => {
     const getCarts = async () => {

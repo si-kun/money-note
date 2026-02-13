@@ -37,8 +37,6 @@ import AddButton from "@/components/button/AddButton";
 import StockForm from "./StockForm";
 import AddStockDialog from "./AddStockDialog";
 import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
-import { toast } from "sonner";
-import { handleStockCartSyncBatch } from "@/app/server-aciton/stock/handleStockCartSyncBatch";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -66,9 +64,6 @@ export function StockDataTable<TData extends Stock, TValue>({
     pageIndex: initialPage,
     pageSize: 10,
   });
-
-  // 同期用のstate
-  const [isSyncing, setIsSyncing] = useState(true);
 
   const table = useReactTable({
     data: stocks,
@@ -102,24 +97,6 @@ export function StockDataTable<TData extends Stock, TValue>({
     }));
   }, [searchParams]);
 
-  useEffect(() => {
-    const syncStocks = async () => {
-      try {
-        console.log("Syncing stock quantities with shopping cart...");
-        const result = await handleStockCartSyncBatch(stocks);
-        if (!result.success) {
-          toast.error("在庫数の同期に失敗しました");
-        }
-      } catch (error) {
-        console.error("在庫数の同期中にエラーが発生しました:", error);
-      } finally {
-        setIsSyncing(false);
-      }
-    };
-    syncStocks();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const handlePageChange = (newPageIndex: number) => {
     setPagination((prev) => ({
       ...prev,
@@ -130,13 +107,6 @@ export function StockDataTable<TData extends Stock, TValue>({
 
   return (
     <div className="w-full h-full">
-      {isSyncing && (
-        <div className="w-full h-full fixed flex gap-2 items-center justify-center inset-0 bg-gray-200/70 z-50">
-          <div className="animate-spin gap-4 h-8 w-8 border-t-3 border-r-3 rounded-full border-blue-500 border-b-transparent">
-          </div>
-          <p className="font-bold text-2xl">在庫を同期中...</p>
-        </div>
-      )}
       <div className="flex items-center justify-center py-4 gap-4">
         <Input
           placeholder="Filter names..."

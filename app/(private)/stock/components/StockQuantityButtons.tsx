@@ -38,7 +38,6 @@ const StockQuantityButtons = ({ row }: StockQuantityButtons) => {
       } catch (error) {
         console.error("Error updating quantity display:", error);
       }
-      console.log("Quantity updated to:", row.quantity);
     }, 500);
 
     return () => clearTimeout(timer);
