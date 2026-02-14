@@ -20,7 +20,7 @@ const StockQuantityButtons = ({ row }: StockQuantityButtons) => {
       setDisplayQuantity(row.quantity);
       previousQuantity.current = row.quantity;
     }
-    //  eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [row.quantity]);
 
   useEffect(() => {

@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { toast } from "sonner";
 
 interface DeleteDialogProps {
@@ -22,14 +24,26 @@ interface DeleteDialogProps {
 }
 
 const DeleteDialog = ({ name, id }: DeleteDialogProps) => {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
   const handleDelete = async () => {
-    try {
-      await deleteCart(id);
-      toast.success(`${name}を削除しました`);
-    } catch (error) {
-      console.error("Error deleting item:", error);
-      toast.error(`${name}の削除に失敗しました`);
-    }
+    startTransition(async () => {
+      try {
+         const result = await deleteCart(id);
+
+         if(!result.success) {
+          toast.error(result.message)
+          return;
+         }
+
+        toast.success(`${name}を削除しました`);
+        router.refresh();
+      } catch (error) {
+        console.error("Error deleting item:", error);
+        toast.error(`${name}の削除に失敗しました`);
+      }
+    });
   };
   return (
     <AlertDialog>
@@ -39,6 +53,7 @@ const DeleteDialog = ({ name, id }: DeleteDialogProps) => {
           variant={"secondary"}
           size={"icon"}
           className="hover:cursor-pointer"
+          disabled={isPending}
         >
           <Trash2 />
         </Button>
@@ -54,7 +69,9 @@ const DeleteDialog = ({ name, id }: DeleteDialogProps) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleDelete}>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={handleDelete} disabled={isPending}>
+            {isPending ? "削除中..." : "Countinue"}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

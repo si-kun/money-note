@@ -2,7 +2,6 @@
 
 import { ApiResponse } from "@/app/types/api/api";
 import { prisma } from "@/lib/prisma/prisma";
-import { revalidatePath } from "next/cache";
 
 export const deleteCart = async (
   cartId: string
@@ -13,8 +12,6 @@ export const deleteCart = async (
         id: cartId,
       },
     });
-
-    revalidatePath("/shopping");
 
     return {
       success: true,
