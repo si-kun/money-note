@@ -1,8 +1,6 @@
 "use client";
 
-import { updateShoppingChecked } from "@/app/server-aciton/shopping/cart/updateShoppingChecked";
 import ActionsCell from "@/components/dataTable/ActionsCell";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Prisma } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import EditShopping from "../../components/EditShopping";

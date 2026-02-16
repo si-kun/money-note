@@ -2,7 +2,8 @@ import { updateShoppingChecked } from "@/app/server-aciton/shopping/cart/updateS
 import { Checkbox } from "@/components/ui/checkbox";
 import { ShoppingCartItem } from "@prisma/client";
 import { Row } from "@tanstack/react-table";
-import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { toast } from "sonner";
 
 interface CheckboxCellProps {
@@ -10,29 +11,25 @@ interface CheckboxCellProps {
 }
 
 const CheckboxCell = ({ row }: CheckboxCellProps) => {
+
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [optimisticChecked, setOptimisticChecked] = useState(
-    row.original.checked
-  );
+
 
   const handleCheckedChange = () => {
-    const newChecked = !optimisticChecked;
-    setOptimisticChecked(newChecked);
-
     startTransition(async () => {
       try {
         const result = await updateShoppingChecked(
           row.original.id,
-          newChecked
+          !row.original.checked
         );
 
         if (!result.success) {
-          setOptimisticChecked(!newChecked);
           toast.error(result.message || "チェック状態の更新に失敗しました。");
           return;
         }
+        router.refresh();
       } catch (error) {
-        setOptimisticChecked(!newChecked);
         console.error("Error updating shopping checked status:", error);
         toast.error("チェック状態の更新に失敗しました。");
       }
@@ -45,7 +42,7 @@ const CheckboxCell = ({ row }: CheckboxCellProps) => {
         className={`data-[state=checked]:bg-green-400 data-[state=checked]:border-none ${
           isPending ? "opacity-50" : ""
         }`}
-        checked={optimisticChecked}
+        checked={row.original.checked}
         onCheckedChange={handleCheckedChange}
         disabled={isPending}
       />

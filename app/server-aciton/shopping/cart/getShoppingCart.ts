@@ -20,6 +20,9 @@ export const getShoppingCart = async (): Promise<
         items: {
           include: {
             stock: true,
+          },
+          orderBy: {
+            checked: "asc",
           }
         }
       },
