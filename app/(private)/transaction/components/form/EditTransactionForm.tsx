@@ -57,6 +57,8 @@ const EditTransactionForm = ({
   const payment =
     type === "PAYMENT" ? (transaction as PaymentWithCategory) : null;
 
+    const currentCategoryId = form.watch("categoryId");
+
   return (
     <Dialog
       open={open}
@@ -139,7 +141,7 @@ const EditTransactionForm = ({
                   )}
                 />
 
-                {payment && (
+                {payment && shoppingCategoryId === currentCategoryId && (
                   <ShoppingHistoryCard
                     shoppingHistory={payment.shoppingHistory}
                   />

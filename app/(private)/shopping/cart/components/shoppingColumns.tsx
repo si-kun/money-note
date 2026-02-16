@@ -10,6 +10,7 @@ import { deleteShoppingCartItem } from "@/app/server-aciton/shopping/cart/delete
 import { toast } from "sonner";
 import SelectedCart from "../../../../../components/select/SelectedCart";
 import { lowStockSelectedCart } from "@/app/server-aciton/shopping/cart/lowStockSelectedCart";
+import CheckboxCell from "./CheckboxCell";
 
 export type ShoppingCartItemWithStock = Prisma.ShoppingCartItemGetPayload<{
   include: { stock: true };
@@ -20,13 +21,7 @@ export const columns: ColumnDef<ShoppingCartItemWithStock>[] = [
     accessorKey: "checked",
     header: "選択",
     cell: ({ row }) => (
-      <Checkbox
-        className="data-[state=checked]:bg-green-400 data-[state=checked]:border-none"
-        checked={row.original.checked}
-        onCheckedChange={async () => {
-          await updateShoppingChecked(row.original.id, !row.original.checked);
-        }}
-      />
+      <CheckboxCell row={row} />
     ),
   },
   {

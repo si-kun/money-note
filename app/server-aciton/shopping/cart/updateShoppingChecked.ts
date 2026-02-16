@@ -16,7 +16,7 @@ export const updateShoppingChecked = async (
       },
     });
 
-    revalidatePath("/shopping");
+    // revalidatePath("/shopping");
 
     return {
       success: true,
