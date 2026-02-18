@@ -13,6 +13,7 @@ export const transactionSchema = z.object({
         quantity: z.number(),
         stockAdd: z.boolean(),
     })).optional(),
+    date: z.string(),
 })
 
 export const editTransactionSchema = z.object({

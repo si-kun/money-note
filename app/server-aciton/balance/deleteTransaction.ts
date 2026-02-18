@@ -49,8 +49,6 @@ export const deleteTransaction = async (
       }
     }
 
-    revalidatePath("/");
-
     return {
       success: true,
       message: "取引が正常に削除されました。",

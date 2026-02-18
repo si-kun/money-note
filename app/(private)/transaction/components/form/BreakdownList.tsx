@@ -1,16 +1,21 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { SelectedData } from "@/app/types/balance/balance";
+import {
+  IncomeWithCategory,
+  PaymentWithCategory,
+} from "@/app/types/balance/balance";
 
 import EditTransactionForm from "./EditTransactionForm";
 
 interface BreakdownList {
-  selectedDate: SelectedData | null;
+  date: string;
+  dailyIncome: IncomeWithCategory[];
+  dailyPayment: PaymentWithCategory[];
 }
 
-const BreakdownList = ({ selectedDate }: BreakdownList) => {
+const BreakdownList = ({ date, dailyIncome, dailyPayment }: BreakdownList) => {
   return (
     <div className="flex flex-col h-full max-h-full flex-1 gap-3 py-1 overflow-y-auto">
-      {selectedDate?.incomes?.map((income) => (
+      {dailyIncome?.map((income) => (
         <Card className="bg-blue-200" key={income.id}>
           <CardContent className="flex items-center">
             <span className="w-[30%]">{income.category.name}</span>
@@ -18,14 +23,14 @@ const BreakdownList = ({ selectedDate }: BreakdownList) => {
             <span className="ml-auto">¥{income.amount.toLocaleString()}</span>
             <EditTransactionForm
               transaction={income}
-              date={selectedDate.date}
+              date={date}
               type={"INCOME"}
             />
           </CardContent>
         </Card>
       ))}
 
-      {selectedDate?.payments?.map((payment) => (
+      {dailyPayment?.map((payment) => (
         <Card className="bg-red-200" key={payment.id}>
           <CardContent className="flex items-center">
             <span className="w-[30%]">【{payment.category.name}】</span>
@@ -33,7 +38,7 @@ const BreakdownList = ({ selectedDate }: BreakdownList) => {
             <span className="ml-auto">¥{payment.amount.toLocaleString()}</span>
             <EditTransactionForm
               transaction={payment}
-              date={selectedDate.date}
+              date={date}
               type={"PAYMENT"}
             />
           </CardContent>

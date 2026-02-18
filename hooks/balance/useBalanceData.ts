@@ -198,24 +198,24 @@ export const useBalanceData = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, year, month]);
 
-  const handlePrevMonth = () => {
-    if (month === 1) {
-      setYear((prev) => prev - 1);
-      setMonth(12);
-    } else {
-      setMonth((prev) => prev - 1);
-    }
-    calendarRef.current?.getApi().prev();
-  };
-  const handleNextMonth = () => {
-    if (month === 12) {
-      setYear((prev) => prev + 1);
-      setMonth(1);
-    } else {
-      setMonth((prev) => prev + 1);
-    }
-    calendarRef.current?.getApi().next();
-  };
+  // const handlePrevMonth = () => {
+  //   if (month === 1) {
+  //     setYear((prev) => prev - 1);
+  //     setMonth(12);
+  //   } else {
+  //     setMonth((prev) => prev - 1);
+  //   }
+  //   calendarRef.current?.getApi().prev();
+  // };
+  // const handleNextMonth = () => {
+  //   if (month === 12) {
+  //     setYear((prev) => prev + 1);
+  //     setMonth(1);
+  //   } else {
+  //     setMonth((prev) => prev + 1);
+  //   }
+  //   calendarRef.current?.getApi().next();
+  // };
 
   const handleSelectedDate = (clickedDate: string) => {
     const selectedIncomes = incomeData.filter((income) => {

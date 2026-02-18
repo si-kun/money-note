@@ -8,7 +8,6 @@ interface layoutProps {
 }
 const layout = async ({ children }: layoutProps) => {
 
-  console.log("layout: Syncing stock with carts...");
 
   const stockResponse = await getAllStock();
   const stocks = stockResponse.data || []

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Dialog,
   DialogContent,
@@ -27,17 +29,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTransactionForm } from "@/hooks/useTransactionForm";
 import FloatingLabel from "./FloatingLabel";
-import { SelectedData } from "@/app/types/balance/balance";
 
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
 import ShoppingCartCard from "../shopping/ShoppingCartCard";
 
 interface TransactionFormProps {
-  selectedDate: SelectedData;
+  date: string;
 }
 
-const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
+const TransactionForm = ({ date }: TransactionFormProps) => {
   const {
     form,
     onSubmit,
@@ -51,7 +52,13 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
     setAddInputProduct,
     totalCartPrice,
     productsValue,
-  } = useTransactionForm();
+    isPending,
+  } = useTransactionForm(date);
+
+    // 追加!
+    console.log('form.formState.isValid:', form.formState.isValid)
+    console.log('form.formState.errors:', form.formState.errors)
+    console.log('form.getValues():', form.getValues())
 
   return (
     <Dialog
@@ -78,7 +85,7 @@ const TransactionForm = ({ selectedDate }: TransactionFormProps) => {
           <FieldGroup>
             <Field>
               <DialogHeader>
-                <DialogTitle>{selectedDate.date}の収支を追加する</DialogTitle>
+                <DialogTitle>{date}の収支を追加する</DialogTitle>
                 <DialogDescription>
                   収入・支出の内訳を追加します。
                 </DialogDescription>

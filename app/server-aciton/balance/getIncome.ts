@@ -13,6 +13,7 @@ export const getIncome = async ({
   year,
   month,
 }: GetIncome): Promise<ApiResponse<IncomeWithCategory[]>> => {
+  
   try {
     const response = await prisma.income.findMany({
       where: {

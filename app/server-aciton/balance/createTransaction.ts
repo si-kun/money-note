@@ -3,13 +3,12 @@
 import { ApiResponse } from "@/app/types/api/api";
 import { TransactionsFormType } from "@/app/types/zod/transaction";
 import { prisma } from "@/lib/prisma/prisma";
-import { revalidatePath } from "next/cache";
 
 export const createTransaction = async (
   data: TransactionsFormType
 ): Promise<ApiResponse<null>> => {
   try {
-    const { title, type, categoryId, amount, memo, addHistories } = data;
+    const { title, type, categoryId, amount, memo, addHistories,date } = data;
     const userId = "test-user-id";
 
     // incomeの場合
@@ -21,6 +20,7 @@ export const createTransaction = async (
           amount,
           memo,
           userId: userId,
+          incomeDate: new Date(date),
         },
       });
     }
@@ -35,6 +35,7 @@ export const createTransaction = async (
             amount,
             memo,
             userId,
+            paymentDate: new Date(date),
           },
         });
 
@@ -114,8 +115,6 @@ export const createTransaction = async (
         data: null,
       };
     }
-
-    revalidatePath("/", "page");
 
     return {
       success: true,

@@ -1,3 +1,5 @@
+"use client";
+
 import { createTransaction } from "@/app/server-aciton/balance/createTransaction";
 import { ShoppingHistoryWithItems } from "@/app/server-aciton/shopping/history/getShoppingHistory";
 import {
@@ -5,11 +7,12 @@ import {
   TransactionsFormType,
 } from "@/app/types/zod/transaction";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { useCategories } from "./useCategories";
 import { v4 as uuidv4 } from "uuid";
+import { useRouter } from "next/navigation";
 
 export interface ProductValue {
   id: string;
@@ -19,11 +22,15 @@ export interface ProductValue {
   stockAdd: boolean;
 }
 
-export const useTransactionForm = () => {
+export const useTransactionForm = (date: string) => {
   const [histories, setHistories] = useState<ShoppingHistoryWithItems[]>([]);
   const [open, setOpen] = useState(false);
 
   const [addInputProduct, setAddInputProduct] = useState<string>("");
+
+  const [isPending, startTransition] = useTransition();
+
+  const router = useRouter();
 
   const { fetchCategories, categories } = useCategories();
 
@@ -43,6 +50,7 @@ export const useTransactionForm = () => {
       amount: 0,
       memo: "",
       addHistories: [],
+      date: date,
     },
   });
 
@@ -104,20 +112,27 @@ export const useTransactionForm = () => {
       : null;
 
   const onSubmit = async (data: TransactionsFormType) => {
-    try {
-      const result = await createTransaction(data);
-      if (result.success) {
-        form.reset();
-        setHistories([]);
-        setOpen(false);
-        toast.success(result.message || "取引が正常に作成されました");
-      } else {
-        toast.error(result.message || "取引の作成に失敗しました");
+    startTransition(async() => {
+
+      try {
+        const result = await createTransaction({
+          ...data,
+          date,
+        });
+        if (result.success) {
+          form.reset();
+          setHistories([]);
+          setOpen(false);
+          toast.success(result.message || "取引が正常に作成されました");
+          router.refresh();
+        } else {
+          toast.error(result.message || "取引の作成に失敗しました");
+        }
+      } catch (error) {
+        console.error("Error submitting transaction:", error);
+        toast.error("取引の作成中にエラーが発生しました");
       }
-    } catch (error) {
-      console.error("Error submitting transaction:", error);
-      toast.error("取引の作成中にエラーが発生しました");
-    }
+    })
   };
 
   const totalCartPrice = productsValue.reduce((acc, item) => {
@@ -146,5 +161,6 @@ export const useTransactionForm = () => {
     setAddInputProduct,
     totalCartPrice,
     productsValue,
+    isPending,
   };
 };

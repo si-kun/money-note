@@ -1,7 +1,6 @@
 "use client";
-import {
-  SubscriptionResponse,
-} from "@/app/server-aciton/balance/getSubscription";
+
+import { SubscriptionResponse } from "@/app/server-aciton/balance/getSubscription";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -17,22 +16,20 @@ import {
 import { ScanSearch } from "lucide-react";
 import { DataTable } from "../../subscriptions/data-table";
 import { columns } from "../../subscriptions/columns";
+import { useState } from "react";
 
 interface SubscriptionCardProps {
   monthlySubscription: SubscriptionResponse;
   year: number;
   month: number;
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
 }
 
 const SubscriptionCard = ({
   monthlySubscription,
   year,
   month,
-  isOpen,
-  setIsOpen,
 }: SubscriptionCardProps) => {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Card className="flex-1">
@@ -40,10 +37,10 @@ const SubscriptionCard = ({
         <CardTitle>サブスク</CardTitle>
       </CardHeader>
       <CardContent className="flex gap-4 items-center">
-        <span>登録数:{monthlySubscription.subscription.length}</span>
+        <span>登録数:{monthlySubscription?.subscription?.length ?? 0}</span>
         <span>
           合計金額:¥
-          {monthlySubscription.totalAmount.toLocaleString()}
+          {(monthlySubscription.totalAmount ?? 0).toLocaleString()}
         </span>
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild className="ml-auto">
