@@ -3,12 +3,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Summary from "./Summary";
 import MonthryTabsContent from "./MonthryTabsContent";
 import { SubscriptionResponse } from "@/app/server-aciton/balance/getSubscription";
-import { IncomeWithCategory, PaymentWithCategory } from "@/app/types/balance/balance";
+import {
+  IncomeWithCategory,
+  PaymentWithCategory,
+} from "@/app/types/balance/balance";
 
 interface SummarySectionProps {
+  // 月次データ
   year: number;
   month: number;
-  date: string;
   incomeError: string | null;
   paymentError: string | null;
   monthlyIncomeTotal: number;
@@ -16,6 +19,7 @@ interface SummarySectionProps {
   monthlySubscription: SubscriptionResponse;
 
   // 日次データ
+  date: string;
   dailyIncome: IncomeWithCategory[];
   dailyPayment: PaymentWithCategory[];
   dailyIncomeTotal: number;
@@ -23,14 +27,17 @@ interface SummarySectionProps {
 }
 
 const SummarySection = ({
+  // 月次データ
   year,
   month,
-  date,
   incomeError,
   paymentError,
   monthlyIncomeTotal,
   monthlyPaymentTotal,
   monthlySubscription,
+
+  // 日次データ
+  date,
   dailyIncome,
   dailyPayment,
   dailyIncomeTotal,
@@ -42,6 +49,8 @@ const SummarySection = ({
         <TabsTrigger value="day">日次</TabsTrigger>
         <TabsTrigger value="month">月次</TabsTrigger>
       </TabsList>
+
+      {/* 日次 */}
       <TabsContent value="day" className="flex-1 overflow-hidden">
         <Summary
           date={date}
@@ -51,15 +60,19 @@ const SummarySection = ({
           dailyPaymentTotal={dailyPaymentTotal}
         />
       </TabsContent>
-      <MonthryTabsContent
-        year={year}
-        month={month}
-        incomeError={incomeError}
-        paymentError={paymentError}
-        monthlyIncomeTotal={monthlyIncomeTotal}
-        monthlyPaymentTotal={monthlyPaymentTotal}
-        monthlySubscription={monthlySubscription}
-      />
+
+      {/* 月次 */}
+      <TabsContent value="month" className="flex-1 overflow-hidden">
+        <MonthryTabsContent
+          year={year}
+          month={month}
+          incomeError={incomeError}
+          paymentError={paymentError}
+          monthlyIncomeTotal={monthlyIncomeTotal}
+          monthlyPaymentTotal={monthlyPaymentTotal}
+          monthlySubscription={monthlySubscription}
+        />
+      </TabsContent>
     </Tabs>
   );
 };

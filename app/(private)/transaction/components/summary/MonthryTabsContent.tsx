@@ -1,5 +1,4 @@
 import SummaryCard from "./SummaryCard";
-import { TabsContent } from "@/components/ui/tabs";
 
 import SubscriptionCard from "@/app/(private)/subscriptions/components/SubscriptionCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,7 +24,6 @@ const MonthryTabsContent = ({
   monthlySubscription,
 }: MonthryTabsContentProps) => {
   return (
-    <TabsContent value="month" className="flex-1 overflow-hidden">
       <Card className="h-full">
         <CardHeader>
           <CardTitle>
@@ -55,15 +53,14 @@ const MonthryTabsContent = ({
             <SummaryCard
               title={"残高"}
               amount={
-                monthlyIncomeTotal -
+               ( monthlyIncomeTotal -
                 monthlyPaymentTotal -
-                monthlySubscription.totalAmount
+                monthlySubscription.totalAmount)
               }
             />
           </div>
         </CardContent>
       </Card>
-    </TabsContent>
   );
 };
 

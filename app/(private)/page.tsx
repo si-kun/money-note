@@ -73,15 +73,16 @@ export default async function Home({
         initialYear={year}
       />
       <SummarySection
+        // 月次データ
         year={year}
         month={month}
-        date={date}
         incomeError={incomeError}
         paymentError={paymentError}
         monthlyIncomeTotal={monthlyIncomeTotal}
         monthlyPaymentTotal={monthlyPaymentTotal}
-        monthlySubscription={monthlySubscription}
+        monthlySubscription={monthlySubscription.data}
         // 日次データ
+        date={date}
         dailyIncome={dailyIncome}
         dailyPayment={dailyPayment}
         dailyIncomeTotal={dailyIncomeTotal}

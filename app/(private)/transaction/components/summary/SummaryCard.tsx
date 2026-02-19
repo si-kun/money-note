@@ -20,7 +20,7 @@ const SummaryCard = ({ title, amount, errorText }: SummaryCardProps) => {
             {errorText}
           </span>
         ) : (
-          `¥${amount}`
+          `¥${amount.toLocaleString()}`
         )}
       </CardContent>
     </Card>
