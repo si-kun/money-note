@@ -18,13 +18,16 @@ import { addStocksToCart } from "@/app/server-aciton/stock/addStocksToCart";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
+import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
 
 interface AddStockDialogProps<TData extends Stock> {
   table: Table<TData>;
+  carts: ShoppingCartWithItems[]
 }
 
 const AddStockDialog = <TData extends Stock>({
   table,
+  carts,
 }: AddStockDialogProps<TData>) => {
   const router = useRouter();
 
@@ -87,6 +90,9 @@ const AddStockDialog = <TData extends Stock>({
         toast.success(result.message);
         router.refresh();
         table.resetRowSelection();
+        setNewCartMode(false);
+        setNewCartName("");
+        setSelectedCartId(null);
         setIsOpen(false);
       } else {
         toast.error(result.message);
@@ -133,7 +139,7 @@ const AddStockDialog = <TData extends Stock>({
               <SelectedCart
                 selectedCartId={selectedCartId}
                 setSelectedCartId={setSelectedCartId}
-                // carts={carts}
+                carts={carts}
               />
             )}
           </div>

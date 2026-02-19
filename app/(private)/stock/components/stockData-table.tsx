@@ -222,7 +222,7 @@ export function StockDataTable<TData extends Stock, TValue>({
             next
           </Button>
         </div>
-        <AddStockDialog table={table} />
+        <AddStockDialog table={table} carts={carts} />
       </div>
     </div>
   );
