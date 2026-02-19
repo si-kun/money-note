@@ -77,7 +77,6 @@ export const useEditTransactionForm = ({
         toast.success(result.message);
         form.reset();
         setOpen(false);
-        router.refresh();
       } catch (error) {
         console.error("Error submitting form:", error);
         toast.error("編集中にエラーが発生しました");
@@ -123,5 +122,6 @@ export const useEditTransactionForm = ({
     filteredCategory,
     shoppingCategoryId,
     handleDeleteTransaction,
+    isPending,
   };
 };

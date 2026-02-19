@@ -3,6 +3,7 @@
 import { ApiResponse } from "@/app/types/api/api";
 import { TransactionsFormType } from "@/app/types/zod/transaction";
 import { prisma } from "@/lib/prisma/prisma";
+import { revalidatePath } from "next/cache";
 
 export const createTransaction = async (
   data: TransactionsFormType
@@ -115,6 +116,8 @@ export const createTransaction = async (
         data: null,
       };
     }
+
+    revalidatePath("/")
 
     return {
       success: true,

@@ -54,6 +54,7 @@ const EditTransactionForm = ({
     filteredCategory,
     shoppingCategoryId,
     handleDeleteTransaction,
+    isPending,
   } = useEditTransactionForm({ transaction, type });
 
   const payment =
@@ -180,15 +181,15 @@ const EditTransactionForm = ({
                   )}
                 />
                 <Button
-                  disabled={!form.formState.isValid}
+                  disabled={!form.formState.isValid || isPending}
                   type="submit"
                   className={`bg-green-500 ${
-                    !form.formState.isValid
+                    !form.formState.isValid || isPending
                       ? "opacity-50 cursor-not-allowed hover:bg-green-500"
                       : "hover:bg-green-600"
                   }`}
                 >
-                  保存
+                  {isPending ? "保存中..." : "保存"}
                 </Button>
                 <DeleteConfirmDialog onConfirm={handleDeleteTransaction} />
               </div>

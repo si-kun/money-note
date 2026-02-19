@@ -12,7 +12,6 @@ import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { useCategories } from "./useCategories";
 import { v4 as uuidv4 } from "uuid";
-import { useRouter } from "next/navigation";
 
 export interface ProductValue {
   id: string;
@@ -29,8 +28,6 @@ export const useTransactionForm = (date: string) => {
   const [addInputProduct, setAddInputProduct] = useState<string>("");
 
   const [isPending, startTransition] = useTransition();
-
-  const router = useRouter();
 
   const { fetchCategories, categories } = useCategories();
 
@@ -124,7 +121,6 @@ export const useTransactionForm = (date: string) => {
           setHistories([]);
           setOpen(false);
           toast.success(result.message || "取引が正常に作成されました");
-          router.refresh();
         } else {
           toast.error(result.message || "取引の作成に失敗しました");
         }
