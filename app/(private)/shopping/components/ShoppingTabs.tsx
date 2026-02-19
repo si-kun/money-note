@@ -3,11 +3,12 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePathname, useRouter } from "next/navigation";
 
-interface ShoppingTabsProps {
-  children: React.ReactNode;
-}
+// interface ShoppingTabsProps {
+//   children: React.ReactNode;
+// }
 
-const ShoppingTabs = ({ children }: ShoppingTabsProps) => {
+const ShoppingTabs = () => {
+// const ShoppingTabs = ({ children }: ShoppingTabsProps) => {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -26,7 +27,7 @@ const ShoppingTabs = ({ children }: ShoppingTabsProps) => {
     <Tabs
       value={currentTab}
       onValueChange={handleTabChange}
-      className="flex flex-col h-full"
+      className="flex flex-col shrink-0"
     >
       <TabsList className="w-full shrink-0">
         <TabsTrigger value="cart" className="flex-1">
@@ -36,7 +37,6 @@ const ShoppingTabs = ({ children }: ShoppingTabsProps) => {
           履歴
         </TabsTrigger>
       </TabsList>
-      {children}
     </Tabs>
   );
 };

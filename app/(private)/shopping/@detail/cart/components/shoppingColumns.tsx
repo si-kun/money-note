@@ -3,12 +3,12 @@
 import ActionsCell from "@/components/dataTable/ActionsCell";
 import { Prisma } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
-import EditShopping from "../../components/EditShopping";
 import { deleteShoppingCartItem } from "@/app/server-aciton/shopping/cart/deleteShoppinCartItem";
 import { toast } from "sonner";
-import SelectedCart from "../../../../../components/select/SelectedCart";
 import { lowStockSelectedCart } from "@/app/server-aciton/shopping/cart/lowStockSelectedCart";
 import CheckboxCell from "./CheckboxCell";
+import EditShopping from "../../../components/EditShopping";
+import SelectedCart from "@/components/select/SelectedCart";
 
 export type ShoppingCartItemWithStock = Prisma.ShoppingCartItemGetPayload<{
   include: { stock: true };

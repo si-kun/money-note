@@ -128,7 +128,7 @@ export function StockDataTable<TData extends Stock, TValue>({
           }}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Theme" />
+            <SelectValue placeholder="カテゴリー" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Categories</SelectItem>

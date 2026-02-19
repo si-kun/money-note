@@ -1,10 +1,10 @@
 import { getShoppingCart } from "@/app/server-aciton/shopping/cart/getShoppingCart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { columns, lowStockColumns } from "../components/shoppingColumns";
-import BuyButton from "../../components/BuyButton";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ShoppingCartItemTable } from "../components/shoppingCartData-table";
+import BuyButton from "../../../components/BuyButton";
 
 interface CartDetailPageProps {
   params: Promise<{
@@ -42,11 +42,11 @@ const ShoppingDetailPage = async ({ params }: CartDetailPageProps) => {
             {selectedCart.items?.length || 0}件のアイテム
           </p>
         </div>
-        {/* あとでダイアログで追加機能を実装。今はLinkで対応 */}
-        <Link href={"/stock"}>
-          <Button variant={"secondary"}>商品を追加</Button>
-        </Link>
-        {/* <AddCartDialog />  */}
+        {!isLowStockCart && (
+          <Link href={"/stock"}>
+            <Button variant={"secondary"}>商品を追加</Button>
+          </Link>
+        )}
       </CardHeader>
       <CardContent className="overflow-y-auto">
         <ShoppingCartItemTable

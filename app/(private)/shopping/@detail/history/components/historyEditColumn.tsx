@@ -2,8 +2,8 @@
 
 import ActionsCell from "@/components/dataTable/ActionsCell";
 import { ColumnDef } from "@tanstack/react-table";
-import EditShopping from "../../components/EditShopping";
 import { ShoppingCartItemWithStock } from "../../cart/components/shoppingColumns";
+import EditShopping from "../../../components/EditShopping";
 
 export const historyEditColumns: ColumnDef<ShoppingCartItemWithStock>[] = [
   {

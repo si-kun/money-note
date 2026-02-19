@@ -2,7 +2,9 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export const dynamic = "force-dynamic";
 
-const CartPage = () => {
+const CartDetailPage = () => {
+
+
   return (
     <Card className="h-full">
       <CardContent className="flex items-center justify-center h-full">
@@ -12,4 +14,4 @@ const CartPage = () => {
   );
 };
 
-export default CartPage;
+export default CartDetailPage;

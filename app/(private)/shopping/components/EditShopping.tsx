@@ -20,7 +20,7 @@ import {
   ShoppingCartItemInput,
   shoppingCartItemSchema,
 } from "@/app/types/zod/shoppingCartItem";
-import { ShoppingCartItemWithStock } from "../cart/components/shoppingColumns";
+import { ShoppingCartItemWithStock } from "../@detail/cart/components/shoppingColumns";
 
 interface EditShoppingProps {
   row: Row<ShoppingCartItemWithStock>;
