@@ -1,10 +1,10 @@
 import { getShoppingCart } from "@/app/server-aciton/shopping/cart/getShoppingCart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { columns, lowStockColumns } from "../components/shoppingColumns";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ShoppingCartItemTable } from "../components/shoppingCartData-table";
 import BuyButton from "../../../components/BuyButton";
+import LowStockTable from "../components/LowStockTable";
+import NomalCartTable from "../components/NomalCartTable";
 
 interface CartDetailPageProps {
   params: Promise<{
@@ -19,6 +19,8 @@ const ShoppingDetailPage = async ({ params }: CartDetailPageProps) => {
   const carts = cartResponse?.data || [];
 
   const selectedCart = carts.find((cart) => cart.id === id);
+
+  const availableCarts = carts.filter((cart) => cart.name !== "在庫不足");
 
   if (!selectedCart) {
     return (
@@ -49,10 +51,14 @@ const ShoppingDetailPage = async ({ params }: CartDetailPageProps) => {
         )}
       </CardHeader>
       <CardContent className="overflow-y-auto">
-        <ShoppingCartItemTable
-          items={selectedCart.items || []}
-          columns={isLowStockCart ? lowStockColumns : columns}
-        />
+        {isLowStockCart ? (
+          <LowStockTable
+            items={selectedCart.items || []}
+            availableCarts={availableCarts}
+          />
+        ) : (
+          <NomalCartTable items={selectedCart.items || []} />
+        )}
         {/* 「在庫不足」カートでは非表示 */}
         {!isLowStockCart && <BuyButton selectedCart={selectedCart} />}
       </CardContent>

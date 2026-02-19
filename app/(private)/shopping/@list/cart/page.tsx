@@ -1,6 +1,5 @@
 import { getShoppingCart } from "@/app/server-aciton/shopping/cart/getShoppingCart";
 
-// import { TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CreateCart from "../../@detail/cart/components/CreateCart";
 import DeleteDialog from "../../components/DeleteDialog";

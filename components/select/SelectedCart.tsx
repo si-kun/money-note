@@ -1,10 +1,7 @@
-"use client";
 
 import { ShoppingCartItemWithStock } from "@/app/(private)/shopping/@detail/cart/components/shoppingColumns";
-import {
-  getShoppingCart,
-  ShoppingCartWithItems,
-} from "@/app/server-aciton/shopping/cart/getShoppingCart";
+import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
+
 
 import {
   Select,
@@ -15,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 interface SelectedCartProps {
   onCartSelect?: (cartId: string) => void;
@@ -23,6 +20,7 @@ interface SelectedCartProps {
   setSelectedCartId?: Dispatch<SetStateAction<string | null>>;
   autoSubmit?: boolean;
   row?: ShoppingCartItemWithStock;
+  carts: ShoppingCartWithItems[];
 }
 
 const SelectedCart = ({
@@ -30,23 +28,8 @@ const SelectedCart = ({
   autoSubmit,
   selectedCartId,
   setSelectedCartId,
+  carts,
 }: SelectedCartProps) => {
-  const [carts, setCarts] = useState<ShoppingCartWithItems[]>([]);
-
-  useEffect(() => {
-    const getCarts = async () => {
-      try {
-        const response = await getShoppingCart();
-        if (response.success) {
-          const data = response.data.filter((cart) => cart.name !== "在庫不足");
-          setCarts(data || []);
-        }
-      } catch (error) {
-        console.error("Error fetching carts:", error);
-      }
-    };
-    getCarts();
-  }, []);
 
   return (
     <Select

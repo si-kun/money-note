@@ -18,9 +18,7 @@ export const columns: ColumnDef<ShoppingCartItemWithStock>[] = [
   {
     accessorKey: "checked",
     header: "選択",
-    cell: ({ row }) => (
-      <CheckboxCell row={row} />
-    ),
+    cell: ({ row }) => <CheckboxCell row={row} />,
   },
   {
     accessorKey: "itemName",
@@ -69,7 +67,9 @@ export const columns: ColumnDef<ShoppingCartItemWithStock>[] = [
 ];
 
 // 在庫不足カート用のカラム
-export const lowStockColumns: ColumnDef<ShoppingCartItemWithStock>[] = [
+export const getLowStockColumns = (
+  carts: ShoppingCartItemWithStock[]
+): ColumnDef<ShoppingCartItemWithStock>[] => [
   {
     accessorKey: "itemName",
     header: "商品名",
@@ -109,6 +109,7 @@ export const lowStockColumns: ColumnDef<ShoppingCartItemWithStock>[] = [
           onCartSelect={handleCartSelect}
           autoSubmit={true}
           row={row.original}
+          carts={carts}
         />
       );
     },

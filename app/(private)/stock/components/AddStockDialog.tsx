@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Stock } from "@prisma/client";
 import { Table } from "@tanstack/react-table";
 import SelectedCart from "../../../../components/select/SelectedCart";
-import {  useState } from "react";
+import { useState } from "react";
 import { addStocksToCart } from "@/app/server-aciton/stock/addStocksToCart";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -23,28 +23,31 @@ interface AddStockDialogProps<TData extends Stock> {
   table: Table<TData>;
 }
 
-const AddStockDialog = <TData extends Stock>({ table }: AddStockDialogProps<TData>) => {
+const AddStockDialog = <TData extends Stock>({
+  table,
+}: AddStockDialogProps<TData>) => {
   const router = useRouter();
 
   const selectedRows = table.getSelectedRowModel().rows;
   const [selectedCartId, setSelectedCartId] = useState<string | null>(null);
-  const [selectedQuantity, setSelectedQuantity] = useState<Record<string, number>>({});
+  const [selectedQuantity, setSelectedQuantity] = useState<
+    Record<string, number>
+  >({});
 
   const handleOpenDialog = () => {
     const initialQuantities: Record<string, number> = {};
     selectedRows.forEach((row) => {
       initialQuantities[row.id] = 1;
-    })
-    setSelectedQuantity(initialQuantities)
-  }
+    });
+    setSelectedQuantity(initialQuantities);
+  };
 
   const handleQuantityChange = (rowId: string, quantity: number) => {
     setSelectedQuantity((prev) => ({
       ...prev,
       [rowId]: quantity,
-    }))
-  }
-
+    }));
+  };
 
   const [newCartMode, setNewCartMode] = useState(false);
   const [newCartName, setNewCartName] = useState("");
@@ -130,6 +133,7 @@ const AddStockDialog = <TData extends Stock>({ table }: AddStockDialogProps<TDat
               <SelectedCart
                 selectedCartId={selectedCartId}
                 setSelectedCartId={setSelectedCartId}
+                // carts={carts}
               />
             )}
           </div>
