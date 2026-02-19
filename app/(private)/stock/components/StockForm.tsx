@@ -19,22 +19,21 @@ import { Switch } from "@/components/ui/switch";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Stock, StockCategory } from "@prisma/client";
 import { Row } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { getStockCategory } from "@/app/server-aciton/getStockCategory";
 import { useRouter } from "next/navigation";
 
 interface StockFormProps {
   row?: Row<Stock>;
   setIsDialogOpen: (open: boolean) => void;
+  categories: StockCategory[];
 }
 
-const StockForm = ({ row, setIsDialogOpen }: StockFormProps) => {
+const StockForm = ({ row, setIsDialogOpen,categories }: StockFormProps) => {
   const router = useRouter();
 
   const [toggleCategory, setToggleCategory] = useState(false);
-  const [categories, setCategories] = useState<StockCategory[]>([]);
 
   const form = useForm<StockFormType>({
     resolver: zodResolver(stockSchema),
@@ -117,19 +116,19 @@ const StockForm = ({ row, setIsDialogOpen }: StockFormProps) => {
     }
   };
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const result = await getStockCategory();
-        if (result.success && result.data) {
-          setCategories(result.data);
-        }
-      } catch (error) {
-        console.error("Error setting form values:", error);
-      }
-    };
-    fetchCategories();
-  }, []);
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const result = await getStockCategory();
+  //       if (result.success && result.data) {
+  //         setCategories(result.data);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error setting form values:", error);
+  //     }
+  //   };
+  //   fetchCategories();
+  // }, []);
 
   return (
     <form

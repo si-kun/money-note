@@ -143,7 +143,7 @@ export function StockDataTable<TData extends Stock, TValue>({
           title="新しい在庫を追加"
           description="在庫の詳細を入力して、新しい在庫を追加します。"
         >
-          {(setIsDialogOpen) => <StockForm setIsDialogOpen={setIsDialogOpen} />}
+          {(setIsDialogOpen) => <StockForm setIsDialogOpen={setIsDialogOpen} categories={categories} />}
         </AddButton>
       </div>
       <div className="overflow-hidden rounded-md border">

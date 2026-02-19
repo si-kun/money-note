@@ -7,6 +7,7 @@ import SelectedCart from "@/components/select/SelectedCart";
 import { ColumnDef } from "@tanstack/react-table";
 import { ShoppingCartItemWithStock } from "./shoppingColumns";
 import { lowStockSelectedCart } from "@/app/server-aciton/shopping/cart/lowStockSelectedCart";
+import { toast } from "sonner";
 
 interface LowStockTableProps {
   items: ShoppingCartWithItems[];
@@ -40,12 +41,12 @@ const LowStockTable = ({ items, availableCarts }: LowStockTableProps) => {
           cell: ({ row }) => {
             const handleCartSelect = async (cartId: string) => {
               if (!cartId) return;
-              await lowStockSelectedCart(row.original, cartId);
-            //   if (result.success) {
-            //     toast.success(result.message);
-            //   } else {
-            //     toast.error(result.message);
-            //   }
+             const result = await lowStockSelectedCart(row.original, cartId);
+              if (result.success) {
+                toast.success(result.message);
+              } else {
+                toast.error(result.message);
+              }
             };
             return (
               <SelectedCart
