@@ -11,7 +11,7 @@ export const deleteSubscription = async (
     if (!id) {
       return {
         success: false,
-        message: "Subscription ID is required.",
+        message: "サブスクIDが提供されていません。",
         data: null,
       };
     }
@@ -24,7 +24,7 @@ export const deleteSubscription = async (
 
     return {
       success: true,
-      message: "Subscription deleted successfully.",
+      message: "サブスクの削除に成功しました。",
       data: null,
     };
   } catch (error) {

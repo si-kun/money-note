@@ -12,7 +12,7 @@ const SubscriptionPage = async () => {
   const errorMessage = resultSubscriptions.success ? null : resultSubscriptions.message;
 
   return (
-    <div className="container mx-auto py-10 h-full">
+    <div className="container h-full">
       <DataTable columns={columns} data={data} errorMessage={errorMessage} />
     </div>
   );

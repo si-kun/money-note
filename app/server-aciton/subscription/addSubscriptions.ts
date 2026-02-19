@@ -3,6 +3,7 @@
 import { ApiResponse } from "@/app/types/api/api";
 import { SubscriptionFormType } from "@/app/types/zod/subscription";
 import { prisma } from "@/lib/prisma/prisma";
+import { revalidatePath } from "next/cache";
 
 export const addSubscriptions = async (
   data: SubscriptionFormType
@@ -18,11 +19,14 @@ export const addSubscriptions = async (
       },
     });
 
+    revalidatePath("/subscriptions");
+    
     return {
       success: true,
       message: "Subscription added successfully",
       data: null,
     };
+
   } catch (error) {
     console.error("Error adding subscription:", error);
     return {

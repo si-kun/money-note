@@ -18,7 +18,6 @@ export const columns: ColumnDef<Subscription>[] = [
   // monthlyPrice
   {
     accessorKey: "monthlyPrice",
-    // header: "MonthlyPrice",
     header: ({ column }) => {
       const isSorted = column.getIsSorted();
       return (
@@ -34,7 +33,6 @@ export const columns: ColumnDef<Subscription>[] = [
       return <div className="">¥{monthlyPrice.toLocaleString()}</div>;
     },
   },
-  // startDate
   {
     accessorKey: "startDate",
     header: ({ column }) => {
@@ -48,7 +46,6 @@ export const columns: ColumnDef<Subscription>[] = [
       return format(startDate, "yyyy/MM/dd");
     },
   },
-  // endDate
   {
     accessorKey: "endDate",
     header: ({ column }) => {
@@ -74,7 +71,9 @@ export const columns: ColumnDef<Subscription>[] = [
     cell: ({ row }) => {
       const handleDelete = async () => {
         try {
+          console.log('削除前')
           await deleteSubscription(row.original.id);
+          console.log('削除後')
           toast.success("Subscription deleted successfully.");
         } catch (error) {
           console.error("Error deleting subscription:", error);
