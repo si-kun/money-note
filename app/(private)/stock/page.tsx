@@ -1,5 +1,5 @@
 import { StockDataTable } from "@/app/(private)/stock/components/stockData-table";
-import { stockColumns } from "./components/stockColumns";
+// import { stockColumns } from "./components/stockColumns";
 import { getAllStock } from "@/app/server-aciton/stock/getAllStock";
 import { getShoppingCart } from "@/app/server-aciton/shopping/cart/getShoppingCart";
 import { getStockCategory } from "@/app/server-aciton/getStockCategory";
@@ -26,7 +26,7 @@ const StockPage = async ({ searchParams }: StockPageProps) => {
 
   return (
     <StockDataTable
-      columns={stockColumns}
+      // columns={stockColumns}
       stocks={stocks}
       carts={carts}
       categories={categories}

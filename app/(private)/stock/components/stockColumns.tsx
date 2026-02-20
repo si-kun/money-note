@@ -23,7 +23,9 @@ declare module "@tanstack/react-table" {
   }
 }
 
-export const stockColumns: ColumnDef<Stock>[] = [
+export const getStockColumns = (
+  categories: StockCategory[]
+): ColumnDef<Stock>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -42,7 +44,9 @@ export const stockColumns: ColumnDef<Stock>[] = [
 
       // カートに存在する在庫は選択不可にする
       const isInCart = carts.some((cart) =>
-        cart.items.some((item:ShoppingCartWithItems) => item.stockId === stock.id)
+        cart.items.some(
+          (item: ShoppingCartWithItems) => item.stockId === stock.id
+        )
       );
 
       return (
@@ -114,7 +118,7 @@ export const stockColumns: ColumnDef<Stock>[] = [
           categories={categories}
           stockName={row.original.name}
           stockId={row.original.id}
-          categoryId={row.original.stockCategoryId  || undefined}
+          categoryId={row.original.stockCategoryId || undefined}
         />
       );
     },
@@ -127,7 +131,7 @@ export const stockColumns: ColumnDef<Stock>[] = [
       const handleDelete = async () => {
         try {
           await deleteStock(row.original.id);
-          toast.success("Stock deleted successfully");
+          toast.success("在庫が正常に削除されました。");
         } catch (error) {
           console.error("Error deleting stock:", error);
         }
@@ -135,7 +139,11 @@ export const stockColumns: ColumnDef<Stock>[] = [
       return (
         <ActionsCell row={row} onClickDelete={handleDelete}>
           {({ row, setIsDialogOpen }) => (
-            <StockForm row={row} setIsDialogOpen={setIsDialogOpen} />
+            <StockForm
+              row={row}
+              setIsDialogOpen={setIsDialogOpen}
+              categories={categories}
+            />
           )}
         </ActionsCell>
       );
@@ -149,7 +157,10 @@ export const stockColumns: ColumnDef<Stock>[] = [
       const stock = row.original;
 
       const cartWithStock = carts.find((cart) => {
-        return cart.items.some((item:ShoppingCartWithItems["item"][number]) => item.stockId === stock.id);
+        return cart.items.some(
+          (item: ShoppingCartWithItems["item"][number]) =>
+            item.stockId === stock.id
+        );
       });
 
       return (

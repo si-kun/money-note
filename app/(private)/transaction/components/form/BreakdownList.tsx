@@ -5,14 +5,16 @@ import {
 } from "@/app/types/balance/balance";
 
 import EditTransactionForm from "./EditTransactionForm";
+import { Category } from "@prisma/client";
 
 interface BreakdownList {
   date: string;
   dailyIncome: IncomeWithCategory[];
   dailyPayment: PaymentWithCategory[];
+  categories: Category[];
 }
 
-const BreakdownList = ({ date, dailyIncome, dailyPayment }: BreakdownList) => {
+const BreakdownList = ({ date, dailyIncome, dailyPayment,categories }: BreakdownList) => {
   return (
     <div className="flex flex-col h-full max-h-full flex-1 gap-3 py-1 overflow-y-auto">
       {dailyIncome?.map((income) => (
@@ -25,6 +27,7 @@ const BreakdownList = ({ date, dailyIncome, dailyPayment }: BreakdownList) => {
               transaction={income}
               date={date}
               type={"INCOME"}
+              categories={categories}
             />
           </CardContent>
         </Card>
@@ -40,6 +43,7 @@ const BreakdownList = ({ date, dailyIncome, dailyPayment }: BreakdownList) => {
               transaction={payment}
               date={date}
               type={"PAYMENT"}
+              categories={categories}
             />
           </CardContent>
         </Card>

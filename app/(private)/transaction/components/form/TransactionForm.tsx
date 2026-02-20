@@ -33,18 +33,23 @@ import FloatingLabel from "./FloatingLabel";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
 import ShoppingCartCard from "../shopping/ShoppingCartCard";
+import { Category } from "@prisma/client";
+import {
+  filterCategoriesByType,
+  getShoppingCategoryId,
+} from "@/utils/category/category";
 
 interface TransactionFormProps {
   date: string;
+  categories: Category[];
 }
 
-const TransactionForm = ({ date }: TransactionFormProps) => {
+const TransactionForm = ({ date, categories }: TransactionFormProps) => {
   const {
     form,
     onSubmit,
-    filteredCategory,
-    shoppingCategoryId,
     typeValue,
+    categoryIdValue,
     open,
     setOpen,
     newAddProduct,
@@ -54,6 +59,12 @@ const TransactionForm = ({ date }: TransactionFormProps) => {
     productsValue,
     isPending,
   } = useTransactionForm(date);
+
+
+  const filteredCategories = filterCategoriesByType(categories, typeValue);
+  const shoppingId = getShoppingCategoryId(categories, categoryIdValue);
+  const isShoppingPayment = shoppingId && typeValue === "PAYMENT";
+
 
   return (
     <Dialog
@@ -131,96 +142,98 @@ const TransactionForm = ({ date }: TransactionFormProps) => {
                           onBlur={field.onBlur}
                           className="w-full data-[size=default]:h-14 p-4"
                         >
-                          <SelectValue placeholder="Theme" />
+                          <SelectValue placeholder="カテゴリー" />
                         </SelectTrigger>
-                        <SelectContent className="">
-                          {filteredCategory.map((cat) => (
-                            <SelectItem key={cat.id} value={cat.id}>
-                              {cat.name}
-                            </SelectItem>
-                          ))}
+                        <SelectContent>
+                          {filteredCategories.map(
+                            (cat) => (
+                              <SelectItem key={cat.id} value={cat.id}>
+                                {cat.name}
+                              </SelectItem>
+                            )
+                          )}
                         </SelectContent>
                       </Select>
                     </Field>
                   )}
                 />
 
-                {shoppingCategoryId && typeValue === "PAYMENT" && (
-                  <ShoppingCartCard
-                    productsValue={productsValue}
-                    addInputProduct={addInputProduct}
-                    setAddInputProduct={setAddInputProduct}
-                    newAddProduct={newAddProduct}
-                    onAddFromStock={(selectedStocks) => {
-                      const currentHistories =
-                        form.getValues("addHistories") || [];
+                {isShoppingPayment && (
+                    <ShoppingCartCard
+                      productsValue={productsValue}
+                      addInputProduct={addInputProduct}
+                      setAddInputProduct={setAddInputProduct}
+                      newAddProduct={newAddProduct}
+                      onAddFromStock={(selectedStocks) => {
+                        const currentHistories =
+                          form.getValues("addHistories") || [];
 
-                      // 重複チェック
-                      const newProducts = selectedStocks
-                        .filter(
-                          (stock) =>
-                            !currentHistories.some(
-                              (item) => item.name === stock.name
-                            )
-                        )
-                        .map((stock) => ({
-                          id: uuidv4(),
-                          name: stock.name,
-                          price: Number(stock.unitPrice),
-                          quantity: 0,
-                          stockAdd: true,
-                        }));
+                        // 重複チェック
+                        const newProducts = selectedStocks
+                          .filter(
+                            (stock) =>
+                              !currentHistories.some(
+                                (item) => item.name === stock.name
+                              )
+                          )
+                          .map((stock) => ({
+                            id: uuidv4(),
+                            name: stock.name,
+                            price: Number(stock.unitPrice),
+                            quantity: 0,
+                            stockAdd: true,
+                          }));
 
-                      // 重複がある場合は、警告
-                      if (newProducts.length < selectedStocks.length) {
-                        toast.warning(
-                          "一部の商品はすでに内訳に存在しているため、追加されませんでした。"
+                        // 重複がある場合は、警告
+                        if (newProducts.length < selectedStocks.length) {
+                          toast.warning(
+                            "一部の商品はすでに内訳に存在しているため、追加されませんでした。"
+                          );
+                        }
+
+                        form.setValue("addHistories", [
+                          ...currentHistories,
+                          ...newProducts,
+                        ]);
+
+                        if (newProducts.length > 0) {
+                          toast.success("選択した商品を内訳に追加しました");
+                        }
+                      }}
+                      onCheckedChange={(id, checked) => {
+                        form.setValue(
+                          "addHistories",
+                          productsValue.map((p) =>
+                            p.id === id
+                              ? {
+                                  ...p,
+                                  stockAdd: checked,
+                                }
+                              : p
+                          )
                         );
-                      }
-
-                      form.setValue("addHistories", [
-                        ...currentHistories,
-                        ...newProducts,
-                      ]);
-
-                      if (newProducts.length > 0) {
-                        toast.success("選択した商品を内訳に追加しました");
-                      }
-                    }}
-                    onCheckedChange={(id, checked) => {
-                      form.setValue(
-                        "addHistories",
-                        productsValue.map((p) =>
-                          p.id === id
-                            ? {
-                                ...p,
-                                stockAdd: checked,
-                              }
-                            : p
-                        )
-                      );
-                    }}
-                    onUpdateProduct={(id, field, value) => {
-                      form.setValue(
-                        "addHistories",
-                        productsValue.map((product) =>
-                          product.id === id
-                            ? {
-                                ...product,
-                                [field]: value,
-                              }
-                            : product
-                        )
-                      );
-                    }}
-                    onDeleteProduct={(id: string) => {
-                      form.setValue(
-                        "addHistories",
-                        productsValue.filter((product) => product.id !== id)
-                      );
-                    }}
-                  />
-                )}
+                      }}
+                      onUpdateProduct={(id, field, value) => {
+                        form.setValue(
+                          "addHistories",
+                          productsValue.map((product) =>
+                            product.id === id
+                              ? {
+                                  ...product,
+                                  [field]: value,
+                                }
+                              : product
+                          )
+                        );
+                      }}
+                      onDeleteProduct={(id: string) => {
+                        form.setValue(
+                          "addHistories",
+                          productsValue.filter((product) => product.id !== id)
+                        );
+                      }}
+                    />
+                  )}
 
                 <Controller
                   control={form.control}
@@ -238,19 +251,20 @@ const TransactionForm = ({ date }: TransactionFormProps) => {
                           }
                           onBlur={field.onBlur}
                         />
-                        {shoppingCategoryId && typeValue === "PAYMENT" && (
-                          <Button
-                            className="h-14"
-                            onClick={() => {
-                              form.setValue("amount", totalCartPrice);
-                              form.trigger("amount");
-                            }}
-                            variant={"secondary"}
-                            type="button"
-                          >
-                            カートの金額を反映
-                          </Button>
-                        )}
+                        {shoppingId &&
+                          typeValue === "PAYMENT" && (
+                            <Button
+                              className="h-14"
+                              onClick={() => {
+                                form.setValue("amount", totalCartPrice);
+                                form.trigger("amount");
+                              }}
+                              variant={"secondary"}
+                              type="button"
+                            >
+                              カートの金額を反映
+                            </Button>
+                          )}
                       </div>
                     </Field>
                   )}

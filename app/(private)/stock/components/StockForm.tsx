@@ -116,20 +116,6 @@ const StockForm = ({ row, setIsDialogOpen,categories }: StockFormProps) => {
     }
   };
 
-  // useEffect(() => {
-  //   const fetchCategories = async () => {
-  //     try {
-  //       const result = await getStockCategory();
-  //       if (result.success && result.data) {
-  //         setCategories(result.data);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error setting form values:", error);
-  //     }
-  //   };
-  //   fetchCategories();
-  // }, []);
-
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}

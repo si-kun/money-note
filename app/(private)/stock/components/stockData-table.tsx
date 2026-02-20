@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  ColumnDef,
   ColumnFiltersState,
   SortingState,
   flexRender,
@@ -37,22 +36,21 @@ import AddButton from "@/components/button/AddButton";
 import StockForm from "./StockForm";
 import AddStockDialog from "./AddStockDialog";
 import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
+import { getStockColumns } from "./stockColumns";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
+interface DataTableProps<TData> {
   stocks: TData[];
   carts: ShoppingCartWithItems[];
   categories: StockCategory[];
   initialPage?: number;
 }
 
-export function StockDataTable<TData extends Stock, TValue>({
-  columns,
+export function StockDataTable<TData extends Stock>({
   stocks,
   carts,
   categories,
   initialPage = 0,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -64,6 +62,8 @@ export function StockDataTable<TData extends Stock, TValue>({
     pageIndex: initialPage,
     pageSize: 10,
   });
+
+  const columns = getStockColumns(categories);
 
   const table = useReactTable({
     data: stocks,

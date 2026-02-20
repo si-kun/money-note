@@ -34,33 +34,38 @@ import { useEditTransactionForm } from "@/hooks/useEditTransactionForm";
 
 import DeleteConfirmDialog from "@/components/dialog/DeleteConfirmDialog";
 import ShoppingHistoryCard from "../shopping/ShoppingHistoryCard";
+import { Category } from "@prisma/client";
+import { filterCategoriesByType, getShoppingCategoryId } from "@/utils/category/category";
 
 interface EditTransactionFormProps {
   transaction: PaymentWithCategory | IncomeWithCategory;
   type: "INCOME" | "PAYMENT";
   date: string;
+  categories: Category[];
 }
 
 const EditTransactionForm = ({
   transaction,
   type,
   date,
+  categories,
 }: EditTransactionFormProps) => {
   const {
     form,
     open,
     setOpen,
     onSubmit,
-    filteredCategory,
-    shoppingCategoryId,
     handleDeleteTransaction,
+    categoryIdValue,
     isPending,
   } = useEditTransactionForm({ transaction, type });
 
   const payment =
     type === "PAYMENT" ? (transaction as PaymentWithCategory) : null;
 
-    const currentCategoryId = form.watch("categoryId");
+    const filteredCategories = filterCategoriesByType(categories, type);
+    const shoppingId = getShoppingCategoryId(categories, categoryIdValue);
+    const isShoppingPayment = shoppingId && type === "PAYMENT";
 
   return (
     <Dialog
@@ -123,7 +128,7 @@ const EditTransactionForm = ({
                           field.onChange(value);
                         }}
                         disabled={
-                          shoppingCategoryId === form.watch("categoryId")
+                          categoryIdValue === form.watch("categoryId")
                         }
                       >
                         <SelectTrigger
@@ -133,7 +138,7 @@ const EditTransactionForm = ({
                           <SelectValue placeholder="Theme" />
                         </SelectTrigger>
                         <SelectContent className="">
-                          {filteredCategory.map((cat) => (
+                          {filteredCategories.map((cat) => (
                             <SelectItem key={cat.id} value={cat.id}>
                               {cat.name}
                             </SelectItem>
@@ -144,7 +149,7 @@ const EditTransactionForm = ({
                   )}
                 />
 
-                {payment && shoppingCategoryId === currentCategoryId && (
+                {isShoppingPayment && (
                   <ShoppingHistoryCard
                     shoppingHistory={payment.shoppingHistory}
                   />

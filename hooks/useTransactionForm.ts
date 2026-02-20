@@ -10,7 +10,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
-import { useCategories } from "./useCategories";
 import { v4 as uuidv4 } from "uuid";
 
 export interface ProductValue {
@@ -28,14 +27,6 @@ export const useTransactionForm = (date: string) => {
   const [addInputProduct, setAddInputProduct] = useState<string>("");
 
   const [isPending, startTransition] = useTransition();
-
-  const { fetchCategories, categories } = useCategories();
-
-  // カテゴリーを取得
-  useEffect(() => {
-    fetchCategories();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const form = useForm<TransactionsFormType>({
     resolver: zodResolver(transactionSchema),
@@ -97,17 +88,6 @@ export const useTransactionForm = (date: string) => {
     setAddInputProduct("");
   };
 
-  // カテゴリーをincome,paymentで絞り込む
-  const filteredCategory = categories.filter((cat) =>
-    typeValue === "INCOME" ? cat.type === "INCOME" : cat.type === "PAYMENT"
-  );
-
-
-  const shoppingCategoryId =
-    categories.find((cat) => cat.name === "買い物")?.id === categoryIdValue
-      ? categoryIdValue
-      : null;
-
   const onSubmit = async (data: TransactionsFormType) => {
     startTransition(async() => {
 
@@ -145,8 +125,7 @@ export const useTransactionForm = (date: string) => {
   return {
     form,
     onSubmit,
-    filteredCategory,
-    shoppingCategoryId,
+    categoryIdValue,
     typeValue,
     histories,
     setHistories,

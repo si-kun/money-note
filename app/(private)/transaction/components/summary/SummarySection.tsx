@@ -7,6 +7,7 @@ import {
   IncomeWithCategory,
   PaymentWithCategory,
 } from "@/app/types/balance/balance";
+import { Category } from "@prisma/client";
 
 interface SummarySectionProps {
   // 月次データ
@@ -24,6 +25,9 @@ interface SummarySectionProps {
   dailyPayment: PaymentWithCategory[];
   dailyIncomeTotal: number;
   dailyPaymentTotal: number;
+
+  // カテゴリー
+  categories: Category[];
 }
 
 const SummarySection = ({
@@ -42,6 +46,9 @@ const SummarySection = ({
   dailyPayment,
   dailyIncomeTotal,
   dailyPaymentTotal,
+
+  // カテゴリー
+  categories,
 }: SummarySectionProps) => {
   return (
     <Tabs defaultValue="day" className="flex-1 flex flex-col">
@@ -58,6 +65,7 @@ const SummarySection = ({
           dailyPayment={dailyPayment}
           dailyIncomeTotal={dailyIncomeTotal}
           dailyPaymentTotal={dailyPaymentTotal}
+          categories={categories}
         />
       </TabsContent>
 

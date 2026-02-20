@@ -5,12 +5,14 @@ import SummaryCard from "./SummaryCard";
 import BreakdownList from "../form/BreakdownList";
 import TransactionForm from "../form/TransactionForm";
 import { IncomeWithCategory, PaymentWithCategory } from "@/app/types/balance/balance";
+import { Category } from "@prisma/client";
 interface SummaryProps {
   date: string;
   dailyIncome: IncomeWithCategory[];
   dailyPayment: PaymentWithCategory[];
   dailyIncomeTotal: number;
   dailyPaymentTotal: number;
+  categories: Category[];
 }
 
 const Summary = ({
@@ -19,6 +21,7 @@ const Summary = ({
   dailyPayment,
   dailyIncomeTotal,
   dailyPaymentTotal,
+  categories,
 }: SummaryProps) => {
 
   return (
@@ -42,13 +45,14 @@ const Summary = ({
             <List />
             <span className="font-semibold">内訳</span>
           </div>
-          <TransactionForm date={date} />
+          <TransactionForm date={date} categories={categories} />
         </div>
 
         {/* 内訳リスト */}
         <BreakdownList date={date}
         dailyIncome={dailyIncome}
         dailyPayment={dailyPayment}
+        categories={categories}
         />
       </CardContent>
     </Card>

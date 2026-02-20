@@ -10,8 +10,8 @@ import {
 } from "@/app/types/zod/transaction";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
-import { useCategories } from "./useCategories";
+import { useForm, useWatch } from "react-hook-form";
+// import { useCategories } from "./useCategories";
 import { editPayment } from "@/app/server-aciton/balance/editPayment";
 import { toast } from "sonner";
 import { editIncome } from "@/app/server-aciton/balance/editIncome";
@@ -27,7 +27,6 @@ export const useEditTransactionForm = ({
   transaction,
   type,
 }: UseEditTransactionFormReturn) => {
-  const { fetchCategories, categories } = useCategories();
 
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -44,6 +43,11 @@ export const useEditTransactionForm = ({
       amount: transaction.amount,
     },
   });
+
+  const categoryIdValue = useWatch({
+    control: form.control,
+    name: "categoryId",
+  })
 
   const onSubmit = async (data: EditTransactionsFormType) => {
     startTransition(async() => {
@@ -84,14 +88,6 @@ export const useEditTransactionForm = ({
     });
   };
 
-  const filteredCategory = categories.filter((cat) =>
-    type === "INCOME" ? cat.type === "INCOME" : cat.type === "PAYMENT"
-  );
-
-  const shoppingCategoryId = categories.find(
-    (cat) => cat.name === "買い物"
-  )?.id;
-
   // 削除機能
   const handleDeleteTransaction = async () => {
     // startTransition(async() => {
@@ -117,10 +113,7 @@ export const useEditTransactionForm = ({
     open,
     setOpen,
     onSubmit,
-    fetchCategories,
-    categories,
-    filteredCategory,
-    shoppingCategoryId,
+    categoryIdValue,
     handleDeleteTransaction,
     isPending,
   };

@@ -4,6 +4,7 @@ import { getPayment } from "../server-aciton/balance/getPayment";
 import { getSubscription } from "../server-aciton/balance/getSubscription";
 import CalendareSection from "./transaction/components/calendar/CalendareSection";
 import SummarySection from "./transaction/components/summary/SummarySection";
+import { getCategory } from "../server-aciton/balance/getCategory";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +29,8 @@ export default async function Home({
   const paymentResult = await getPayment({ year, month });
 
   const monthlySubscription = await getSubscription({ year, month });
+
+  const categories = await getCategory();
 
   // エラーテキスト
   const incomeError =
@@ -87,6 +90,8 @@ export default async function Home({
         dailyPayment={dailyPayment}
         dailyIncomeTotal={dailyIncomeTotal}
         dailyPaymentTotal={dailyPaymentTotal}
+        // カテゴリー
+        categories={categories.data}
       />
     </div>
   );
