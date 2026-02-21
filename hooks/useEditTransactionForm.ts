@@ -16,7 +16,6 @@ import { editPayment } from "@/app/server-aciton/balance/editPayment";
 import { toast } from "sonner";
 import { editIncome } from "@/app/server-aciton/balance/editIncome";
 import { deleteTransaction } from "@/app/server-aciton/balance/deleteTransaction";
-import { useRouter } from "next/navigation";
 
 interface UseEditTransactionFormReturn {
   transaction: PaymentWithCategory | IncomeWithCategory;
@@ -30,8 +29,6 @@ export const useEditTransactionForm = ({
 
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
-
-  const router = useRouter();
 
   const form = useForm<EditTransactionsFormType>({
     mode: "onBlur",
@@ -90,12 +87,10 @@ export const useEditTransactionForm = ({
 
   // 削除機能
   const handleDeleteTransaction = async () => {
-    // startTransition(async() => {
       try {
         const result = await deleteTransaction(transaction.id, type);
         if (result.success) {
           toast.success(result.message);
-          router.refresh();
 
           setOpen(false);
         } else {

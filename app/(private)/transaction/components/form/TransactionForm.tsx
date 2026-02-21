@@ -117,7 +117,7 @@ const TransactionForm = ({ date, categories }: TransactionFormProps) => {
                         type="text"
                         className="p-4 h-14"
                         value={field.value || ""}
-                        onChange={(e) => field.onChange(e.target.value)}
+                        onChange={(e) => field.onChange(e.target.value.trim())}
                         onBlur={field.onBlur}
                       />
                     </Field>
@@ -245,6 +245,7 @@ const TransactionForm = ({ date, categories }: TransactionFormProps) => {
                         <Input
                           type="number"
                           className="p-4 h-14"
+                          min={0}
                           value={field.value || totalCartPrice || ""}
                           onChange={(e) =>
                             field.onChange(Number(e.target.value))
@@ -277,7 +278,7 @@ const TransactionForm = ({ date, categories }: TransactionFormProps) => {
                       <FloatingLabel label="メモ" fieldState={fieldState} />
                       <Textarea
                         value={field.value}
-                        onChange={(e) => field.onChange(e.target.value)}
+                        onChange={(e) => field.onChange(e.target.value.trim())}
                         className="p-4 h-25 resize-none"
                       />
                     </Field>

@@ -35,7 +35,10 @@ import { useEditTransactionForm } from "@/hooks/useEditTransactionForm";
 import DeleteConfirmDialog from "@/components/dialog/DeleteConfirmDialog";
 import ShoppingHistoryCard from "../shopping/ShoppingHistoryCard";
 import { Category } from "@prisma/client";
-import { filterCategoriesByType, getShoppingCategoryId } from "@/utils/category/category";
+import {
+  filterCategoriesByType,
+  getShoppingCategoryId,
+} from "@/utils/category/category";
 
 interface EditTransactionFormProps {
   transaction: PaymentWithCategory | IncomeWithCategory;
@@ -63,9 +66,9 @@ const EditTransactionForm = ({
   const payment =
     type === "PAYMENT" ? (transaction as PaymentWithCategory) : null;
 
-    const filteredCategories = filterCategoriesByType(categories, type);
-    const shoppingId = getShoppingCategoryId(categories, categoryIdValue);
-    const isShoppingPayment = shoppingId && type === "PAYMENT";
+  const filteredCategories = filterCategoriesByType(categories, type);
+  const shoppingId = getShoppingCategoryId(categories, categoryIdValue);
+  const isShoppingPayment = shoppingId && type === "PAYMENT";
 
   return (
     <Dialog
@@ -107,7 +110,7 @@ const EditTransactionForm = ({
                         type="text"
                         className="p-4 h-14"
                         value={field.value || ""}
-                        onChange={(e) => field.onChange(e.target.value)}
+                        onChange={(e) => field.onChange(e.target.value.trim())}
                         onBlur={field.onBlur}
                       />
                     </Field>
@@ -127,9 +130,7 @@ const EditTransactionForm = ({
                         onValueChange={(value) => {
                           field.onChange(value);
                         }}
-                        disabled={
-                          categoryIdValue === form.watch("categoryId")
-                        }
+                        disabled={!!shoppingId}
                       >
                         <SelectTrigger
                           onBlur={field.onBlur}
@@ -163,6 +164,7 @@ const EditTransactionForm = ({
                       <FloatingLabel label="金額" fieldState={fieldState} />
                       <Input
                         type="number"
+                        min={0}
                         className="p-4 h-14"
                         value={field.value || ""}
                         onChange={(e) => field.onChange(Number(e.target.value))}
@@ -179,7 +181,7 @@ const EditTransactionForm = ({
                       <FloatingLabel label="メモ" fieldState={fieldState} />
                       <Textarea
                         value={field.value}
-                        onChange={(e) => field.onChange(e.target.value)}
+                        onChange={(e) => field.onChange(e.target.value.trim())}
                         className="p-4 h-25 resize-none"
                       />
                     </Field>

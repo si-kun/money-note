@@ -63,6 +63,7 @@ const ProductTable = ({
                   type="number"
                   value={product.quantity || ""}
                   placeholder="0"
+                  min={0}
                   onChange={(e) =>
                     updateProduct(
                       product.id,
@@ -76,6 +77,7 @@ const ProductTable = ({
                 <Input
                   type="number"
                   placeholder="0"
+                  min={0}
                   value={product.price || ""}
                   onChange={(e) =>
                     updateProduct(product.id, "price", Number(e.target.value))
