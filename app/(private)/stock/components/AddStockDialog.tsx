@@ -22,7 +22,7 @@ import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShop
 
 interface AddStockDialogProps<TData extends Stock> {
   table: Table<TData>;
-  carts: ShoppingCartWithItems[]
+  carts: ShoppingCartWithItems[];
 }
 
 const AddStockDialog = <TData extends Stock>({
@@ -103,8 +103,23 @@ const AddStockDialog = <TData extends Stock>({
     }
   };
 
+  const isCartNameEmpty = newCartName.trim() === "";
+  const isCartNotSelected = !selectedCartId;
+  const disableAddButton = isCartNameEmpty && isCartNotSelected;
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        setIsOpen(open);
+        if (!open) {
+          // 閉じたときだけ初期化
+          setNewCartMode(false);
+          setSelectedCartId(null);
+          setNewCartName("");
+        }
+      }}
+    >
       <DialogTrigger asChild>
         <Button
           disabled={selectedRows.length === 0}
@@ -162,8 +177,15 @@ const AddStockDialog = <TData extends Stock>({
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={handleAddToCart} type="submit">
-            アイテムを追加する
+          <Button
+            disabled={disableAddButton}
+            className="bg-green-500 hover:bg-green-400 disabled:bg-slate-400"
+            onClick={handleAddToCart}
+            type="submit"
+          >
+            {disableAddButton
+              ? "カートを選択または名前を入力してください"
+              : "アイテムを追加する"}
           </Button>
         </DialogFooter>
       </DialogContent>

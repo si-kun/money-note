@@ -104,14 +104,23 @@ const SubscriptionForm = ({ row, setIsDialogOpen }: SubscriptionFormProps) => {
               className="flex flex-col gap-1"
             >
               {formField.type === "date" ? (
-                <CalendarField
-                  field={field}
-                  formField={formField}
-                  open={field.name === "startDate" ? startOpen : endOpen}
-                  setOpen={
-                    field.name === "startDate" ? setStartOpen : setEndOpen
-                  }
-                />
+                <div className="flex items-center gap-2">
+                  <CalendarField
+                    field={field}
+                    formField={formField}
+                    open={field.name === "startDate" ? startOpen : endOpen}
+                    setOpen={
+                      field.name === "startDate" ? setStartOpen : setEndOpen
+                    }
+                  />
+                  {formField.name === "endDate" && (
+                    <Button
+                    onClick={() => field.onChange(null)}
+                    variant={"ghost"}
+                    size={"sm"}
+                    disabled={!form.watch("endDate")} className="mt-auto bg-blue-500 hover:bg-blue-400" type="button">日付をリセット</Button>
+                  )}
+                </div>
               ) : (
                 <>
                   <FieldLabel htmlFor={field.name}>
@@ -121,6 +130,7 @@ const SubscriptionForm = ({ row, setIsDialogOpen }: SubscriptionFormProps) => {
                     {...field}
                     id={field.name}
                     type={formField.type}
+                    min={formField.type === "number" ? 0 : undefined}
                     aria-invalid={fieldState.invalid}
                     placeholder={
                       formField.name === "monthlyPrice"
@@ -132,7 +142,7 @@ const SubscriptionForm = ({ row, setIsDialogOpen }: SubscriptionFormProps) => {
                     onChange={(e) =>
                       formField.type === "number"
                         ? field.onChange(Number(e.target.value))
-                        : field.onChange(e.target.value)
+                        : field.onChange(e.target.value.trim())
                     }
                   />
                 </>

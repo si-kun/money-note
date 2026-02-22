@@ -31,6 +31,13 @@ const SelectedCart = ({
   carts,
 }: SelectedCartProps) => {
 
+  // 在庫不足のカートは表示しない
+   const filteredCarts = carts.filter((cart) => {
+    return cart.name !== "在庫不足"
+   })
+
+   console.log("filteredCarts", filteredCarts)
+
   return (
     <Select
       value={selectedCartId ?? "カートに入っていません"}
@@ -49,7 +56,7 @@ const SelectedCart = ({
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Carts</SelectLabel>
-          {carts.map((cart) => (
+          {filteredCarts.map((cart) => (
             <SelectItem key={cart.id} value={cart.id}>
               {cart.name} ({cart.items.length || 0}件)
             </SelectItem>

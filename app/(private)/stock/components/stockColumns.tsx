@@ -55,6 +55,7 @@ export const getStockColumns = (
           onCheckedChange={(value) => row.toggleSelected(!!value)}
           aria-label="Select row"
           disabled={isInCart}
+          className="data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500"
         />
       );
     },

@@ -3,6 +3,7 @@
 import { ApiResponse } from "@/app/types/api/api";
 import { StockFormType } from "@/app/types/zod/stock";
 import { prisma } from "@/lib/prisma/prisma";
+import { revalidatePath } from "next/cache";
 
 interface AddStockParams {
   stock: StockFormType;
@@ -49,7 +50,7 @@ export const addStock = async ({
         stockCategoryId = null;
       }
 
-      await tx.stock.create({
+      const newStock = await tx.stock.create({
         data: {
           name: stock.name,
           quantity: stock.quantity,
@@ -60,8 +61,42 @@ export const addStock = async ({
           stockCategoryId,
         },
       });
+
+      // 新規追加時に在庫数が最小在庫数以下の場合は、在庫不足カートに追加する
+      if (stock.minQuantity && stock.quantity <= stock.minQuantity) {
+        // 既にカートがあるか確認
+        let lowStockCart = await tx.shoppingCart.findFirst({
+          where: {
+            userId: "test-user-id",
+            name: "在庫不足",
+          },
+        });
+
+        // カートがない場合は新規作成
+        if (!lowStockCart) {
+          lowStockCart = await tx.shoppingCart.create({
+            data: {
+              name: "在庫不足",
+              userId: "test-user-id",
+            },
+          });
+        }
+
+        // カートにアイテムを追加
+        await tx.shoppingCartItem.create({
+          data: {
+            itemName: newStock.name,
+            quantity: newStock.quantity,
+            unit: newStock.unit,
+            unitPrice: newStock.unitPrice,
+            stockId: newStock.id,
+            cartId: lowStockCart.id,
+          },
+        });
+      }
     });
 
+    revalidatePath("/stock");
 
     return {
       success: true,

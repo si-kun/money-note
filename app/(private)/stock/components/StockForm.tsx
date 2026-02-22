@@ -22,7 +22,6 @@ import { Row } from "@tanstack/react-table";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 interface StockFormProps {
   row?: Row<Stock>;
@@ -31,7 +30,6 @@ interface StockFormProps {
 }
 
 const StockForm = ({ row, setIsDialogOpen,categories }: StockFormProps) => {
-  const router = useRouter();
 
   const [toggleCategory, setToggleCategory] = useState(false);
 
@@ -107,10 +105,6 @@ const StockForm = ({ row, setIsDialogOpen,categories }: StockFormProps) => {
         await addStock({ stock: form.getValues() });
       }
       setIsDialogOpen(false);
-      // ダイアログが消えてからページをリフレッシュ
-      setTimeout(() => {
-        router.refresh();
-      }, 300);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -140,6 +134,7 @@ const StockForm = ({ row, setIsDialogOpen,categories }: StockFormProps) => {
                     ? Number(field.value) || ""
                     : field.value
                 }
+                min={formField.type === "number" ? 0 : undefined}
                 type={formField.type}
                 aria-invalid={fieldState.invalid}
                 placeholder={formField.placeholder}
@@ -147,7 +142,7 @@ const StockForm = ({ row, setIsDialogOpen,categories }: StockFormProps) => {
                 onChange={(e) =>
                   formField.type === "number"
                     ? field.onChange(Number(e.target.value))
-                    : field.onChange(e.target.value)
+                    : field.onChange(e.target.value.trim())
                 }
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
