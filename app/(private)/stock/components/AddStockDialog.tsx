@@ -103,9 +103,9 @@ const AddStockDialog = <TData extends Stock>({
     }
   };
 
-  const isCartNameEmpty = newCartName.trim() === "";
-  const isCartNotSelected = !selectedCartId;
-  const disableAddButton = isCartNameEmpty && isCartNotSelected;
+  const disableAddButton = newCartMode
+    ? newCartName.trim() === ""
+    : !selectedCartId;
 
   return (
     <Dialog
@@ -142,7 +142,9 @@ const AddStockDialog = <TData extends Stock>({
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <Label>カート選択を選択、または新規作成</Label>
-              <Switch onCheckedChange={setNewCartMode} />
+              <Switch
+              className="data-[state=checked]:bg-green-500"
+              onCheckedChange={setNewCartMode} />
             </div>
             {newCartMode ? (
               <Input
