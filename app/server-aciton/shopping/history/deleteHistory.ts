@@ -37,6 +37,13 @@ export const deleteHistory = async (
       await tx.shoppingHistory.delete({
         where: { id: historyId },
       });
+      // 対応するpaymentも削除
+      if (history.paymentId) {
+        await tx.payment.deleteMany({
+          where: { id: history.paymentId },
+        });
+      }
+
     });
     revalidatePath("/shopping/history");
     return {
