@@ -4,6 +4,7 @@ import ActionsCell from "@/components/dataTable/ActionsCell";
 import { ColumnDef } from "@tanstack/react-table";
 import { ShoppingCartItemWithStock } from "../../cart/components/shoppingColumns";
 import EditShopping from "../../../components/EditShopping";
+import { deleteHistoryItem } from "@/app/server-aciton/shopping/history/deleteHistoryItem";
 
 export const historyEditColumns: ColumnDef<ShoppingCartItemWithStock>[] = [
   {
@@ -32,8 +33,16 @@ export const historyEditColumns: ColumnDef<ShoppingCartItemWithStock>[] = [
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
+      const handleDelete = async() => {
+        try {
+          await deleteHistoryItem({historyId: row.original.historyId, itemId:row.original.id});
+        } catch(error) {
+          console.error("Error deleting history item:", error);
+        }
+      }
+
       return (
-        <ActionsCell row={row}>
+        <ActionsCell row={row} onClickDelete={handleDelete}>
           {({ row, setIsDialogOpen }) => (
             <EditShopping row={row} setIsDialogOpen={setIsDialogOpen} />
           )}

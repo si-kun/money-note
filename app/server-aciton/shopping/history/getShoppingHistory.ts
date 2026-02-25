@@ -34,6 +34,9 @@ export const getShoppingHistory = async ({year,month}:GetShoppingHistory): Promi
           }
         }
       },
+      orderBy: {
+        date: "asc"
+      }
     });
 
     return {

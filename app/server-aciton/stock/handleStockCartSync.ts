@@ -17,6 +17,23 @@ export const handleStockCartSync = async (stock: Stock) => {
     },
   });
 
+  // stockが在庫不足以外にあるかチェック
+  const existingInOtherCart = await prisma.shoppingCartItem.findFirst({
+    where: {
+      stockId: stock.id,
+      cart: {
+        userId: "test-user-id",
+        name: {
+          not: "在庫不足",
+        },
+      }
+    }
+  })
+
+  if(existingInOtherCart) {
+    return;
+  }
+
   // ショッピングカートが存在する場合
   if (shoppingCart) {
     // stockの在庫数がminQuantity以上であれば、ショッピングカートから削除
