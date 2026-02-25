@@ -8,6 +8,10 @@ import { ShoppingCart } from "@prisma/client";
 export const buyShoppingCart = async (
   cart: ShoppingCart
 ): Promise<ApiResponse<null>> => {
+
+  const adjustedDate = new Date();
+  adjustedDate.setHours(12, 0, 0, 0);
+
   try {
 
     await prisma.$transaction(async (tx) => {
@@ -41,7 +45,7 @@ export const buyShoppingCart = async (
     const history = await tx.shoppingHistory.create({
       data: {
         name: cart.name,
-        date: new Date(),
+        date: adjustedDate,
         userId: "test-user-id",
         totalPrice,
       },
