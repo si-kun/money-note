@@ -10,6 +10,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "../ui/button";
+import { Trash2 } from "lucide-react";
 
 interface DeleteConfirmDialogProps {
   title?: string;
@@ -25,7 +26,7 @@ const DeleteConfirmDialog = ({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">削除</Button>
+        <Button variant="destructive"><Trash2 />削除</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

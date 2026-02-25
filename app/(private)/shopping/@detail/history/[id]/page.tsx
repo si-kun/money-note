@@ -9,6 +9,7 @@ import EditHistoryDialog from "../components/EditHistoryDialog";
 import { historyColumns } from "../components/historyColumn";
 import { getShoppingHistoryId } from "@/app/server-aciton/shopping/history/getShoppingHistoryId";
 import { ShoppinghistoryDataTable } from "../components/shoppingHistoryDataTable";
+import HistoryDeleteButton from "../components/HistoryDeleteButton";
 
 interface HistroyDetailPage {
   params: Promise<{
@@ -22,7 +23,7 @@ const HistroyDetailPage = async ({ params }: HistroyDetailPage) => {
   const historyResponse = await getShoppingHistoryId(id);
   const history = historyResponse.data;
 
-  if (!historyResponse.success|| !history) {
+  if (!historyResponse.success || !history) {
     return (
       <Card className="h-full">
         <CardContent className="flex items-center justify-center h-full">
@@ -41,7 +42,10 @@ const HistroyDetailPage = async ({ params }: HistroyDetailPage) => {
             {history.items.length || 0}件のアイテム
           </p>
         </div>
-        <EditHistoryDialog selectedHistory={history} />
+        <div className="flex items-center gap-2">
+          <EditHistoryDialog selectedHistory={history} />
+          <HistoryDeleteButton historyId={id} />
+        </div>
       </CardHeader>
       <CardContent className="overflow-y-auto">
         <ShoppinghistoryDataTable
