@@ -40,19 +40,6 @@ export const editShoppingCartItem = async ({
               `在庫数が0未満になるため更新できません:${newStockQuantity}`
             );
           }
-
-          await tx.stock.updateMany({
-            where: {
-              id: stockItem.id,
-            },
-            data: {
-              name: data.itemName,
-              unit: data.unit,
-              // 既存の数量から編集後の数量の差分を計算して更新
-              quantity:
-                stockItem.quantity + (data.quantity - existingItem.quantity),
-            },
-          });
         }
       }
       // 商品を更新する
