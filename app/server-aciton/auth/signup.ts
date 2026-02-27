@@ -1,13 +1,13 @@
 "use server";
 
-import { AuthSchemaType } from "@/app/(auth)/types/authSchema";
+import { SignupSchemaType } from "@/app/(auth)/types/authSchema";
 import { ApiResponse } from "@/app/types/api/api";
 import { prisma } from "@/lib/prisma/prisma";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
 export const signup = async (
-  signupData: AuthSchemaType
+  signupData: SignupSchemaType
 ): Promise<ApiResponse<null>> => {
   let userId: string | undefined = undefined;
 
