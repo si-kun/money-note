@@ -1,8 +1,16 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import {
+  Calendar,
+  CircleUser,
+  Home,
+  Inbox,
+  Search,
+  Settings,
+} from "lucide-react";
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -11,6 +19,8 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { getAuthUserWithProfile } from "@/lib/supabase/getAuthUserWithProfile";
+import LogoutButton from "@/app/(auth)/components/LogoutButton";
 
 // Menu items.
 const items = [
@@ -41,7 +51,10 @@ const items = [
   },
 ];
 
-const AppSidebar = () => {
+const AppSidebar = async() => {
+
+  const userProfile = await getAuthUserWithProfile()
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -63,6 +76,15 @@ const AppSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuButton className="flex items-center gap-2 hover:cursor-pointer">
+            <CircleUser />
+            <span>{userProfile.userName}</span>
+          </SidebarMenuButton>
+            <LogoutButton />
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 };
