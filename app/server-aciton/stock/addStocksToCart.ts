@@ -1,13 +1,11 @@
 "use server";
 
 import { ApiResponse } from "@/app/types/api/api";
+import { AddStockItem } from "@/app/types/stock/stock";
 import { prisma } from "@/lib/prisma/prisma";
-import { ShoppingCartItem } from "@prisma/client";
+import { getAuthUser } from "@/lib/supabase/getUser";
 
-export type AddStockItem = Pick<
-  ShoppingCartItem,
-  "itemName" | "quantity" | "unit" | "unitPrice" | "stockId" | "memo"
->;
+
 
 interface AddStocksToCar {
   cartId?: string;
@@ -21,12 +19,15 @@ export const addStocksToCart = async ({
   cartName,
 }: AddStocksToCar): Promise<ApiResponse<null>> => {
   try {
+
+    const user = await getAuthUser();
+
     // 新規カートを作成の場合
     if (!cartId && cartName) {
       const newCart = await prisma.shoppingCart.create({
         data: {
           name: cartName,
-          userId: "test-user-id",
+          userId: user.id,
         },
       });
 

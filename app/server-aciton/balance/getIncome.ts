@@ -1,8 +1,9 @@
 "use server";
 
 import { ApiResponse } from "@/app/types/api/api";
-import { IncomeWithCategory } from "@/app/types/balance/balance";
+import { IncomeWithCategory } from "@/app/types/transaction/transaction";
 import { prisma } from "@/lib/prisma/prisma";
+import { getAuthUser } from "@/lib/supabase/getUser";
 
 interface GetIncome {
   year: number;
@@ -15,9 +16,12 @@ export const getIncome = async ({
 }: GetIncome): Promise<ApiResponse<IncomeWithCategory[]>> => {
   
   try {
+
+    const user = await getAuthUser();
+
     const response = await prisma.income.findMany({
       where: {
-        userId: "test-user-id",
+        userId: user.id,
         incomeDate: {
           // 月の前後1週間分までを取得
           gte: new Date(year, month - 1, 1 -7),

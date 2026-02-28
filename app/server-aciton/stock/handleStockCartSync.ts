@@ -1,18 +1,17 @@
 "use server";
 
+import { Stock } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma/prisma";
-import { Stock } from "@prisma/client";
 
-export const handleStockCartSync = async (stock: Stock) => {
-
-    if(stock.minQuantity === null) {
-        return;
-    }
+export const handleStockCartSync = async (stock: Stock, userId: string) => {
+  if (stock.minQuantity === null) {
+    return;
+  }
 
   // 名前が"在庫不足"のショッピングカートを取得
   const shoppingCart = await prisma.shoppingCart.findFirst({
     where: {
-      userId: "test-user-id",
+      userId,
       name: "在庫不足",
     },
   });
@@ -22,15 +21,15 @@ export const handleStockCartSync = async (stock: Stock) => {
     where: {
       stockId: stock.id,
       cart: {
-        userId: "test-user-id",
+        userId,
         name: {
           not: "在庫不足",
         },
-      }
-    }
-  })
+      },
+    },
+  });
 
-  if(existingInOtherCart) {
+  if (existingInOtherCart) {
     return;
   }
 
@@ -103,7 +102,7 @@ export const handleStockCartSync = async (stock: Stock) => {
   else if (stock.minQuantity !== null && stock.quantity < stock.minQuantity) {
     const newCart = await prisma.shoppingCart.create({
       data: {
-        userId: "test-user-id",
+        userId,
         name: "在庫不足",
       },
     });

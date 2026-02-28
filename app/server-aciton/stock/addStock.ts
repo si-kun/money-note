@@ -3,6 +3,7 @@
 import { ApiResponse } from "@/app/types/api/api";
 import { StockFormType } from "@/app/types/zod/stock";
 import { prisma } from "@/lib/prisma/prisma";
+import { getAuthUser } from "@/lib/supabase/getUser";
 import { revalidatePath } from "next/cache";
 
 interface AddStockParams {
@@ -13,6 +14,10 @@ export const addStock = async ({
   stock,
 }: AddStockParams): Promise<ApiResponse<null>> => {
   try {
+
+    const user = await getAuthUser();
+    const userId = user.id
+
     await prisma.$transaction(async (tx) => {
       let stockCategoryId = null;
 
@@ -31,7 +36,7 @@ export const addStock = async ({
           const newCategory = await tx.stockCategory.create({
             data: {
               categoryName: stock.newCategoryName,
-              userId: "test-user-id",
+              userId,
             },
           });
           stockCategoryId = newCategory.id;
@@ -39,7 +44,7 @@ export const addStock = async ({
       } else if (stock.categoryId) {
         const existingCategory = await tx.stockCategory.findUnique({
           where: {
-            userId: "test-user-id",
+            userId,
             id: stock.categoryId,
           },
         });
@@ -57,7 +62,7 @@ export const addStock = async ({
           minQuantity: stock.minQuantity,
           unit: stock.unit,
           unitPrice: stock.unitPrice,
-          userId: "test-user-id",
+          userId,
           stockCategoryId,
         },
       });
@@ -67,7 +72,7 @@ export const addStock = async ({
         // 既にカートがあるか確認
         let lowStockCart = await tx.shoppingCart.findFirst({
           where: {
-            userId: "test-user-id",
+            userId,
             name: "在庫不足",
           },
         });
@@ -77,7 +82,7 @@ export const addStock = async ({
           lowStockCart = await tx.shoppingCart.create({
             data: {
               name: "在庫不足",
-              userId: "test-user-id",
+              userId,
             },
           });
         }

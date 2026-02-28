@@ -1,8 +1,9 @@
 "use server";
 
 import { ApiResponse } from "@/app/types/api/api";
-import { PaymentWithCategory } from "@/app/types/balance/balance";
+import { PaymentWithCategory } from "@/app/types/transaction/transaction";
 import { prisma } from "@/lib/prisma/prisma";
+import { getAuthUser } from "@/lib/supabase/getUser";
 
 interface getPayment {
   year: number;
@@ -14,9 +15,12 @@ export const getPayment = async ({
   month,
 }: getPayment): Promise<ApiResponse<PaymentWithCategory[]>> => {
   try {
+
+    const user = await getAuthUser();
+
     const response = await prisma.payment.findMany({
       where: {
-        userId: "test-user-id",
+        userId: user.id,
         paymentDate: {
           // 月の前後1週間分までを取得
           gte: new Date(year, month - 1, 1 - 7),

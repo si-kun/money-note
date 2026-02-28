@@ -29,7 +29,7 @@ import FloatingLabel from "./FloatingLabel";
 import {
   IncomeWithCategory,
   PaymentWithCategory,
-} from "@/app/types/balance/balance";
+} from "@/app/types/transaction/transaction";
 import { useEditTransactionForm } from "@/hooks/useEditTransactionForm";
 
 import DeleteConfirmDialog from "@/components/dialog/DeleteConfirmDialog";
@@ -150,7 +150,7 @@ const EditTransactionForm = ({
                   )}
                 />
 
-                {isShoppingPayment && (
+                {isShoppingPayment && payment && (
                   <ShoppingHistoryCard
                     shoppingHistory={payment.shoppingHistory}
                   />

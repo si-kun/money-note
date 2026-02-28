@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import {
   IncomeWithCategory,
   PaymentWithCategory,
-} from "@/app/types/balance/balance";
+} from "@/app/types/transaction/transaction";
 
 import EditTransactionForm from "./EditTransactionForm";
 import { Category } from "@prisma/client";

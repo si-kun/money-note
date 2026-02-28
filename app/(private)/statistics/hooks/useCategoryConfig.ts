@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { getCategoryColor } from "../utils/chartHelpers";
-import { PaymentWithCategory } from "@/app/types/balance/balance";
+import { PaymentWithCategory } from "@/app/types/transaction/transaction";
 
 interface UseCategoryConfigProps {
   payments: PaymentWithCategory[];

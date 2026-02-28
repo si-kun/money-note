@@ -1,4 +1,4 @@
-import { ShoppingHistoryWithItems } from "@/app/server-aciton/shopping/history/getShoppingHistory"
+import { ShoppingHistoryWithItems } from "@/app/types/shopping/shopping"
 import { SummayHistoryDataTable } from "../summary/SummaryHistoryData-table"
 import { historyColumns } from "@/app/(private)/shopping/@detail/history/components/historyColumn"
  

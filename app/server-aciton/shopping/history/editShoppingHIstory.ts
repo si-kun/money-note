@@ -1,8 +1,8 @@
 "use server";
 
 import { ApiResponse } from "@/app/types/api/api";
+import { ShoppingHistoryWithItems } from "@/app/types/shopping/shopping";
 import { prisma } from "@/lib/prisma/prisma";
-import { ShoppingHistoryWithItems } from "./getShoppingHistory";
 import { revalidatePath } from "next/cache";
 
 interface EditShoppingHistory {

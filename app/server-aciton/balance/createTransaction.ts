@@ -3,6 +3,7 @@
 import { ApiResponse } from "@/app/types/api/api";
 import { TransactionsFormType } from "@/app/types/zod/transaction";
 import { prisma } from "@/lib/prisma/prisma";
+import { getAuthUser } from "@/lib/supabase/getUser";
 import { revalidatePath } from "next/cache";
 
 export const createTransaction = async (
@@ -10,7 +11,8 @@ export const createTransaction = async (
 ): Promise<ApiResponse<null>> => {
   try {
     const { title, type, categoryId, amount, memo, addHistories,date } = data;
-    const userId = "test-user-id";
+    const user = await getAuthUser();
+    const userId = user.id;
 
     // incomeの場合
     if (type === "INCOME") {
@@ -20,7 +22,7 @@ export const createTransaction = async (
           categoryId,
           amount,
           memo,
-          userId: userId,
+          userId,
           incomeDate: new Date(date),
         },
       });
@@ -47,7 +49,7 @@ export const createTransaction = async (
             data: {
               name: title || "買い物履歴",
               totalPrice: amount,
-              userId: "test-user-id",
+              userId,
               paymentId: payment.id,
             },
           });
@@ -61,7 +63,7 @@ export const createTransaction = async (
             if (item.stockAdd) {
               const existingStock = await tx.stock.findFirst({
                 where: {
-                  userId: "test-user-id",
+                  userId,
                   name: item.name,
                 },
               });
@@ -84,7 +86,7 @@ export const createTransaction = async (
                     minQuantity: 0,
                     unit: "個",
                     unitPrice: item.price || 0,
-                    userId: "test-user-id",
+                    userId,
                   },
                 });
                 stockId = newStock.id;

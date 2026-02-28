@@ -5,6 +5,7 @@ import { StockFormType } from "@/app/types/zod/stock";
 import { prisma } from "@/lib/prisma/prisma";
 import { handleStockCartSync } from "./handleStockCartSync";
 import { revalidatePath } from "next/cache";
+import { getAuthUser } from "@/lib/supabase/getUser";
 
 interface EditStockProps {
   id: string;
@@ -13,6 +14,9 @@ interface EditStockProps {
 
 export const editStock = async ({ id, data }:EditStockProps): Promise<ApiResponse<null>> => {
   try {
+
+    const user = await getAuthUser();
+    const userId = user.id
 
     await prisma.$transaction(async (tx) => {
 
@@ -35,7 +39,7 @@ export const editStock = async ({ id, data }:EditStockProps): Promise<ApiRespons
           const newCategory = await tx.stockCategory.create({
             data: {
               categoryName: data.newCategoryName,
-              userId: "test-user-id",
+              userId,
             }
           })
           stockCategoryId = newCategory.id;
@@ -66,7 +70,7 @@ export const editStock = async ({ id, data }:EditStockProps): Promise<ApiRespons
           stockCategoryId,
         },
       });
-      await handleStockCartSync(updateStock);
+      await handleStockCartSync(updateStock,userId);
   
       revalidatePath("/stock");
     })

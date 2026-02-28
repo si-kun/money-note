@@ -1,7 +1,7 @@
 "use client";
 
 import { createTransaction } from "@/app/server-aciton/balance/createTransaction";
-import { ShoppingHistoryWithItems } from "@/app/server-aciton/shopping/history/getShoppingHistory";
+import { ShoppingHistoryWithItems } from "@/app/types/shopping/shopping";
 import {
   transactionSchema,
   TransactionsFormType,
@@ -12,13 +12,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 
-export interface ProductValue {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  stockAdd: boolean;
-}
+
 
 export const useTransactionForm = (date: string) => {
   const [histories, setHistories] = useState<ShoppingHistoryWithItems[]>([]);

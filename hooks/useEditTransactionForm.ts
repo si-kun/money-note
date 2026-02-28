@@ -3,7 +3,7 @@
 import {
   IncomeWithCategory,
   PaymentWithCategory,
-} from "@/app/types/balance/balance";
+} from "@/app/types/transaction/transaction";
 import {
   editTransactionSchema,
   EditTransactionsFormType,

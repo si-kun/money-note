@@ -1,7 +1,7 @@
 import {
   IncomeWithCategory,
   PaymentWithCategory,
-} from "@/app/types/balance/balance";
+} from "@/app/types/transaction/transaction";
 
 export const getCategoryColor = (categoryName: string) => {
   let hash = 0;

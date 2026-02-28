@@ -2,16 +2,20 @@
 
 import { ApiResponse } from "@/app/types/api/api";
 import { prisma } from "@/lib/prisma/prisma";
+import { getAuthUser } from "@/lib/supabase/getUser";
 import { revalidatePath } from "next/cache";
 
 export const createShoppingCart = async (
   name: string
 ): Promise<ApiResponse<null>> => {
   try {
+
+    const user = await getAuthUser();
+
     await prisma.shoppingCart.create({
       data: {
         name,
-        userId: "test-user-id",
+        userId:user.id,
       },
     });
 

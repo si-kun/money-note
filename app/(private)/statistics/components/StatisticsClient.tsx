@@ -10,7 +10,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { YearDataResponse } from "@/app/server-aciton/statistics/getAllYearData";
 import { useMemo } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -22,6 +21,7 @@ import {
   calcPaymentYearCategoryChartData,
 } from "../utils/chartHelpers";
 import { useCategoryConfig } from "../hooks/useCategoryConfig";
+import { YearDataResponse } from "@/app/types/statistics/statistics";
 
 interface StatisticsClientProps {
   data: YearDataResponse | null;

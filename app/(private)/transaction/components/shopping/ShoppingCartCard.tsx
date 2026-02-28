@@ -10,10 +10,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import ProductTable from "./ProductTable";
-import { ProductValue } from "@/hooks/useTransactionForm";
 import { Dispatch, SetStateAction } from "react";
 import { Stock } from "@prisma/client";
 import StockSelectionDialog from "../stock/StockSelectionDialog";
+import { ProductValue } from "@/app/types/transaction/transaction";
 
 interface ShoppingCartCardProps {
   productsValue: ProductValue[];

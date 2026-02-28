@@ -18,7 +18,7 @@ import { addStocksToCart } from "@/app/server-aciton/stock/addStocksToCart";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
-import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
+import { ShoppingCartWithItems } from "@/app/types/shopping/shopping";
 
 interface AddStockDialogProps<TData extends Stock> {
   table: Table<TData>;

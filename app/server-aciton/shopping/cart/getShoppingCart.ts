@@ -1,20 +1,19 @@
 "use server";
 
 import { ApiResponse } from "@/app/types/api/api";
+import { ShoppingCartWithItems } from "@/app/types/shopping/shopping";
 import { prisma } from "@/lib/prisma/prisma";
-import { Prisma } from "@prisma/client";
-
-export type ShoppingCartWithItems = Prisma.ShoppingCartGetPayload<{
-  include: { items: { include : { stock: true}} };
-}>;
-
+import { getAuthUser } from "@/lib/supabase/getUser";
 export const getShoppingCart = async (): Promise<
   ApiResponse<ShoppingCartWithItems[]>
 > => {
   try {
+
+    const user = await getAuthUser();
+
     const response = await prisma.shoppingCart.findMany({
       where: {
-        userId: "test-user-id",
+        userId: user.id,
       },
       include: {
         items: {
@@ -30,14 +29,14 @@ export const getShoppingCart = async (): Promise<
 
     return {
       success: true,
-      message: "Shopping cart fetched successfully.",
+      message: "ショッピングカートが正常に取得されました",
       data: response,
     };
   } catch (error) {
     console.error("Error fetching shopping cart:", error);
     return {
       success: false,
-      message: "Failed to fetch shopping cart.",
+      message: "ショッピングカートの取得に失敗しました",
       data: [],
     };
   }

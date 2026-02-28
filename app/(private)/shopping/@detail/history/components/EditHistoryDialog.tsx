@@ -20,7 +20,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ShoppingHistoryWithItems } from "@/app/server-aciton/shopping/history/getShoppingHistory";
 import { useState } from "react";
 import { editShoppingHistory } from "@/app/server-aciton/shopping/history/editShoppingHIstory";
 import { toast } from "sonner";
@@ -28,6 +27,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { historyEditColumns } from "./historyEditColumn";
 import { ShoppinghistoryDataTable } from "./shoppingHistoryDataTable";
+import { ShoppingHistoryWithItems } from "@/app/types/shopping/shopping";
 
 interface EditHistoryDialogProps {
   selectedHistory: ShoppingHistoryWithItems;

@@ -1,16 +1,20 @@
 "use server";
 
 import { ApiResponse } from "@/app/types/api/api";
+import { Subscription } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma/prisma";
-import { Subscription } from "@prisma/client";
+import { getAuthUser } from "@/lib/supabase/getUser";
 
 export const getAllSubscription = async (): Promise<
   ApiResponse<Subscription[]>
 > => {
   try {
+
+    const user = await getAuthUser();
+
     const response = await prisma.subscription.findMany({
       where: {
-        userId: "test-user-id",
+        userId: user.id,
       },
       orderBy: [
         {
@@ -22,17 +26,9 @@ export const getAllSubscription = async (): Promise<
       ],
     });
 
-    if (response.length === 0) {
-      return {
-        success: false,
-        message: "No subscriptions found",
-        data: [],
-      };
-    }
-
     return {
       success: true,
-      message: "Subscriptions fetched successfully",
+      message: "サブスクの取得に成功しました。",
       data: response,
     };
   } catch (error) {
@@ -40,7 +36,7 @@ export const getAllSubscription = async (): Promise<
     return {
       success: false,
       data: [],
-      message: "Failed to fetch subscriptions",
+      message: "サブスクの取得に失敗しました。",
     };
   }
 };

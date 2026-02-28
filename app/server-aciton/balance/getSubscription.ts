@@ -2,6 +2,7 @@
 
 import { ApiResponse } from "@/app/types/api/api";
 import { prisma } from "@/lib/prisma/prisma";
+import { getAuthUser } from "@/lib/supabase/getUser";
 import { Subscription } from "@prisma/client";
 
 interface getSubscription {
@@ -22,9 +23,12 @@ export const getSubscription = async ({
   const monthEnd = new Date(year, month, 0, 23, 59, 59, 999);
 
   try {
+
+    const user = await getAuthUser();
+
     const response = await prisma.subscription.findMany({
       where: {
-        userId: "test-user-id",
+        userId: user.id,
         startDate: {
           lte: monthEnd,
         },
@@ -48,7 +52,7 @@ export const getSubscription = async ({
 
     return {
       success: true,
-      message: "Subscriptions fetched successfully",
+      message: "サブスクの取得に成功しました",
       data: {
         subscription: response,
         totalAmount,
@@ -58,7 +62,7 @@ export const getSubscription = async ({
     console.error("Error fetching subscriptions:", error);
     return {
       success: false,
-      message: "Failed to fetch subscriptions",
+      message: "サブスクの取得に失敗しました",
       data: {
         subscription: [],
         totalAmount: 0,

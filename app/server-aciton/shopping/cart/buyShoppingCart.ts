@@ -4,6 +4,7 @@ import { ApiResponse } from "@/app/types/api/api";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePath } from "next/cache";
 import { ShoppingCart } from "@prisma/client";
+import { getAuthUser } from "@/lib/supabase/getUser";
 
 export const buyShoppingCart = async (
   cart: ShoppingCart
@@ -13,6 +14,9 @@ export const buyShoppingCart = async (
   adjustedDate.setHours(12, 0, 0, 0);
 
   try {
+
+    const user = await getAuthUser();
+    const userId = user.id;
 
     await prisma.$transaction(async (tx) => {
 
@@ -46,7 +50,7 @@ export const buyShoppingCart = async (
       data: {
         name: cart.name,
         date: adjustedDate,
-        userId: "test-user-id",
+        userId,
         totalPrice,
       },
       include: {
@@ -59,7 +63,7 @@ export const buyShoppingCart = async (
       data: {
         amount: totalPrice,
         paymentDate: history.date,
-        userId: "test-user-id",
+        userId,
         categoryId: shoppingCategory.id,
       },
     });
@@ -122,7 +126,7 @@ export const buyShoppingCart = async (
 
     return {
       success: true,
-      message: "Shopping cart purchased successfully.",
+      message: "買い物カートの購入が完了しました。",
       data: null,
     };
   } catch (error) {
@@ -136,7 +140,7 @@ export const buyShoppingCart = async (
     }
     return {
       success: false,
-      message: "Failed to buy shopping cart.",
+      message: "買い物カートの購入中にエラーが発生しました。",
       data: null,
     };
   }

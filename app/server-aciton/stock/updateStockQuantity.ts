@@ -4,12 +4,16 @@ import { ApiResponse } from "@/app/types/api/api";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePath } from "next/cache";
 import { handleStockCartSync } from "./handleStockCartSync";
+import { getAuthUser } from "@/lib/supabase/getUser";
 
 export const updateStockQuantity = async (
   stockId: string,
   newQuantity: number
 ): Promise<ApiResponse<null>> => {
   try {
+
+    const user = await getAuthUser();
+
     // 在庫数を更新
     const targetItem = await prisma.stock.update({
       where: { id: stockId },
@@ -18,7 +22,7 @@ export const updateStockQuantity = async (
       },
     });
 
-    await handleStockCartSync(targetItem);
+    await handleStockCartSync(targetItem,user.id);
 
     revalidatePath("/stock");
 

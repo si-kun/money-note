@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import HistoryDetail from "./HistoryDetail";
 import { Button } from "@/components/ui/button";
-import { PaymentWithCategory } from "@/app/types/balance/balance";
+import { PaymentWithCategory } from "@/app/types/transaction/transaction";
 
 interface ShoppingHistoryCardProps {
   shoppingHistory: PaymentWithCategory["shoppingHistory"];

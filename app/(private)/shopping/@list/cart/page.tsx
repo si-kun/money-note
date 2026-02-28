@@ -5,6 +5,8 @@ import CreateCart from "../../@detail/cart/components/CreateCart";
 import DeleteDialog from "../../components/DeleteDialog";
 import Link from "next/link";
 
+export const dynamic = 'force-dynamic'
+
 const CartListPage = async () => {
   // cartのリストを取得
   const fetchCartList = await getShoppingCart();

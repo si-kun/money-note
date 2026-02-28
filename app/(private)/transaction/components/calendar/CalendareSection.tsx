@@ -9,13 +9,12 @@ import interractionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { EventClickArg } from "@fullcalendar/core";
 
 import { Button } from "@/components/ui/button";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import {
   BalanceData,
   IncomeWithCategory,
   PaymentWithCategory,
-  SelectedData,
-} from "@/app/types/balance/balance";
+} from "@/app/types/transaction/transaction";
 import { useRouter } from "next/navigation";
 
 interface CalendarSectionProps {
@@ -32,18 +31,8 @@ const CalendareSection = ({
   initialPaymentData,
   initialYear,
   initialMonth,
-  today,
 }: CalendarSectionProps) => {
   const router = useRouter();
-
-  // const [selectedDate, setSelectedDate] = useState<SelectedData>({
-  //   date: format(today, "yyyy-MM-dd"),
-  //   incomes: [],
-  //   payments: [],
-  //   totalIncome: 0,
-  //   totalPayment: 0,
-  //   balance: 0,
-  // });
 
   const calendarRef = useRef<FullCalendar>(null);
 
@@ -66,33 +55,6 @@ const CalendareSection = ({
     router.push(url);
     calendarRef.current?.getApi().next();
   }
-
-  const handleSelectedDate = (clickedDate: string) => {
-    const selectedIncomes = initialIncomeData.filter((income) => {
-      return income.incomeDate.toISOString().split("T")[0] === clickedDate;
-    });
-
-    const selectedPayments = initialPaymentData.filter((payment) => {
-      return payment.paymentDate.toISOString().split("T")[0] === clickedDate;
-    });
-
-    const totalIncome = selectedIncomes.reduce(
-      (sum, income) => sum + income.amount,
-      0
-    );
-    const totalPayment = selectedPayments.reduce(
-      (sum, payment) => sum + payment.amount,
-      0
-    );
-    // setSelectedDate({
-    //   date: clickedDate,
-    //   incomes: selectedIncomes,
-    //   payments: selectedPayments,
-    //   totalIncome,
-    //   totalPayment,
-    //   balance: totalIncome - totalPayment,
-    // });
-  };
 
   const handleDateClick = (arg: DateClickArg) => {
     const clickedDate = arg.dateStr

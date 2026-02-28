@@ -8,7 +8,7 @@ import { EventClickArg } from "@fullcalendar/core";
 
 import { Button } from "@/components/ui/button";
 import { RefObject } from "react";
-import { EventData } from "@/app/types/balance/balance";
+import { EventData } from "@/app/types/transaction/transaction";
 
 interface CalendarProps {
   year: number;

@@ -11,8 +11,8 @@ import StockForm from "./StockForm";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import StockQuantityButtons from "./StockQuantityButtons";
-import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
 import CategorySelect from "./CategorySelect";
+import { ShoppingCartWithItems } from "@/app/types/shopping/shopping";
 
 // TableMetaの型を拡張
 declare module "@tanstack/react-table" {
@@ -45,7 +45,7 @@ export const getStockColumns = (
       // カートに存在する在庫は選択不可にする
       const isInCart = carts.some((cart) =>
         cart.items.some(
-          (item: ShoppingCartWithItems) => item.stockId === stock.id
+          (item) => item.stockId === stock.id
         )
       );
 
@@ -159,7 +159,7 @@ export const getStockColumns = (
 
       const cartWithStock = carts.find((cart) => {
         return cart.items.some(
-          (item: ShoppingCartWithItems["item"][number]) =>
+          (item: ShoppingCartWithItems["items"][number]) =>
             item.stockId === stock.id
         );
       });

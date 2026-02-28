@@ -1,3 +1,4 @@
+import { ProductValue } from "@/app/types/transaction/transaction";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -10,7 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ProductValue } from "@/hooks/useTransactionForm";
 import { Trash2 } from "lucide-react";
 
 interface ProductTableProps {

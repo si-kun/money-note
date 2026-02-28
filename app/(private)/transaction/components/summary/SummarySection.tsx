@@ -6,7 +6,7 @@ import { SubscriptionResponse } from "@/app/server-aciton/balance/getSubscriptio
 import {
   IncomeWithCategory,
   PaymentWithCategory,
-} from "@/app/types/balance/balance";
+} from "@/app/types/transaction/transaction";
 import { Category } from "@prisma/client";
 
 interface SummarySectionProps {

@@ -35,8 +35,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import AddButton from "@/components/button/AddButton";
 import StockForm from "./StockForm";
 import AddStockDialog from "./AddStockDialog";
-import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
 import { getStockColumns } from "./stockColumns";
+import { ShoppingCartWithItems } from "@/app/types/shopping/shopping";
 
 interface DataTableProps<TData> {
   stocks: TData[];

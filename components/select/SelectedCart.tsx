@@ -1,7 +1,6 @@
 
 import { ShoppingCartItemWithStock } from "@/app/(private)/shopping/@detail/cart/components/shoppingColumns";
-import { ShoppingCartWithItems } from "@/app/server-aciton/shopping/cart/getShoppingCart";
-
+import { ShoppingCartWithItems } from "@/app/types/shopping/shopping";
 
 import {
   Select,

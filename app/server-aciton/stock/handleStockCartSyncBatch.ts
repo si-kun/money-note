@@ -1,16 +1,20 @@
 "use server";
 
 import { ApiResponse } from "@/app/types/api/api";
-import { Stock } from "@prisma/client";
 import { handleStockCartSync } from "./handleStockCartSync";
+import { Stock } from "@/generated/prisma/client";
+import { getAuthUser } from "@/lib/supabase/getUser";
 
 export const handleStockCartSyncBatch = async (
   stocks: Stock[]
 ): Promise<ApiResponse<null>> => {
   try {
+
+    const user = await getAuthUser()
+
     // stocks配列の各在庫アイテムに対してhandleStockCartSyncを呼び出す
     for (const stock of stocks) {
-      await handleStockCartSync(stock);
+      await handleStockCartSync(stock,user.id);
     }
 
     return {

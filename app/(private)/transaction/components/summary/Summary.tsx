@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SummaryCard from "./SummaryCard";
 import BreakdownList from "../form/BreakdownList";
 import TransactionForm from "../form/TransactionForm";
-import { IncomeWithCategory, PaymentWithCategory } from "@/app/types/balance/balance";
+import { IncomeWithCategory, PaymentWithCategory } from "@/app/types/transaction/transaction";
 import { Category } from "@prisma/client";
 interface SummaryProps {
   date: string;

@@ -2,35 +2,31 @@
 
 import { ApiResponse } from "@/app/types/api/api";
 import { prisma } from "@/lib/prisma/prisma";
+import { getAuthUser } from "@/lib/supabase/getUser";
 import { Category } from "@prisma/client";
 
 export const getCategory = async (
 ): Promise<ApiResponse<Category[]>> => {
   try {
+
+    const user = await getAuthUser();
+
     const response = await prisma.category.findMany({
       where: {
-        userId: "test-user-id",
+        userId: user.id,
       },
     });
 
-    if (response.length > 0) {
-      return {
-        success: true,
-        message: "Category fetched successfully",
-        data: response,
-      };
-    }
-
     return {
       success: true,
-      message: "Category fetched successfully",
-      data: [],
+      message: "カテゴリーの取得に成功しました",
+      data: response,
     };
   } catch (error) {
     console.error("Error fetching category:", error);
     return {
       success: false,
-      message: "Failed to fetch category",
+      message: "カテゴリーの取得に失敗しました",
       data: [],
     };
   }

@@ -1,13 +1,20 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/generated/prisma/client";
 
 // Prisma が自動生成してくれる型を使う
 export type IncomeWithCategory = Prisma.IncomeGetPayload<{
   include: { category: true };
 }>;
 export type PaymentWithCategory = Prisma.PaymentGetPayload<{
-  include: { category: true,shoppingHistory: {include: {items: {
-    include: { stock: true}
-  }}} };
+  include: {
+    category: true;
+    shoppingHistory: {
+      include: {
+        items: {
+          include: { stock: true };
+        };
+      };
+    };
+  };
 }>;
 
 export type BalanceData = Record<
@@ -37,4 +44,12 @@ export interface EventData {
     payment: number;
     balance: number;
   };
+}
+
+export interface ProductValue {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  stockAdd: boolean;
 }

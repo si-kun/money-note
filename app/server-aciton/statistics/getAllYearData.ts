@@ -1,29 +1,28 @@
 "use server";
 
 import { ApiResponse } from "@/app/types/api/api";
-import {
-  IncomeWithCategory,
-  PaymentWithCategory,
-} from "@/app/types/balance/balance";
+import { YearDataResponse } from "@/app/types/statistics/statistics";
 import { prisma } from "@/lib/prisma/prisma";
+import { getAuthUser } from "@/lib/supabase/getUser";
 
 interface GetAllYearData {
   year: number;
 }
 
-export interface YearDataResponse {
-  income: IncomeWithCategory[];
-  payment: PaymentWithCategory[];
-}
+
 
 export const getAllYearData = async ({
   year,
 }: GetAllYearData): Promise<ApiResponse<YearDataResponse | null>> => {
   try {
+
+    const user = await getAuthUser();
+    const userId = user.id
+
     const response = await prisma.$transaction(async (tx) => {
       const incomes = await tx.income.findMany({
         where: {
-          userId: "test-user-id",
+          userId,
           incomeDate: {
             gte: new Date(`${year}-01-01`),
             lt: new Date(`${year + 1}-01-01`),
@@ -36,7 +35,7 @@ export const getAllYearData = async ({
 
       const payments = await tx.payment.findMany({
         where: {
-          userId: "test-user-id",
+          userId,
           paymentDate: {
             gte: new Date(`${year}-01-01`),
             lt: new Date(`${year + 1}-01-01`),
@@ -67,7 +66,7 @@ export const getAllYearData = async ({
     console.error("Error in getAllYearData:", error);
     return {
       success: false,
-      message: "Failed to fetch year data.",
+      message: "データの取得に失敗しました。",
       data: null,
     };
   }
