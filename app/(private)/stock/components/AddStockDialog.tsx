@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Stock } from "@prisma/client";
 import { Table } from "@tanstack/react-table";
 import SelectedCart from "../../../../components/select/SelectedCart";
 import { useState } from "react";
@@ -19,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
 import { ShoppingCartWithItems } from "@/app/types/shopping/shopping";
+import { Stock } from "@/generated/prisma/client";
 
 interface AddStockDialogProps<TData extends Stock> {
   table: Table<TData>;

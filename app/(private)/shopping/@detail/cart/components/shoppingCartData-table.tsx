@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Stock } from "@prisma/client";
+import { Stock } from "@/generated/prisma/client";
 
 interface ShoppingItemTableProps<TData extends { stock: Stock | null}> {
   items: TData[];

@@ -1,6 +1,5 @@
 "use client";
 
-import { Stock, StockCategory } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import HeaderButton from "../../subscriptions/components/HeaderButton";
 import ActionsCell from "@/components/dataTable/ActionsCell";
@@ -13,6 +12,7 @@ import Link from "next/link";
 import StockQuantityButtons from "./StockQuantityButtons";
 import CategorySelect from "./CategorySelect";
 import { ShoppingCartWithItems } from "@/app/types/shopping/shopping";
+import { Stock, StockCategory } from "@/generated/prisma/client";
 
 // TableMetaの型を拡張
 declare module "@tanstack/react-table" {

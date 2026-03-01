@@ -1,7 +1,7 @@
 "use server";
 
-import { ShoppingCartItemWithStock } from "@/app/(private)/shopping/@detail/cart/components/shoppingColumns";
 import { ApiResponse } from "@/app/types/api/api";
+import { ShoppingCartItemWithStock } from "@/app/types/shopping/shopping";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePath } from "next/cache";
 

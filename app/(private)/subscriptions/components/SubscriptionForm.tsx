@@ -11,10 +11,10 @@ import { Row } from "@tanstack/react-table";
 import { useState, useTransition } from "react";
 import { Controller, FieldErrors, useForm } from "react-hook-form";
 import CalendarField from "./CalendarField";
-import { Subscription } from "@prisma/client";
 import { editSubscription } from "@/app/server-aciton/subscription/editSubscription";
 import { toast } from "sonner";
 import { addSubscriptions } from "@/app/server-aciton/subscription/addSubscriptions";
+import { Subscription } from "@/generated/prisma/client";
 
 interface SubscriptionFormProps {
   row?: Row<Subscription>;

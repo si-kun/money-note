@@ -3,8 +3,8 @@
 import { ApiResponse } from "@/app/types/api/api";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePath } from "next/cache";
-import { ShoppingCart } from "@prisma/client";
 import { getAuthUser } from "@/lib/supabase/getUser";
+import { ShoppingCart } from "@/generated/prisma/client";
 
 export const buyShoppingCart = async (
   cart: ShoppingCart

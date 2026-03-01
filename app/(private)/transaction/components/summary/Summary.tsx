@@ -5,7 +5,7 @@ import SummaryCard from "./SummaryCard";
 import BreakdownList from "../form/BreakdownList";
 import TransactionForm from "../form/TransactionForm";
 import { IncomeWithCategory, PaymentWithCategory } from "@/app/types/transaction/transaction";
-import { Category } from "@prisma/client";
+import { Category } from "@/generated/prisma/client";
 interface SummaryProps {
   date: string;
   dailyIncome: IncomeWithCategory[];

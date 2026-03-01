@@ -34,11 +34,11 @@ import { useEditTransactionForm } from "@/hooks/useEditTransactionForm";
 
 import DeleteConfirmDialog from "@/components/dialog/DeleteConfirmDialog";
 import ShoppingHistoryCard from "../shopping/ShoppingHistoryCard";
-import { Category } from "@prisma/client";
 import {
   filterCategoriesByType,
   getShoppingCategoryId,
 } from "@/utils/category/category";
+import { Category } from "@/generated/prisma/client";
 
 interface EditTransactionFormProps {
   transaction: PaymentWithCategory | IncomeWithCategory;

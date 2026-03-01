@@ -1,6 +1,5 @@
 "use client";
 
-import { Subscription } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 
@@ -9,6 +8,7 @@ import SubscriptionForm from "./components/SubscriptionForm";
 import ActionsCell from "@/components/dataTable/ActionsCell";
 import { deleteSubscription } from "@/app/server-aciton/subscription/deleteSubscription";
 import { toast } from "sonner";
+import { Subscription } from "@/generated/prisma/client";
 
 export const columns: ColumnDef<Subscription>[] = [
   {

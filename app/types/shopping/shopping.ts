@@ -9,3 +9,7 @@ export type ShoppingCartWithItems = Prisma.ShoppingCartGetPayload<{
       include:{ stock: true}
     } };
   }>;
+
+  export type ShoppingCartItemWithStock = Prisma.ShoppingCartItemGetPayload<{
+    include: { stock: true };
+  }>;

@@ -1,7 +1,6 @@
 "use client";
 
 import ActionsCell from "@/components/dataTable/ActionsCell";
-import { Prisma } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { deleteShoppingCartItem } from "@/app/server-aciton/shopping/cart/deleteShoppinCartItem";
 import { toast } from "sonner";
@@ -9,10 +8,7 @@ import { lowStockSelectedCart } from "@/app/server-aciton/shopping/cart/lowStock
 import CheckboxCell from "./CheckboxCell";
 import EditShopping from "../../../components/EditShopping";
 import SelectedCart from "@/components/select/SelectedCart";
-
-export type ShoppingCartItemWithStock = Prisma.ShoppingCartItemGetPayload<{
-  include: { stock: true };
-}>;
+import { ShoppingCartItemWithStock, ShoppingCartWithItems } from "@/app/types/shopping/shopping";
 
 export const columns: ColumnDef<ShoppingCartItemWithStock>[] = [
   {
@@ -68,7 +64,7 @@ export const columns: ColumnDef<ShoppingCartItemWithStock>[] = [
 
 // 在庫不足カート用のカラム
 export const getLowStockColumns = (
-  carts: ShoppingCartItemWithStock[]
+  carts: ShoppingCartWithItems[]
 ): ColumnDef<ShoppingCartItemWithStock>[] => [
   {
     accessorKey: "itemName",

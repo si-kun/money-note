@@ -10,10 +10,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useEffect, useState } from "react";
-import { Stock } from "@prisma/client";
 import { getAllStock } from "@/app/server-aciton/stock/getAllStock";
 import { StockListDataTable } from "./StockListDataTable";
 import { stockListColumns } from "./stockListColumns";
+import { Stock } from "@/generated/prisma/client";
 
 interface StockSelectionDialogProps {
     onSelect: (selectedStocks: Stock[]) => void;

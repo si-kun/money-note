@@ -17,11 +17,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Stock, StockCategory } from "@prisma/client";
 import { Row } from "@tanstack/react-table";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { Stock, StockCategory } from "@/generated/prisma/client";
 
 interface StockFormProps {
   row?: Row<Stock>;

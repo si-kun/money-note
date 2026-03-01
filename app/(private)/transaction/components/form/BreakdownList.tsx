@@ -5,7 +5,7 @@ import {
 } from "@/app/types/transaction/transaction";
 
 import EditTransactionForm from "./EditTransactionForm";
-import { Category } from "@prisma/client";
+import { Category } from "@/generated/prisma/client";
 
 interface BreakdownList {
   date: string;

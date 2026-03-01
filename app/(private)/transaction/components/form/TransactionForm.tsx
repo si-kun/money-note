@@ -33,11 +33,11 @@ import FloatingLabel from "./FloatingLabel";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
 import ShoppingCartCard from "../shopping/ShoppingCartCard";
-import { Category } from "@prisma/client";
 import {
   filterCategoriesByType,
   getShoppingCategoryId,
 } from "@/utils/category/category";
+import { Category } from "@/generated/prisma/client";
 
 interface TransactionFormProps {
   date: string;

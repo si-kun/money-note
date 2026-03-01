@@ -30,13 +30,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Stock, StockCategory } from "@prisma/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import AddButton from "@/components/button/AddButton";
 import StockForm from "./StockForm";
 import AddStockDialog from "./AddStockDialog";
 import { getStockColumns } from "./stockColumns";
 import { ShoppingCartWithItems } from "@/app/types/shopping/shopping";
+import { Stock, StockCategory } from "@/generated/prisma/client";
 
 interface DataTableProps<TData> {
   stocks: TData[];

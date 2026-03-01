@@ -6,7 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { StockCategory } from "@prisma/client";
+import { StockCategory } from "@/generated/prisma/client";
 import { toast } from "sonner";
 
 interface CategorySelectProps {

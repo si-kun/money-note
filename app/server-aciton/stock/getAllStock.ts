@@ -1,9 +1,9 @@
 "use server";
 
 import { ApiResponse } from "@/app/types/api/api";
+import { Stock } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma/prisma";
 import { getAuthUser } from "@/lib/supabase/getUser";
-import { Stock } from "@prisma/client";
 
 export const getAllStock = async (): Promise<ApiResponse<Stock[]>> => {
 

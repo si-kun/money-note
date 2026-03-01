@@ -1,7 +1,7 @@
 "use client";
 
 import { Checkbox } from "@/components/ui/checkbox";
-import { Stock } from "@prisma/client";
+import { Stock } from "@/generated/prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 
 export const stockListColumns: ColumnDef<Stock>[] = [

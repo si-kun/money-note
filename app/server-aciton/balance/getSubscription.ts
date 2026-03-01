@@ -1,9 +1,9 @@
 "use server";
 
 import { ApiResponse } from "@/app/types/api/api";
+import { Subscription } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma/prisma";
 import { getAuthUser } from "@/lib/supabase/getUser";
-import { Subscription } from "@prisma/client";
 
 interface getSubscription {
   year: number;

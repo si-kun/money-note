@@ -7,7 +7,7 @@ import {
   IncomeWithCategory,
   PaymentWithCategory,
 } from "@/app/types/transaction/transaction";
-import { Category } from "@prisma/client";
+import { Category } from "@/generated/prisma/client";
 
 interface SummarySectionProps {
   // 月次データ

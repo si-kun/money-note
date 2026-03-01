@@ -1,6 +1,6 @@
 "use client";
 
-import { ShoppingCartItem } from "@prisma/client";
+import { ShoppingCartItem } from "@/generated/prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 
 export const historyColumns: ColumnDef<ShoppingCartItem>[] = [

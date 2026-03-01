@@ -1,7 +1,8 @@
 "use client"
 
+import { ShoppingCartItemWithStock } from "@/app/types/shopping/shopping";
 import { ShoppingCartItemTable } from "./shoppingCartData-table";
-import { columns, ShoppingCartItemWithStock } from "./shoppingColumns";
+import { columns } from "./shoppingColumns";
 
 interface NormalCartTableProps {
   items: ShoppingCartItemWithStock[];

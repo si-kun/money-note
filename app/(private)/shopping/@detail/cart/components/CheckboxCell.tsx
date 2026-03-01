@@ -1,13 +1,13 @@
 import { updateShoppingChecked } from "@/app/server-aciton/shopping/cart/updateShoppingChecked";
+import { ShoppingCartItemWithStock } from "@/app/types/shopping/shopping";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ShoppingCartItem } from "@prisma/client";
 import { Row } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
 interface CheckboxCellProps {
-  row: Row<ShoppingCartItem>;
+  row: Row<ShoppingCartItemWithStock>;
 }
 
 const CheckboxCell = ({ row }: CheckboxCellProps) => {

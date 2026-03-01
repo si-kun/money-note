@@ -11,9 +11,9 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import ProductTable from "./ProductTable";
 import { Dispatch, SetStateAction } from "react";
-import { Stock } from "@prisma/client";
 import StockSelectionDialog from "../stock/StockSelectionDialog";
 import { ProductValue } from "@/app/types/transaction/transaction";
+import { Stock } from "@/generated/prisma/client";
 
 interface ShoppingCartCardProps {
   productsValue: ProductValue[];

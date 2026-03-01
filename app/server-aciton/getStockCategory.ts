@@ -1,6 +1,6 @@
 "use server";
 
-import { StockCategory } from "@prisma/client";
+import { StockCategory } from "@/generated/prisma/client";
 import { ApiResponse } from "../types/api/api";
 import { prisma } from "@/lib/prisma/prisma";
 import { getAuthUser } from "@/lib/supabase/getUser";

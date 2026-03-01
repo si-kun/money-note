@@ -2,7 +2,7 @@
 
 import { updateStockQuantity } from "@/app/server-aciton/stock/updateStockQuantity";
 import { Button } from "@/components/ui/button";
-import { Stock } from "@prisma/client";
+import { Stock } from "@/generated/prisma/client";
 import { useEffect, useRef, useState } from "react";
 
 interface StockQuantityButtons {
