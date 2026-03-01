@@ -4,11 +4,9 @@ import ActionsCell from "@/components/dataTable/ActionsCell";
 import { ColumnDef } from "@tanstack/react-table";
 import { deleteShoppingCartItem } from "@/app/server-aciton/shopping/cart/deleteShoppinCartItem";
 import { toast } from "sonner";
-import { lowStockSelectedCart } from "@/app/server-aciton/shopping/cart/lowStockSelectedCart";
 import CheckboxCell from "./CheckboxCell";
 import EditShopping from "../../../components/EditShopping";
-import SelectedCart from "@/components/select/SelectedCart";
-import { ShoppingCartItemWithStock, ShoppingCartWithItems } from "@/app/types/shopping/shopping";
+import { ShoppingCartItemWithStock } from "@/app/types/shopping/shopping";
 
 export const columns: ColumnDef<ShoppingCartItemWithStock>[] = [
   {
@@ -17,8 +15,8 @@ export const columns: ColumnDef<ShoppingCartItemWithStock>[] = [
     cell: ({ row }) => <CheckboxCell row={row} />,
   },
   {
-    accessorKey: "itemName",
     header: "商品名",
+    cell: ({ row }) => row.original.stock?.name ?? row.original.itemName,
   },
   {
     accessorKey: "quantity",
@@ -57,56 +55,6 @@ export const columns: ColumnDef<ShoppingCartItemWithStock>[] = [
             <EditShopping row={row} setIsDialogOpen={setIsDialogOpen} />
           )}
         </ActionsCell>
-      );
-    },
-  },
-];
-
-// 在庫不足カート用のカラム
-export const getLowStockColumns = (
-  carts: ShoppingCartWithItems[]
-): ColumnDef<ShoppingCartItemWithStock>[] => [
-  {
-    accessorKey: "itemName",
-    header: "商品名",
-  },
-  {
-    accessorKey: "quantity",
-    header: "購入予定数",
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2">
-        <span>{row.original.quantity}</span>
-      </div>
-    ),
-  },
-  {
-    accessorKey: "unitPrice",
-    header: "値段",
-    cell: ({ row }) => `${row.original.unitPrice?.toLocaleString()}円`,
-  },
-  {
-    id: "selectedCart",
-    header: "カート選択",
-    cell: ({ row }) => {
-      const handleCartSelect = async (cartId: string) => {
-        if (!cartId) return;
-
-        const result = await lowStockSelectedCart(row.original, cartId);
-
-        if (result.success) {
-          toast.success(result.message);
-        } else {
-          toast.error(result.message);
-        }
-      };
-      return (
-        <SelectedCart
-          selectedCartId={row.original.cartId}
-          onCartSelect={handleCartSelect}
-          autoSubmit={true}
-          row={row.original}
-          carts={carts}
-        />
       );
     },
   },

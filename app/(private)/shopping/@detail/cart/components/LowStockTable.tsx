@@ -17,8 +17,8 @@ const LowStockTable = ({ items, availableCarts }: LowStockTableProps) => {
 
     const columns = useMemo((): ColumnDef<ShoppingCartItemWithStock>[] => [
         {
-          accessorKey: "itemName",
           header: "商品名",
+          cell:({ row }) => row.original.stock?.name ?? row.original.itemName
         },
         {
           accessorKey: "quantity",
