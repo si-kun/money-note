@@ -16,31 +16,17 @@ export const editShoppingCartItem = async ({
 }: EditShoppingCartItem): Promise<ApiResponse<null>> => {
   try {
     await prisma.$transaction(async (tx) => {
-      // 更新前の商品情報を取得
-      const existingItem = await tx.shoppingCartItem.findUnique({
-        where: {
-          id: itemId,
-        },
-      });
 
-      // 対象の在庫も更新する
-      if (data.stockId) {
-        const stockItem = await tx.stock.findUnique({
+      // カートのアイテム名を更新したら、在庫のアイテム名も更新する
+      if(data.stockId) {
+        await tx.stock.update({
           where: {
             id: data.stockId,
           },
-        });
-
-        if (stockItem && existingItem) {
-          const newStockQuantity =
-            stockItem.quantity + (data.quantity - existingItem.quantity);
-
-          if (newStockQuantity < 0) {
-            throw new Error(
-              `在庫数が0未満になるため更新できません:${newStockQuantity}`
-            );
+          data: {
+            name: data.itemName,
           }
-        }
+        })
       }
       // 商品を更新する
       await tx.shoppingCartItem.update({
@@ -65,14 +51,7 @@ export const editShoppingCartItem = async ({
       data: null,
     };
   } catch (error) {
-    if (error instanceof Error) {
-      console.error("Error editing shopping cart item:", error);
-      return {
-        success: false,
-        message: error.message,
-        data: null,
-      };
-    }
+    console.error("Error editing shopping cart item:", error);
     return {
       success: false,
       message: "ショッピングカートアイテムの編集中にエラーが発生しました",
