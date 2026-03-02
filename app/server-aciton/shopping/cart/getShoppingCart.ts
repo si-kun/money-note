@@ -20,17 +20,21 @@ export const getShoppingCart = async (): Promise<
           include: {
             stock: true,
           },
-          orderBy: {
-            checked: "asc",
-          }
         }
       },
     });
 
+    // 在庫不足を先頭に並び変える
+    const sortedResponse = response.sort((a, b) => {
+      if(a.name === "在庫不足") return -1;
+      if(b.name === "在庫不足") return 1;
+      return 0;
+    })
+
     return {
       success: true,
       message: "ショッピングカートが正常に取得されました",
-      data: response,
+      data: sortedResponse,
     };
   } catch (error) {
     console.error("Error fetching shopping cart:", error);

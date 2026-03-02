@@ -38,7 +38,7 @@ const DeleteDialog = ({ name, id }: DeleteDialogProps) => {
          }
 
         toast.success(`${name}を削除しました`);
-        router.refresh();
+        router.push("/shopping/cart");
       } catch (error) {
         console.error("Error deleting item:", error);
         toast.error(`${name}の削除に失敗しました`);

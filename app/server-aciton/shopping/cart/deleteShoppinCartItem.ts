@@ -10,70 +10,79 @@ export const deleteShoppingCartItem = async (
   cartId: string | null
 ): Promise<ApiResponse<null>> => {
   try {
-
     const user = await getAuthUser();
     const userId = user.id;
 
     // 1. 削除と同時に stock 情報も取得
     await prisma.$transaction(async (tx) => {
-
-    const deleteItem = await tx.shoppingCartItem.delete({
-      where: { id: itemId },
-      include: { stock: true },
-    });
-
-    // 2. アイテムが在庫不足かどうかチェック
-    if (
-      deleteItem.stock &&
-      deleteItem.stock.minQuantity !== null &&
-      deleteItem.stock.quantity < deleteItem.stock.minQuantity
-    ) {
-      // 3. 在庫不足カートを取得または作成
-      let lowStockCart = await tx.shoppingCart.findFirst({
-        where: {
-          name: "在庫不足",
-          userId,
-        },
+      const deleteItem = await tx.shoppingCartItem.delete({
+        where: { id: itemId },
+        include: { stock: true },
       });
 
-      if (!lowStockCart) {
-        lowStockCart = await tx.shoppingCart.create({
-          data: {
+      // 2. アイテムが在庫不足かどうかチェック
+      if (
+        deleteItem.stock &&
+        deleteItem.stock.minQuantity !== null &&
+        deleteItem.stock.quantity < deleteItem.stock.minQuantity
+      ) {
+        // 3. 在庫不足カートを取得または作成
+        let lowStockCart = await tx.shoppingCart.findFirst({
+          where: {
             name: "在庫不足",
             userId,
           },
         });
-      }
 
-      // 4. 在庫不足カートにアイテムを追加
-      await tx.shoppingCartItem.create({
-        data: {
-          itemName: deleteItem.itemName,
-          quantity: deleteItem.quantity,
-          unit: deleteItem.unit,
-          unitPrice: deleteItem.unitPrice,
-          checked: false,
-          memo: deleteItem.memo,
-          cartId: lowStockCart.id,
-          stockId: deleteItem.stockId,
-        },
-      });
-    }
+        if (!lowStockCart) {
+          lowStockCart = await tx.shoppingCart.create({
+            data: {
+              name: "在庫不足",
+              userId,
+            },
+          });
+        }
 
-    // 5. カートの中身が空になったらカート自体も削除
-    if (cartId) {
-      const remainingItems = await tx.shoppingCartItem.count({
-        where: { cartId },
-      });
+        // 4. 在庫不足カートにアイテムを追加
 
-      if (remainingItems === 0) {
-        await tx.shoppingCart.delete({
-          where: { id: cartId },
+        // 4-1. すでに在庫不足に同じアイテムがあるかチェック
+        const existingItem = await tx.shoppingCartItem.findFirst({
+          where: {
+            cartId: lowStockCart.id,
+            stockId: deleteItem.stockId,
+          },
         });
-      }
-    }
-  })
 
+        // 4-2. 存在しない場合だけ追加する
+        if (!existingItem) {
+          await tx.shoppingCartItem.create({
+            data: {
+              itemName: deleteItem.itemName,
+              quantity: deleteItem.quantity,
+              unit: deleteItem.unit,
+              unitPrice: deleteItem.unitPrice,
+              checked: false,
+              memo: deleteItem.memo,
+              cartId: lowStockCart.id,
+              stockId: deleteItem.stockId,
+            },
+          });
+        }
+      }
+
+      // 5. カートの中身が空になったらカート自体も削除
+      if (cartId) {
+        const remainingItems = await tx.shoppingCartItem.count({
+          where: { cartId },
+        });
+
+        if (remainingItems === 0) {
+          await tx.shoppingCart.delete({
+            where: { id: cartId },
+          });
+        }
+      }
+    });
 
     revalidatePath("/shopping");
 
