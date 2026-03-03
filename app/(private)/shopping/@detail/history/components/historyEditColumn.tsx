@@ -44,7 +44,7 @@ export const historyEditColumns: ColumnDef<ShoppingCartItemWithStock>[] = [
       return (
         <ActionsCell row={row} onClickDelete={handleDelete}>
           {({ row, setIsDialogOpen }) => (
-            <EditShopping row={row} setIsDialogOpen={setIsDialogOpen} />
+            <EditShopping isHistory={true} row={row} setIsDialogOpen={setIsDialogOpen} />
           )}
         </ActionsCell>
       );

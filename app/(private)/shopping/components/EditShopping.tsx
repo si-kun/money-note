@@ -21,13 +21,19 @@ import {
   shoppingCartItemSchema,
 } from "@/app/types/zod/shoppingCartItem";
 import { ShoppingCartItemWithStock } from "@/app/types/shopping/shopping";
+import { editShoppingHistoryItem } from "@/app/server-aciton/shopping/history/editShoppingHistoryItem";
 
 interface EditShoppingProps {
   row: Row<ShoppingCartItemWithStock>;
   setIsDialogOpen: (open: boolean) => void;
+  isHistory?: boolean;
 }
 
-const EditShopping = ({ row, setIsDialogOpen }: EditShoppingProps) => {
+const EditShopping = ({
+  row,
+  setIsDialogOpen,
+  isHistory,
+}: EditShoppingProps) => {
   const form = useForm<ShoppingCartItemInput>({
     resolver: zodResolver(shoppingCartItemSchema),
     defaultValues: {
@@ -37,22 +43,44 @@ const EditShopping = ({ row, setIsDialogOpen }: EditShoppingProps) => {
       unitPrice: row.original.unitPrice || 0,
       memo: row.original.memo || "",
       stockId: row.original.stockId || null,
+
+      historyId: row.original.historyId || undefined,
     },
   });
 
   const onSubmit = async (data: ShoppingCartItemInput) => {
     try {
-      await editShoppingCartItem({
-        itemId: row.original.id,
-        data: {
-          itemName: data.itemName,
-          quantity: Number(data.quantity),
-          unit: data.unit,
-          unitPrice: data.unitPrice,
-          memo: data.memo || "",
-          stockId: row.original.stockId|| null,
-        },
-      });
+      if (isHistory) {
+        const result =  await editShoppingHistoryItem({
+          itemId: row.original.id,
+          data: {
+            itemName: data.itemName,
+            quantity: Number(data.quantity),
+            unit: data.unit,
+            unitPrice: data.unitPrice,
+            memo: data.memo || "",
+            stockId: row.original.stockId || null,
+            historyId: row.original.historyId!,
+          },
+        });
+
+        if(!result.success) {
+          toast.error(result.message || "履歴アイテムの更新に失敗しました");
+          return;
+        }
+      } else {
+        await editShoppingCartItem({
+          itemId: row.original.id,
+          data: {
+            itemName: data.itemName,
+            quantity: Number(data.quantity),
+            unit: data.unit,
+            unitPrice: data.unitPrice,
+            memo: data.memo || "",
+            stockId: row.original.stockId || null,
+          },
+        });
+      }
       toast.success("ショッピングアイテムを更新しました");
       setIsDialogOpen(false);
     } catch (error) {

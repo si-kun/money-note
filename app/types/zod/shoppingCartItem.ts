@@ -7,6 +7,8 @@ export const shoppingCartItemSchema = z.object({
     unitPrice: z.coerce.number<number>().min(0, "Unit price must be at least 0."),
     memo: z.string().optional(),
     stockId: z.string().nullable().optional(),
+
+    historyId: z.string().optional().optional(),
   });
 
 export type ShoppingCartItemInput = z.infer<typeof shoppingCartItemSchema>;
