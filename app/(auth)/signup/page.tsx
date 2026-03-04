@@ -33,7 +33,7 @@ const SignupPage = () => {
 
   const form = useForm<SignupSchemaType>({
     resolver: zodResolver(signupSchema),
-    mode: "onBlur",
+    mode: "onChange",
     defaultValues: {
       userName: "",
       email: "",

@@ -31,7 +31,7 @@ export const useEditTransactionForm = ({
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<EditTransactionsFormType>({
-    mode: "onBlur",
+    mode: "onChange",
     resolver: zodResolver(editTransactionSchema),
     defaultValues: {
       title: transaction.title || "",

@@ -29,6 +29,7 @@ const SubscriptionForm = ({ row, setIsDialogOpen }: SubscriptionFormProps) => {
 
   const form = useForm<SubscriptionFormType>({
     resolver: zodResolver(subscriptionSchema),
+    mode: "onChange",
     defaultValues: {
       name: row ? String(row.getValue("name")) : "",
       monthlyPrice: row ? Number(row.getValue("monthlyPrice")) : undefined,

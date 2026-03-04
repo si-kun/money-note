@@ -30,7 +30,7 @@ const SigninPage = () => {
 
   const form = useForm<SigninSchemaType>({
     resolver: zodResolver(signinSchema),
-    mode: "onBlur",
+    mode: "onChange",
     defaultValues: {
       email: "",
       password: "",

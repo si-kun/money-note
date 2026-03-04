@@ -24,7 +24,7 @@ export const useTransactionForm = (date: string) => {
 
   const form = useForm<TransactionsFormType>({
     resolver: zodResolver(transactionSchema),
-    mode: "onBlur",
+    mode: "onChange",
     defaultValues: {
       title: "",
       type: "PAYMENT",

@@ -35,6 +35,7 @@ const StockForm = ({ row, setIsDialogOpen,categories }: StockFormProps) => {
 
   const form = useForm<StockFormType>({
     resolver: zodResolver(stockSchema),
+    mode: "onChange",
     defaultValues: {
       name: row ? row.original.name : "",
       quantity: row ? row.original.quantity : 0,

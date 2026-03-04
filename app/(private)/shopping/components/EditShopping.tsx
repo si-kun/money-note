@@ -36,6 +36,7 @@ const EditShopping = ({
 }: EditShoppingProps) => {
   const form = useForm<ShoppingCartItemInput>({
     resolver: zodResolver(shoppingCartItemSchema),
+    mode: "onChange",
     defaultValues: {
       itemName: row.original.itemName,
       quantity: row.original.quantity,
