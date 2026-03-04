@@ -2,6 +2,7 @@ import { getShoppingHistory } from "@/app/server-aciton/shopping/history/getShop
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import HistorydateSelect from "./components/HistorydateSelect";
+import { format } from "date-fns";
 
 const HistoryPage = async ({
   searchParams,
@@ -34,7 +35,7 @@ const HistoryPage = async ({
           >
             <CardHeader className="flex items-center justify-between">
               <CardTitle className="text-base">{history.name}</CardTitle>
-              <span>{new Date(history.date).toLocaleDateString()}</span>
+              <span>{format(new Date(history.date), "yyyy/MM/dd")}</span>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
