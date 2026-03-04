@@ -12,27 +12,27 @@ interface EditStockProps {
   data: StockFormType;
 }
 
-export const editStock = async ({ id, data }:EditStockProps): Promise<ApiResponse<null>> => {
+export const editStock = async ({
+  id,
+  data,
+}: EditStockProps): Promise<ApiResponse<null>> => {
   try {
-
     const user = await getAuthUser();
-    const userId = user.id
+    const userId = user.id;
 
-    await prisma.$transaction(async (tx) => {
-
+    const updatedStock = await prisma.$transaction(async (tx) => {
       let stockCategoryId = null;
 
       // カテゴリーが新規の場合
-      if(data.newCategoryName) {
-
+      if (data.newCategoryName) {
         // 既存のカテゴリーがあるかどうか確認
         const existingCategory = await tx.stockCategory.findFirst({
           where: {
             categoryName: data.newCategoryName,
-          }
-        })
+          },
+        });
 
-        if(existingCategory) {
+        if (existingCategory) {
           stockCategoryId = existingCategory.id;
         } else {
           // なければ新規作成
@@ -40,18 +40,18 @@ export const editStock = async ({ id, data }:EditStockProps): Promise<ApiRespons
             data: {
               categoryName: data.newCategoryName,
               userId,
-            }
-          })
+            },
+          });
           stockCategoryId = newCategory.id;
         }
-      } else if(data.categoryId) {
+      } else if (data.categoryId) {
         // 既存カテゴリーが選択されている場合
         const existingCategory = await tx.stockCategory.findUnique({
           where: {
             id: data.categoryId,
-          }
-        })
-        if(existingCategory) {
+          },
+        });
+        if (existingCategory) {
           stockCategoryId = existingCategory.id;
         } else {
           stockCategoryId = null;
@@ -66,16 +66,28 @@ export const editStock = async ({ id, data }:EditStockProps): Promise<ApiRespons
           minQuantity: data.minQuantity,
           unit: data.unit,
           unitPrice: data.unitPrice,
-  
+
           stockCategoryId,
         },
       });
-      await handleStockCartSync(updateStock,userId);
-  
-      revalidatePath("/stock");
-    })
 
+      // 在庫が更新されたら、カート、購入履歴も更新する
+      await tx.shoppingCartItem.updateMany({
+        where: {
+          stockId: updateStock.id,
+        },
+        data: {
+          itemName: updateStock.name,
+          unit: updateStock.unit,
+        },
+      });
 
+      return updateStock;
+    });
+
+    await handleStockCartSync(updatedStock, userId);
+
+    revalidatePath("/stock");
 
     return {
       success: true,
