@@ -11,9 +11,12 @@ import { signin } from "@/app/server-aciton/auth/signin";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { guestLogin } from "@/app/server-aciton/auth/guestLogin";
+import { useState } from "react";
 
 const SigninPage = () => {
   const router = useRouter();
+
+  const [isGuestLoginLoading, setIsGuestLoginLoading] = useState(false);
 
   const formValues = [
     {
@@ -54,6 +57,7 @@ const SigninPage = () => {
   };
 
   const handleGuestLogin = async () => {
+    setIsGuestLoginLoading(true);
     try {
       const result = await guestLogin();
 
@@ -66,6 +70,8 @@ const SigninPage = () => {
     } catch (error) {
       console.error("ゲストログインに失敗しました:", error);
       toast.error("ゲストログインに失敗しました");
+    } finally {
+      setIsGuestLoginLoading(false);
     }
   };
 
@@ -88,11 +94,12 @@ const SigninPage = () => {
         submittingText={"ログイン中..."}
       />
       <Button
+      disabled={isGuestLoginLoading}
         className="mx-6 bg-blue-600 hover:bg-blue-500 "
         type="button"
         onClick={() => handleGuestLogin()}
       >
-        ゲストログイン
+        {isGuestLoginLoading ? "ゲストログイン中..." : "ゲストログイン"}
       </Button>
     </>
   );
