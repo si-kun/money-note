@@ -104,6 +104,7 @@ const StockForm = ({ row, setIsDialogOpen,categories }: StockFormProps) => {
         toast.success("在庫が正常に編集されました。");
       } else {
         await addStock({ stock: form.getValues() });
+        toast.success("在庫が正常に追加されました。");
       }
       setIsDialogOpen(false);
     } catch (error) {
