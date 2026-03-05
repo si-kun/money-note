@@ -23,6 +23,14 @@ export const editStock = async ({
     const updatedStock = await prisma.$transaction(async (tx) => {
       let stockCategoryId = null;
 
+      // 変更前情報を取得
+      const oldCategory = await tx.stock.findUnique({
+        where: { id },
+        select: {
+          stockCategoryId: true,
+        },
+      })
+
       // カテゴリーが新規の場合
       if (data.newCategoryName) {
         // 既存のカテゴリーがあるかどうか確認
@@ -70,6 +78,23 @@ export const editStock = async ({
           stockCategoryId,
         },
       });
+
+      // 変更前のカテゴリーに紐づく在庫が0件になった場合はカテゴリーも削除する
+      if(oldCategory?.stockCategoryId) {
+        const stockCount = await tx.stock.count({
+          where: {
+            stockCategoryId: oldCategory.stockCategoryId,
+          }
+        })
+
+        if(stockCount === 0) {
+          await tx.stockCategory.delete({
+            where: {
+              id: oldCategory.stockCategoryId,
+            }
+          })
+        }
+      }
 
       // 在庫が更新されたら、カート、購入履歴も更新する
       await tx.shoppingCartItem.updateMany({
