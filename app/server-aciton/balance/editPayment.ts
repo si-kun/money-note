@@ -19,6 +19,16 @@ export const editPayment = async ({
 }: EditPayment): Promise<ApiResponse<null>> => {
   try {
     await prisma.$transaction(async (tx) => {
+
+      const oldCategory = await tx.payment.findUnique({
+        where: {
+          id: data.id,
+        },
+        select: {
+          categoryId: true,
+        },
+      })
+
       await tx.payment.update({
         where: {
           id: data.id,
@@ -40,6 +50,32 @@ export const editPayment = async ({
           totalPrice: data.amount || 0,
         }
       })
+
+      // カテゴリーが変更され、1件もない場合かつ買い物カテゴリーではない場合、該当のカテゴリーを削除
+      if(oldCategory?.categoryId !== data.categoryId) {
+        const count = await tx.payment.count({
+          where: {
+            categoryId: oldCategory?.categoryId,
+          }
+        })
+
+        const oldCategoryName = await tx.category.findUnique({
+          where: {
+            id: oldCategory?.categoryId,
+          },
+          select: {
+            name: true,
+          }
+        })
+
+        if(count === 0 && oldCategoryName?.name !== "買い物") {
+          await tx.category.delete({
+            where: {
+              id: oldCategory?.categoryId,
+            }
+          })
+        }
+      }
     });
 
     revalidatePath("/");

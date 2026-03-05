@@ -18,6 +18,16 @@ export const editIncome = async ({
   data,
 }: EditIncome): Promise<ApiResponse<null>> => {
   try {
+
+    const oldCategory = await prisma.income.findUnique({
+      where: {
+        id: data.id,
+      },
+      select: {
+        categoryId: true,
+      },
+    })
+
     await prisma.income.update({
       where: {
         id: data.id,
@@ -29,6 +39,23 @@ export const editIncome = async ({
         categoryId: data.categoryId,
       },
     });
+
+    // カテゴリーが変更された場合、1件もなければ該当のカテゴリーを削除する
+    if(oldCategory?.categoryId !== data.categoryId) {
+      const count = await prisma.income.count({
+        where: {
+          categoryId: oldCategory?.categoryId,
+        }
+      })
+
+      if(count === 0) {
+        await prisma.category.delete({
+          where: {
+            id: oldCategory?.categoryId,
+          }
+        })
+      }
+    }
 
     revalidatePath("/");
 
