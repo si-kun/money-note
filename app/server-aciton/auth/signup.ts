@@ -39,6 +39,19 @@ export const signup = async (
       throw new Error("ユーザーの作成に失敗しました");
     }
 
+    // 買い物カテゴリーだけ自動生成
+    const defaultCategory = await prisma.category.create({
+      data: {
+        name: "買い物",
+        type: "PAYMENT",
+        userId: prismaRes.id,
+      }
+    })
+
+    if(!defaultCategory) {
+      throw new Error("初期カテゴリーの作成に失敗しました");
+    }
+
     return {
       success: true,
       message: "ユーザーの作成に成功しました",
