@@ -143,7 +143,7 @@ const SubscriptionForm = ({ row, setIsDialogOpen }: SubscriptionFormProps) => {
                     onChange={(e) =>
                       formField.type === "number"
                         ? field.onChange(Number(e.target.value))
-                        : field.onChange(e.target.value.trim())
+                        : field.onChange(e.target.value)
                     }
                   />
                 </>

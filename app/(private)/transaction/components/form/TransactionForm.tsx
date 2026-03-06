@@ -140,7 +140,7 @@ const TransactionForm = ({ date, categories }: TransactionFormProps) => {
                         type="text"
                         className="p-4 h-14"
                         value={field.value || ""}
-                        onChange={(e) => field.onChange(e.target.value.trim())}
+                        onChange={(e) => field.onChange(e.target.value)}
                         onBlur={field.onBlur}
                       />
                     </Field>

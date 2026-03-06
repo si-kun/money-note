@@ -110,7 +110,7 @@ const EditTransactionForm = ({
                         type="text"
                         className="p-4 h-14"
                         value={field.value || ""}
-                        onChange={(e) => field.onChange(e.target.value.trim())}
+                        onChange={(e) => field.onChange(e.target.value)}
                         onBlur={field.onBlur}
                       />
                     </Field>
@@ -181,7 +181,7 @@ const EditTransactionForm = ({
                       <FloatingLabel label="メモ" fieldState={fieldState} />
                       <Textarea
                         value={field.value}
-                        onChange={(e) => field.onChange(e.target.value.trim())}
+                        onChange={(e) => field.onChange(e.target.value)}
                         className="p-4 h-25 resize-none"
                       />
                     </Field>

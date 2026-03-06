@@ -63,7 +63,7 @@ const ShoppingCartCard = ({
             <Input
               id="ProductName"
               value={addInputProduct}
-              onChange={(e) => setAddInputProduct(e.target.value.trim())}
+              onChange={(e) => setAddInputProduct(e.target.value)}
             />
             <Button type="button" onClick={newAddProduct} variant={"secondary"}>
               追加

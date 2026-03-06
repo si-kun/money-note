@@ -144,7 +144,7 @@ const StockForm = ({ row, setIsDialogOpen,categories }: StockFormProps) => {
                 onChange={(e) =>
                   formField.type === "number"
                     ? field.onChange(Number(e.target.value))
-                    : field.onChange(e.target.value.trim())
+                    : field.onChange(e.target.value)
                 }
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

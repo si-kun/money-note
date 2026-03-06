@@ -1,10 +1,10 @@
 import z from "zod";
 
 export const transactionSchema = z.object({
-    title: z.string().optional(),
+    title: z.string().trim().optional(),
     type: z.enum(["INCOME", "PAYMENT"]),
     categoryId: z.string().min(1,"カテゴリーを選択してください"),
-    memo: z.string().optional(),
+    memo: z.string().trim().optional(),
     amount: z.number().min(1,"金額は1以上で入力してください"),
     addHistories: z.array(z.object({
         id: z.string(),
@@ -17,9 +17,9 @@ export const transactionSchema = z.object({
 })
 
 export const editTransactionSchema = z.object({
-    title: z.string().optional(),
+    title: z.string().trim().optional(),
     categoryId: z.string().min(1,"カテゴリーを選択してください"),
-    memo: z.string().optional(),
+    memo: z.string().trim().optional(),
     amount: z.number().min(1,"金額は1以上で入力してください"),
 })
 
