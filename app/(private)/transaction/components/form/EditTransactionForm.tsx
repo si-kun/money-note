@@ -39,6 +39,10 @@ import {
   getShoppingCategoryId,
 } from "@/utils/category/category";
 import { Category } from "@/generated/prisma/client";
+import NewCategoryInput from "./NewCategoryInput";
+import { useState } from "react";
+import { createTransactionCategory } from "@/app/server-aciton/balance/createTransactionCategory";
+import { toast } from "sonner";
 
 interface EditTransactionFormProps {
   transaction: PaymentWithCategory | IncomeWithCategory;
@@ -53,6 +57,13 @@ const EditTransactionForm = ({
   date,
   categories,
 }: EditTransactionFormProps) => {
+
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [showNewCategory, setShowNewCategory] = useState(false);
+  const [localCategories, setLocalCategories] =
+  useState<Category[]>(categories);
+
+
   const {
     form,
     open,
@@ -66,9 +77,27 @@ const EditTransactionForm = ({
   const payment =
     type === "PAYMENT" ? (transaction as PaymentWithCategory) : null;
 
-  const filteredCategories = filterCategoriesByType(categories, type);
+  const filteredCategories = filterCategoriesByType(localCategories, type);
   const shoppingId = getShoppingCategoryId(categories, categoryIdValue);
   const isShoppingPayment = shoppingId && type === "PAYMENT";
+
+  const handleCreateCategory = async () => {
+    try {
+      const result = await createTransactionCategory({
+        name: newCategoryName,
+        type,
+      });
+      if (result.success && result.data) {
+        setLocalCategories([...localCategories, result.data]);
+        form.setValue("categoryId", result.data.id);
+        setShowNewCategory(false);
+        setNewCategoryName("");
+      }
+    } catch (error) {
+      console.error("Error creating category:", error);
+      toast.error("カテゴリーの作成に失敗しました");
+    }
+  };
 
   return (
     <Dialog
@@ -144,7 +173,15 @@ const EditTransactionForm = ({
                               {cat.name}
                             </SelectItem>
                           ))}
+                          <NewCategoryInput
+                          showNewCategory={showNewCategory}
+                          setShowNewCategory={setShowNewCategory}
+                          newCategoryName={newCategoryName}
+                          setNewCategoryName={setNewCategoryName}
+                          handleCreateCategory={handleCreateCategory}
+                          />
                         </SelectContent>
+                        
                       </Select>
                     </Field>
                   )}

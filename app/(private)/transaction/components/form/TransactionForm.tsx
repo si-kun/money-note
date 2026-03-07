@@ -40,6 +40,7 @@ import {
 import { Category } from "@/generated/prisma/client";
 import { useState } from "react";
 import { createTransactionCategory } from "@/app/server-aciton/balance/createTransactionCategory";
+import NewCategoryInput from "./NewCategoryInput";
 
 interface TransactionFormProps {
   date: string;
@@ -174,23 +175,13 @@ const TransactionForm = ({ date, categories }: TransactionFormProps) => {
                             </SelectItem>
                           ))}
 
-                          <div className="p-2 border-t">
-                            {!showNewCategory ? (
-                              <Button
-                              type="button"
-                                variant={"outline"}
-                                onClick={() => setShowNewCategory(true)}
-                              >
-                                新規作成
-                              </Button>
-                            ) : (
-                              <div className="flex items-center gap-2">
-                                <Input onChange={(e) => setNewCategoryName(e.target.value)} value={newCategoryName} placeholder="カテゴリー名を入力" />
-                                <Button type="button" variant={"outline"} className="bg-green-500 hover:bg-green-400" onClick={handleCreateCategory}>追加</Button>
-                                <Button type="button" variant={"destructive"} onClick={() => setShowNewCategory(false)}>キャンセル</Button>
-                              </div>
-                            )}
-                          </div>
+                          <NewCategoryInput
+                          showNewCategory={showNewCategory}
+                          setShowNewCategory={setShowNewCategory}
+                          newCategoryName={newCategoryName}
+                          setNewCategoryName={setNewCategoryName}
+                          handleCreateCategory={handleCreateCategory}
+                          />
                         </SelectContent>
                       </Select>
                     </Field>
