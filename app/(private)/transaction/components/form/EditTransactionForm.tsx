@@ -79,10 +79,6 @@ const EditTransactionForm = ({
   const shoppingId = getShoppingCategoryId(categories, categoryIdValue);
   const isShoppingPayment = shoppingId && type === "PAYMENT";
 
-  console.log("categories:", categories);
-  console.log("categoryIdValue:", categoryIdValue);
-  console.log("shoppingId:", shoppingId);
-
   useEffect(() => {
     if (!open) {
       const timer = setTimeout(() => {

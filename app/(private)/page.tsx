@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format, getMonth, getYear } from "date-fns";
 import { getIncome } from "../server-action/balance/getIncome";
 import { getPayment } from "../server-action/balance/getPayment";
 import { getSubscription } from "../server-action/balance/getSubscription";
@@ -40,11 +40,21 @@ export default async function Home({
 
   // income,paymentそれぞれの合計金額
   const monthlyIncomeTotal = incomeResult.success
-    ? incomeResult.data.reduce((total, item) => total + item.amount, 0)
+    ? incomeResult.data
+        .filter((item) => {
+          const date = new Date(item.incomeDate);
+          return getYear(date) === year && getMonth(date) + 1 === month;
+        })
+        .reduce((total, item) => total + item.amount, 0)
     : 0;
 
   const monthlyPaymentTotal = paymentResult.success
-    ? paymentResult.data.reduce((total, item) => total + item.amount, 0)
+    ? paymentResult.data
+        .filter((item) => {
+          const date = new Date(item.paymentDate);
+          return getYear(date) === year && getMonth(date) + 1 === month;
+        })
+        .reduce((total, item) => total + item.amount, 0)
     : 0;
 
   // 当日のデータを取得
@@ -54,7 +64,6 @@ export default async function Home({
   const dailyPayment = paymentResult.data.filter(
     (payment) => payment.paymentDate.toISOString().split("T")[0] === date
   );
-
 
   // 合計金額を計算
   const dailyIncomeTotal = dailyIncome.reduce(

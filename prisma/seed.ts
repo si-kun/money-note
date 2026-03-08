@@ -39,20 +39,51 @@ async function main() {
   console.log("シードデータの作成を開始");
 
   //ユーザーテーブルの削除
-  console.log("ユーザーテーブルの削除を開始");
   await prisma.user.upsert({
-    where: { id: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0" },
+    where: { id: "98c875c7-0839-432f-a7b0-e471d5e4610f" },
     update: {},  // 更新しない
     create: {
-      id: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+      id: "98c875c7-0839-432f-a7b0-e471d5e4610f",
       email: "demo-user@gmail.com",
       userName: "デモユーザー",
     },
   })
 
-  // ユーザーの作成
-  console.log("ユーザーの作成を開始");
-  console.log("ユーザーの作成が完了しました");
+  // テーブルを削除
+  console.log("既存のデータを削除中...");
+  await prisma.payment.deleteMany({
+    where: {
+      userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
+    }
+  })
+  await prisma.income.deleteMany({
+    where: {
+      userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
+    }
+  })
+  await prisma.subscription.deleteMany({
+    where: {
+      userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
+    }
+  })
+  await prisma.category.deleteMany({
+    where: {
+      userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
+      NOT: {
+        name: "買い物"
+      },
+    }
+  })
+  await prisma.stockCategory.deleteMany({
+    where: {
+      userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
+    }
+  })
+  await prisma.stock.deleteMany({
+    where: {
+      userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
+    }
+  })
 
   // カテゴリーの作成
   console.log("カテゴリーの作成を開始");
@@ -62,43 +93,37 @@ async function main() {
         id: "cat-1",
         name: "食費",
         type: "PAYMENT",
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
       },
       {
         id: "cat-2",
         name: "交通費",
         type: "PAYMENT",
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
       },
       {
         id: "cat-3",
         name: "娯楽",
         type: "PAYMENT",
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
       },
       {
         id: "cat-4",
         name: "光熱費",
         type: "PAYMENT",
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
       },
       {
         id: "cat-5",
         name: "その他",
         type: "PAYMENT",
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
       },
       {
         id: "cat-6",
         name: "給料",
         type: "INCOME",
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
-      },
-      {
-        id: "cat-7",
-        name: "買い物",
-        type: "PAYMENT",
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
       },
     ],
   });
@@ -130,8 +155,8 @@ async function main() {
         id: `record-${month}-${day}`,
         title: getRondomTitle(`cat-${(day % 5) + 1}`),
         amount: Math.floor(Math.random() * 10000) + 500,
-        paymentDate: new Date(year, month - 1, day),
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        paymentDate: new Date(year, month - 1, day, 12,0,0),
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         categoryId: `cat-${(day % 5) + 1}`,
       });
     }
@@ -151,8 +176,8 @@ async function main() {
       id: `income-${month}`,
       title: "月給",
       amount: Math.floor(Math.random() * 200000) + 100000,
-      incomeDate: new Date(year, month - 1, 1),
-      userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+      incomeDate: new Date(year, month - 1, 1, 12,0,0),
+      userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
       categoryId: `cat-6`,
     });
   }
@@ -172,7 +197,7 @@ async function main() {
       startDate: new Date(year - 1, 5, 15),
       endDate: null,
       monthlyPrice: 1200,
-      userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+      userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
     },
     {
       id: "sub-2",
@@ -180,7 +205,7 @@ async function main() {
       startDate: new Date(year - 2, 3, 10),
       endDate: new Date(year - 1, 4, 11),
       monthlyPrice: 980,
-      userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+      userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
     },
     {
       id: "sub-3",
@@ -188,7 +213,7 @@ async function main() {
       startDate: new Date(year - 3, 7, 20),
       endDate: null,
       monthlyPrice: 500,
-      userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+      userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
     },
     {
       id: "sub-4",
@@ -196,7 +221,7 @@ async function main() {
       startDate: new Date(year, 2, 10),
       endDate: null,
       monthlyPrice: 980,
-      userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+      userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
     }
   );
 
@@ -212,37 +237,37 @@ async function main() {
       {
         id: "stock-cat-1",
         categoryName: "野菜",
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
       },
       {
         id: "stock-cat-2",
         categoryName: "果物",
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
       },
       {
         id: "stock-cat-3",
         categoryName: "乳製品",
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
       },
       {
         id: "stock-cat-4",
         categoryName: "調味料",
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
       },
       {
         id: "stock-cat-5",
         categoryName: "日用品",
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
       },
       {
         id: "stock-cat-6",
         categoryName: "穀物・麺類",
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
       },
       {
         id: "stock-cat-7",
         categoryName: "飲料",
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
       },
     ],
   });
@@ -260,7 +285,7 @@ async function main() {
         minQuantity: 3,
         unit: "個",
         unitPrice: 150,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-2",
       },
       {
@@ -270,7 +295,7 @@ async function main() {
         minQuantity: 2,
         unit: "房",
         unitPrice: 120,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-2",
       },
 
@@ -282,7 +307,7 @@ async function main() {
         minQuantity: 1,
         unit: "本",
         unitPrice: 200,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-3",
       },
       {
@@ -292,7 +317,7 @@ async function main() {
         minQuantity: 1,
         unit: "パック",
         unitPrice: 250,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-3",
       },
       {
@@ -302,7 +327,7 @@ async function main() {
         minQuantity: 1,
         unit: "個",
         unitPrice: 300,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-3",
       },
       {
@@ -312,7 +337,7 @@ async function main() {
         minQuantity: 1,
         unit: "個",
         unitPrice: 120,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-3",
       },
       {
@@ -322,7 +347,7 @@ async function main() {
         minQuantity: 1,
         unit: "パック",
         unitPrice: 350,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-3",
       },
 
@@ -334,7 +359,7 @@ async function main() {
         minQuantity: 2,
         unit: "ロール",
         unitPrice: 100,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-5",
       },
       {
@@ -344,7 +369,7 @@ async function main() {
         minQuantity: 2,
         unit: "箱",
         unitPrice: 180,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-5",
       },
       {
@@ -354,7 +379,7 @@ async function main() {
         minQuantity: 1,
         unit: "本",
         unitPrice: 450,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-5",
       },
       {
@@ -364,7 +389,7 @@ async function main() {
         minQuantity: 1,
         unit: "本",
         unitPrice: 600,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-5",
       },
       {
@@ -374,7 +399,7 @@ async function main() {
         minQuantity: 1,
         unit: "個",
         unitPrice: 250,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-5",
       },
       {
@@ -384,7 +409,7 @@ async function main() {
         minQuantity: 1,
         unit: "個",
         unitPrice: 300,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-5",
       },
 
@@ -396,7 +421,7 @@ async function main() {
         minQuantity: 1,
         unit: "kg",
         unitPrice: 500,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-6",
       },
       {
@@ -406,7 +431,7 @@ async function main() {
         minQuantity: 2,
         unit: "袋",
         unitPrice: 180,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-6",
       },
       {
@@ -416,7 +441,7 @@ async function main() {
         minQuantity: 1,
         unit: "斤",
         unitPrice: 150,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-6",
       },
 
@@ -428,7 +453,7 @@ async function main() {
         minQuantity: 3,
         unit: "個",
         unitPrice: 50,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-1",
       },
       {
@@ -438,7 +463,7 @@ async function main() {
         minQuantity: 4,
         unit: "個",
         unitPrice: 40,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-1",
       },
       {
@@ -448,7 +473,7 @@ async function main() {
         minQuantity: 2,
         unit: "本",
         unitPrice: 60,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-1",
       },
       {
@@ -458,7 +483,7 @@ async function main() {
         minQuantity: 1,
         unit: "玉",
         unitPrice: 180,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-1",
       },
       {
@@ -468,7 +493,7 @@ async function main() {
         minQuantity: 1,
         unit: "丁",
         unitPrice: 80,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-1",
       },
       {
@@ -478,7 +503,7 @@ async function main() {
         minQuantity: 2,
         unit: "パック",
         unitPrice: 90,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-1",
       },
 
@@ -490,7 +515,7 @@ async function main() {
         minQuantity: 1,
         unit: "袋",
         unitPrice: 200,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-4",
       },
       {
@@ -500,7 +525,7 @@ async function main() {
         minQuantity: 1,
         unit: "袋",
         unitPrice: 150,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-4",
       },
       {
@@ -510,7 +535,7 @@ async function main() {
         minQuantity: 1,
         unit: "本",
         unitPrice: 300,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-4",
       },
       {
@@ -520,7 +545,7 @@ async function main() {
         minQuantity: 1,
         unit: "本",
         unitPrice: 350,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-4",
       },
 
@@ -532,7 +557,7 @@ async function main() {
         minQuantity: 3,
         unit: "本",
         unitPrice: 180,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-7",
       },
       {
@@ -542,7 +567,7 @@ async function main() {
         minQuantity: 2,
         unit: "袋",
         unitPrice: 500,
-        userId: "2f604489-0ac2-4f25-ba10-8bbe1035c0c0",
+        userId: "98c875c7-0839-432f-a7b0-e471d5e4610f",
         stockCategoryId: "stock-cat-7",
       },
     ],
