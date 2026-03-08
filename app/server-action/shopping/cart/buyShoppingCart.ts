@@ -36,6 +36,7 @@ export const buyShoppingCart = async (
     // 買い物カテゴリーを取得
     const shoppingCategory = await tx.category.findFirst({
       where: {
+        userId,
         name: "買い物",
       },
     });

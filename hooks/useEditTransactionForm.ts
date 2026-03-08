@@ -27,6 +27,8 @@ export const useEditTransactionForm = ({
   type,
 }: UseEditTransactionFormReturn) => {
 
+  console.log("transaction.categoryId:", transaction.categoryId)
+
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -76,7 +78,7 @@ export const useEditTransactionForm = ({
         }
 
         toast.success(result.message);
-        form.reset();
+        // form.reset();
         setOpen(false);
       } catch (error) {
         console.error("Error submitting form:", error);
@@ -100,7 +102,6 @@ export const useEditTransactionForm = ({
         console.error("Error deleting transaction:", error);
         toast.error("取引の削除中にエラーが発生しました");
       }
-    // })
   };
 
   return {

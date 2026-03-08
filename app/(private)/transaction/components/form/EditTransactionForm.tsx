@@ -40,7 +40,7 @@ import {
 } from "@/utils/category/category";
 import { Category } from "@/generated/prisma/client";
 import NewCategoryInput from "./NewCategoryInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createTransactionCategory } from "@/app/server-action/balance/createTransactionCategory";
 import { toast } from "sonner";
 
@@ -57,12 +57,10 @@ const EditTransactionForm = ({
   date,
   categories,
 }: EditTransactionFormProps) => {
-
   const [newCategoryName, setNewCategoryName] = useState("");
   const [showNewCategory, setShowNewCategory] = useState(false);
   const [localCategories, setLocalCategories] =
-  useState<Category[]>(categories);
-
+    useState<Category[]>(categories);
 
   const {
     form,
@@ -80,6 +78,20 @@ const EditTransactionForm = ({
   const filteredCategories = filterCategoriesByType(localCategories, type);
   const shoppingId = getShoppingCategoryId(categories, categoryIdValue);
   const isShoppingPayment = shoppingId && type === "PAYMENT";
+
+  console.log("categories:", categories);
+  console.log("categoryIdValue:", categoryIdValue);
+  console.log("shoppingId:", shoppingId);
+
+  useEffect(() => {
+    if (!open) {
+      const timer = setTimeout(() => {
+        form.reset()
+      }, 300)
+      return () => clearTimeout(timer)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open])
 
   const handleCreateCategory = async () => {
     try {
@@ -103,9 +115,6 @@ const EditTransactionForm = ({
     <Dialog
       open={open}
       onOpenChange={(isOpen) => {
-        if (isOpen === false) {
-          form.reset();
-        }
         setOpen(isOpen);
       }}
     >
@@ -174,14 +183,13 @@ const EditTransactionForm = ({
                             </SelectItem>
                           ))}
                           <NewCategoryInput
-                          showNewCategory={showNewCategory}
-                          setShowNewCategory={setShowNewCategory}
-                          newCategoryName={newCategoryName}
-                          setNewCategoryName={setNewCategoryName}
-                          handleCreateCategory={handleCreateCategory}
+                            showNewCategory={showNewCategory}
+                            setShowNewCategory={setShowNewCategory}
+                            newCategoryName={newCategoryName}
+                            setNewCategoryName={setNewCategoryName}
+                            handleCreateCategory={handleCreateCategory}
                           />
                         </SelectContent>
-                        
                       </Select>
                     </Field>
                   )}
