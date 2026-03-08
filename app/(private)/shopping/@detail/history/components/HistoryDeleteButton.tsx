@@ -1,6 +1,6 @@
 "use client"
 
-import { deleteHistory } from '@/app/server-aciton/shopping/history/deleteHistory'
+import { deleteHistory } from '@/app/server-action/shopping/history/deleteHistory'
 import DeleteConfirmDialog from '@/components/dialog/DeleteConfirmDialog'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'

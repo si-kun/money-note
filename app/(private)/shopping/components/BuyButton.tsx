@@ -1,6 +1,6 @@
 "use client";
 
-import { buyShoppingCart } from "@/app/server-aciton/shopping/cart/buyShoppingCart";
+import { buyShoppingCart } from "@/app/server-action/shopping/cart/buyShoppingCart";
 import { ShoppingCartWithItems } from "@/app/types/shopping/shopping";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";

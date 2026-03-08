@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteCart } from "@/app/server-aciton/shopping/cart/deleteCart";
+import { deleteCart } from "@/app/server-action/shopping/cart/deleteCart";
 import {
   AlertDialog,
   AlertDialogAction,

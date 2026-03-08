@@ -1,10 +1,10 @@
 import { format } from "date-fns";
-import { getIncome } from "../server-aciton/balance/getIncome";
-import { getPayment } from "../server-aciton/balance/getPayment";
-import { getSubscription } from "../server-aciton/balance/getSubscription";
+import { getIncome } from "../server-action/balance/getIncome";
+import { getPayment } from "../server-action/balance/getPayment";
+import { getSubscription } from "../server-action/balance/getSubscription";
 import CalendareSection from "./transaction/components/calendar/CalendareSection";
 import SummarySection from "./transaction/components/summary/SummarySection";
-import { getCategory } from "../server-aciton/balance/getCategory";
+import { getCategory } from "../server-action/balance/getCategory";
 
 export const dynamic = "force-dynamic";
 

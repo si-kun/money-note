@@ -1,6 +1,6 @@
 "use client";
 
-import { updateStockQuantity } from "@/app/server-aciton/stock/updateStockQuantity";
+import { updateStockQuantity } from "@/app/server-action/stock/updateStockQuantity";
 import { Button } from "@/components/ui/button";
 import { Stock } from "@/generated/prisma/client";
 import { useEffect, useRef, useState } from "react";

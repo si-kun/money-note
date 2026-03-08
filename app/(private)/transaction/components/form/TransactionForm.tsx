@@ -39,7 +39,7 @@ import {
 } from "@/utils/category/category";
 import { Category } from "@/generated/prisma/client";
 import { useState } from "react";
-import { createTransactionCategory } from "@/app/server-aciton/balance/createTransactionCategory";
+import { createTransactionCategory } from "@/app/server-action/balance/createTransactionCategory";
 import NewCategoryInput from "./NewCategoryInput";
 
 interface TransactionFormProps {

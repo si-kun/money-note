@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { ShoppingCartItemTable } from "./shoppingCartData-table";
 import SelectedCart from "@/components/select/SelectedCart";
 import { ColumnDef } from "@tanstack/react-table";
-import { lowStockSelectedCart } from "@/app/server-aciton/shopping/cart/lowStockSelectedCart";
+import { lowStockSelectedCart } from "@/app/server-action/shopping/cart/lowStockSelectedCart";
 import { toast } from "sonner";
 import { ShoppingCartItemWithStock, ShoppingCartWithItems } from "@/app/types/shopping/shopping";
 

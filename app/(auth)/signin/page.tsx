@@ -7,10 +7,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CardDescription } from "@/components/ui/card";
 import Link from "next/link";
 import { toast } from "sonner";
-import { signin } from "@/app/server-aciton/auth/signin";
+import { signin } from "@/app/server-action/auth/signin";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { guestLogin } from "@/app/server-aciton/auth/guestLogin";
+import { guestLogin } from "@/app/server-action/auth/guestLogin";
 import { useState } from "react";
 
 const SigninPage = () => {

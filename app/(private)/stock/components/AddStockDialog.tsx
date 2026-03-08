@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Table } from "@tanstack/react-table";
 import SelectedCart from "../../../../components/select/SelectedCart";
 import { useState } from "react";
-import { addStocksToCart } from "@/app/server-aciton/stock/addStocksToCart";
+import { addStocksToCart } from "@/app/server-action/stock/addStocksToCart";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";

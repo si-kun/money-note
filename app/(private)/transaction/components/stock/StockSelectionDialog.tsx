@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useEffect, useState } from "react";
-import { getAllStock } from "@/app/server-aciton/stock/getAllStock";
+import { getAllStock } from "@/app/server-action/stock/getAllStock";
 import { StockListDataTable } from "./StockListDataTable";
 import { stockListColumns } from "./stockListColumns";
 import { Stock } from "@/generated/prisma/client";

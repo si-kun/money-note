@@ -21,7 +21,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useState } from "react";
-import { editShoppingHistory } from "@/app/server-aciton/shopping/history/editShoppingHIstory";
+import { editShoppingHistory } from "@/app/server-action/shopping/history/editShoppingHIstory";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";

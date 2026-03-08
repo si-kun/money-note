@@ -1,6 +1,6 @@
 "use client";
 
-import { createShoppingCart } from "@/app/server-aciton/shopping/cart/createCart";
+import { createShoppingCart } from "@/app/server-action/shopping/cart/createCart";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

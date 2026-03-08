@@ -1,4 +1,4 @@
-import { getShoppingCart } from "@/app/server-aciton/shopping/cart/getShoppingCart";
+import { getShoppingCart } from "@/app/server-action/shopping/cart/getShoppingCart";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CreateCart from "../../@detail/cart/components/CreateCart";

@@ -1,6 +1,6 @@
 "use client";
 
-import { SubscriptionResponse } from "@/app/server-aciton/balance/getSubscription";
+import { SubscriptionResponse } from "@/app/server-action/balance/getSubscription";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {

@@ -12,10 +12,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 // import { useCategories } from "./useCategories";
-import { editPayment } from "@/app/server-aciton/balance/editPayment";
+import { editPayment } from "@/app/server-action/balance/editPayment";
 import { toast } from "sonner";
-import { editIncome } from "@/app/server-aciton/balance/editIncome";
-import { deleteTransaction } from "@/app/server-aciton/balance/deleteTransaction";
+import { editIncome } from "@/app/server-action/balance/editIncome";
+import { deleteTransaction } from "@/app/server-action/balance/deleteTransaction";
 
 interface UseEditTransactionFormReturn {
   transaction: PaymentWithCategory | IncomeWithCategory;

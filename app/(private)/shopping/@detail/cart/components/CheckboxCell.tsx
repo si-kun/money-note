@@ -1,4 +1,4 @@
-import { updateShoppingChecked } from "@/app/server-aciton/shopping/cart/updateShoppingChecked";
+import { updateShoppingChecked } from "@/app/server-action/shopping/cart/updateShoppingChecked";
 import { ShoppingCartItemWithStock } from "@/app/types/shopping/shopping";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Row } from "@tanstack/react-table";

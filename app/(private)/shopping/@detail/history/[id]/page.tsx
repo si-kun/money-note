@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/card";
 import EditHistoryDialog from "../components/EditHistoryDialog";
 import { historyColumns } from "../components/historyColumn";
-import { getShoppingHistoryId } from "@/app/server-aciton/shopping/history/getShoppingHistoryId";
+import { getShoppingHistoryId } from "@/app/server-action/shopping/history/getShoppingHistoryId";
 import { ShoppinghistoryDataTable } from "../components/shoppingHistoryDataTable";
 import HistoryDeleteButton from "../components/HistoryDeleteButton";
 

@@ -6,7 +6,7 @@ import { format } from "date-fns";
 import HeaderButton from "./components/HeaderButton";
 import SubscriptionForm from "./components/SubscriptionForm";
 import ActionsCell from "@/components/dataTable/ActionsCell";
-import { deleteSubscription } from "@/app/server-aciton/subscription/deleteSubscription";
+import { deleteSubscription } from "@/app/server-action/subscription/deleteSubscription";
 import { toast } from "sonner";
 import { Subscription } from "@/generated/prisma/client";
 

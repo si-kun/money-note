@@ -1,6 +1,6 @@
 "use client";
 
-import { signOut } from "@/app/server-aciton/auth/signout";
+import { signOut } from "@/app/server-action/auth/signout";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";

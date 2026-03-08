@@ -1,7 +1,7 @@
 "use client";
 
-import { addStock } from "@/app/server-aciton/stock/addStock";
-import { editStock } from "@/app/server-aciton/stock/editStock";
+import { addStock } from "@/app/server-action/stock/addStock";
+import { editStock } from "@/app/server-action/stock/editStock";
 import { StockFormType, stockSchema } from "@/app/types/zod/stock";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";

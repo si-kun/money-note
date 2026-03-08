@@ -1,4 +1,4 @@
-import { updateCategory } from "@/app/server-aciton/stock/updateCategory";
+import { updateCategory } from "@/app/server-action/stock/updateCategory";
 import {
   Select,
   SelectContent,

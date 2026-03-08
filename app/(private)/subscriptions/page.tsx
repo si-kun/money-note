@@ -1,6 +1,6 @@
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
-import { getAllSubscription } from "@/app/server-aciton/subscription/getAllSubscription";
+import { getAllSubscription } from "@/app/server-action/subscription/getAllSubscription";
 
 export const dynamic = "force-dynamic";
 

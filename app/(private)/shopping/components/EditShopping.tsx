@@ -15,13 +15,13 @@ import { Field, FieldGroup } from "@/components/ui/field";
 
 import { Row } from "@tanstack/react-table";
 import FormControllerStrNum from "@/components/form/FormControllerStrNum";
-import { editShoppingCartItem } from "@/app/server-aciton/shopping/cart/editShoppingCartItem";
+import { editShoppingCartItem } from "@/app/server-action/shopping/cart/editShoppingCartItem";
 import {
   ShoppingCartItemInput,
   shoppingCartItemSchema,
 } from "@/app/types/zod/shoppingCartItem";
 import { ShoppingCartItemWithStock } from "@/app/types/shopping/shopping";
-import { editShoppingHistoryItem } from "@/app/server-aciton/shopping/history/editShoppingHistoryItem";
+import { editShoppingHistoryItem } from "@/app/server-action/shopping/history/editShoppingHistoryItem";
 
 interface EditShoppingProps {
   row: Row<ShoppingCartItemWithStock>;

@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import Summary from "./Summary";
 import MonthryTabsContent from "./MonthryTabsContent";
-import { SubscriptionResponse } from "@/app/server-aciton/balance/getSubscription";
+import { SubscriptionResponse } from "@/app/server-action/balance/getSubscription";
 import {
   IncomeWithCategory,
   PaymentWithCategory,

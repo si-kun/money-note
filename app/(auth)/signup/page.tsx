@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { signupSchema, SignupSchemaType } from "../types/authSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signup } from "@/app/server-aciton/auth/signup";
+import { signup } from "@/app/server-action/auth/signup";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import AuthForm from "../components/AuthForm";

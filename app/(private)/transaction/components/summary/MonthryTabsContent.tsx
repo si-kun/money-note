@@ -2,7 +2,7 @@ import SummaryCard from "./SummaryCard";
 
 import SubscriptionCard from "@/app/(private)/subscriptions/components/SubscriptionCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { SubscriptionResponse } from "@/app/server-aciton/balance/getSubscription";
+import { SubscriptionResponse } from "@/app/server-action/balance/getSubscription";
 
 interface MonthryTabsContentProps {
   year: number;

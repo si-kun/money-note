@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import HeaderButton from "../../subscriptions/components/HeaderButton";
 import ActionsCell from "@/components/dataTable/ActionsCell";
-import { deleteStock } from "@/app/server-aciton/stock/deleteStock";
+import { deleteStock } from "@/app/server-action/stock/deleteStock";
 import { toast } from "sonner";
 import StockForm from "./StockForm";
 

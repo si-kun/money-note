@@ -3,7 +3,7 @@
 import ActionsCell from "@/components/dataTable/ActionsCell";
 import { ColumnDef } from "@tanstack/react-table";
 import EditShopping from "../../../components/EditShopping";
-import { deleteHistoryItem } from "@/app/server-aciton/shopping/history/deleteHistoryItem";
+import { deleteHistoryItem } from "@/app/server-action/shopping/history/deleteHistoryItem";
 import { ShoppingCartItemWithStock } from "@/app/types/shopping/shopping";
 
 export const historyEditColumns: ColumnDef<ShoppingCartItemWithStock>[] = [

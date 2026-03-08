@@ -1,4 +1,4 @@
-import { getAllYearData } from "@/app/server-aciton/statistics/getAllYearData";
+import { getAllYearData } from "@/app/server-action/statistics/getAllYearData";
 import StatisticsClient from "./components/StatisticsClient";
 
 export const dynamic = "force-dynamic";

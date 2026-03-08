@@ -2,7 +2,7 @@
 
 import ActionsCell from "@/components/dataTable/ActionsCell";
 import { ColumnDef } from "@tanstack/react-table";
-import { deleteShoppingCartItem } from "@/app/server-aciton/shopping/cart/deleteShoppinCartItem";
+import { deleteShoppingCartItem } from "@/app/server-action/shopping/cart/deleteShoppinCartItem";
 import { toast } from "sonner";
 import CheckboxCell from "./CheckboxCell";
 import EditShopping from "../../../components/EditShopping";

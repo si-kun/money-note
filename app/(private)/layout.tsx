@@ -1,7 +1,7 @@
 import AppSidebar from "@/components/sidebar/AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { getAllStock } from "../server-aciton/stock/getAllStock";
-import { handleStockCartSyncBatch } from "../server-aciton/stock/handleStockCartSyncBatch";
+import { getAllStock } from "../server-action/stock/getAllStock";
+import { handleStockCartSyncBatch } from "../server-action/stock/handleStockCartSyncBatch";
 
 interface layoutProps {
   children: React.ReactNode;

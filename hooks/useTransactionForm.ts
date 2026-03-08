@@ -1,6 +1,6 @@
 "use client";
 
-import { createTransaction } from "@/app/server-aciton/balance/createTransaction";
+import { createTransaction } from "@/app/server-action/balance/createTransaction";
 import { ShoppingHistoryWithItems } from "@/app/types/shopping/shopping";
 import {
   transactionSchema,

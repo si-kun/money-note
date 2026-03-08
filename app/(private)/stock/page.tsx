@@ -1,7 +1,7 @@
 import { StockDataTable } from "@/app/(private)/stock/components/stockData-table";
-import { getAllStock } from "@/app/server-aciton/stock/getAllStock";
-import { getShoppingCart } from "@/app/server-aciton/shopping/cart/getShoppingCart";
-import { getStockCategory } from "@/app/server-aciton/getStockCategory";
+import { getAllStock } from "@/app/server-action/stock/getAllStock";
+import { getShoppingCart } from "@/app/server-action/shopping/cart/getShoppingCart";
+import { getStockCategory } from "@/app/server-action/getStockCategory";
 
 export const dynamic = "force-dynamic";
 
