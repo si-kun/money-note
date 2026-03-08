@@ -9,7 +9,7 @@ import interractionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { EventClickArg } from "@fullcalendar/core";
 
 import { Button } from "@/components/ui/button";
-import { useMemo, useRef } from "react";
+import { useMemo } from "react";
 import {
   BalanceData,
   IncomeWithCategory,
@@ -23,7 +23,6 @@ interface CalendarSectionProps {
   initialIncomeData: IncomeWithCategory[];
   initialPaymentData: PaymentWithCategory[];
   today: Date;
-  
 }
 
 const CalendareSection = ({
@@ -34,8 +33,6 @@ const CalendareSection = ({
 }: CalendarSectionProps) => {
   const router = useRouter();
 
-  const calendarRef = useRef<FullCalendar>(null);
-
   const handlePrevMonth = () => {
     const newMonth = initialMonth === 1 ? 12 : initialMonth - 1;
     const newYear = initialMonth === 1 ? initialYear - 1 : initialYear;
@@ -43,7 +40,6 @@ const CalendareSection = ({
     const url = `/?year=${newYear}&month=${newMonth}`;
 
     router.push(url);
-    calendarRef.current?.getApi().prev();
   };
 
   const handleNextMonth = () => {
@@ -53,17 +49,20 @@ const CalendareSection = ({
     const url = `/?year=${newYear}&month=${newMonth}`;
 
     router.push(url);
-    calendarRef.current?.getApi().next();
-  }
+  };
 
   const handleDateClick = (arg: DateClickArg) => {
-    const clickedDate = arg.dateStr
-    router.push(`/?year=${initialYear}&month=${initialMonth}&date=${clickedDate}`)
+    const clickedDate = arg.dateStr;
+    router.push(
+      `/?year=${initialYear}&month=${initialMonth}&date=${clickedDate}`
+    );
   };
 
   const handleEventClick = (arg: EventClickArg) => {
-    const clickedDate = arg.event.startStr
-    router.push(`/?year=${initialYear}&month=${initialMonth}&date=${clickedDate}`)
+    const clickedDate = arg.event.startStr;
+    router.push(
+      `/?year=${initialYear}&month=${initialMonth}&date=${clickedDate}`
+    );
   };
   const events = useMemo(() => {
     const tempBalanceData: BalanceData = {};
@@ -86,14 +85,14 @@ const CalendareSection = ({
 
     // イベント配列を生成
     const result = Object.entries(tempBalanceData).map(([date, data]) => ({
-      start:date,
+      start: date,
       extendedProps: {
         income: data.income,
         payment: data.payment,
         balance: data.income - data.payment,
       },
     }));
-    return result
+    return result;
   }, [initialPaymentData, initialIncomeData]);
 
   return (
@@ -106,11 +105,11 @@ const CalendareSection = ({
         <Button onClick={handleNextMonth}>Next</Button>
       </div>
       <FullCalendar
-        ref={calendarRef}
+        key={`${initialYear}-${initialMonth}`}
         locale={"ja"}
         plugins={[dayGridPlugin, interractionPlugin]}
         initialView="dayGridMonth"
-        initialDate={new Date(initialYear, initialMonth - 1,1)}
+        initialDate={new Date(initialYear, initialMonth - 1, 1)}
         dayCellClassNames={"cursor-pointer"}
         events={events}
         dateClick={handleDateClick}
