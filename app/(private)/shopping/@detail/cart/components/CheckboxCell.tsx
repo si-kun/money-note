@@ -2,8 +2,7 @@ import { updateShoppingChecked } from "@/app/server-action/shopping/cart/updateS
 import { ShoppingCartItemWithStock } from "@/app/types/shopping/shopping";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Row } from "@tanstack/react-table";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useOptimistic, useTransition } from "react";
 import { toast } from "sonner";
 
 interface CheckboxCellProps {
@@ -12,13 +11,14 @@ interface CheckboxCellProps {
 
 const CheckboxCell = ({ row }: CheckboxCellProps) => {
 
-  const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [optimisticChecked, setOptimisticChecked] = useOptimistic(row.original.checked)
 
 
   const handleCheckedChange = () => {
     startTransition(async () => {
       try {
+        setOptimisticChecked((prev) => !prev);
         const result = await updateShoppingChecked(
           row.original.id,
           !row.original.checked
@@ -28,7 +28,6 @@ const CheckboxCell = ({ row }: CheckboxCellProps) => {
           toast.error(result.message || "チェック状態の更新に失敗しました。");
           return;
         }
-        router.refresh();
       } catch (error) {
         console.error("Error updating shopping checked status:", error);
         toast.error("チェック状態の更新に失敗しました。");
@@ -42,11 +41,11 @@ const CheckboxCell = ({ row }: CheckboxCellProps) => {
         className={`data-[state=checked]:bg-green-400 data-[state=checked]:border-none ${
           isPending ? "opacity-50" : ""
         }`}
-        checked={row.original.checked}
+        checked={optimisticChecked}
         onCheckedChange={handleCheckedChange}
         disabled={isPending}
       />
-      {/* ✨ 処理中はスピナー表示（オプション） */}
+      {/*  処理中はスピナー表示 */}
       {isPending && (
         <div className="animate-spin h-3 w-3 border-2 border-blue-500 border-t-transparent rounded-full" />
       )}

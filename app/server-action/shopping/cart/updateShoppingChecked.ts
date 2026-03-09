@@ -2,6 +2,7 @@
 
 import { ApiResponse } from "@/app/types/api/api";
 import { prisma } from "@/lib/prisma/prisma";
+import { revalidatePath } from "next/cache";
 
 export const updateShoppingChecked = async (
   id: string,
@@ -15,19 +16,19 @@ export const updateShoppingChecked = async (
       },
     });
 
-    // revalidatePath("/shopping");
+    revalidatePath("/shopping/cart/[id]");
 
     return {
       success: true,
       data: null,
-      message: "Shopping checked status updated successfully.",
+      message: "チェック状態の更新に成功しました。",
     };
   } catch (error) {
     console.error("Error updating shopping checked status:", error);
     return {
       success: false,
       data: null,
-      message: "Failed to update shopping checked status.",
+      message: "チェック状態の更新に失敗しました。",
     };
   }
 };
