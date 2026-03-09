@@ -56,6 +56,9 @@ const CalendarField = ({ formField,field, open, setOpen }: CalendarFieldProps) =
             selected={field.value instanceof Date ? field.value : undefined}
             captionLayout="dropdown"
             onSelect={(date) => {
+              if (date) {
+                date.setHours(12, 0, 0, 0);
+              }
               field.onChange(date);
               setOpen(false);
             }}
