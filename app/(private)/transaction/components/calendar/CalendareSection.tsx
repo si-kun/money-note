@@ -16,6 +16,7 @@ import {
   PaymentWithCategory,
 } from "@/app/types/transaction/transaction";
 import { useRouter } from "next/navigation";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 interface CalendarSectionProps {
   initialYear: number;
@@ -98,11 +99,11 @@ const CalendareSection = ({
   return (
     <div className="w-[65%] space-y-4">
       <div className="flex items-center justify-between">
-        <Button onClick={handlePrevMonth}>Prev</Button>
+        <Button type="button" variant={"outline"} onClick={handlePrevMonth}><ArrowLeft />Prev</Button>
         <h2 className="text-xl font-bold">
           {initialYear}年{initialMonth}月収支カレンダー
         </h2>
-        <Button onClick={handleNextMonth}>Next</Button>
+        <Button type="button" variant={"outline"} onClick={handleNextMonth}>Next<ArrowRight /></Button>
       </div>
       <FullCalendar
         key={`${initialYear}-${initialMonth}`}

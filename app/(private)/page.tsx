@@ -59,10 +59,10 @@ export default async function Home({
 
   // 当日のデータを取得
   const dailyIncome = incomeResult.data.filter(
-    (income) => income.incomeDate.toISOString().split("T")[0] === date
+    (income) => format(new Date(income.incomeDate), "yyyy-MM-dd") === date
   );
   const dailyPayment = paymentResult.data.filter(
-    (payment) => payment.paymentDate.toISOString().split("T")[0] === date
+    (payment) => format(new Date(payment.paymentDate), "yyyy-MM-dd") === date
   );
 
   // 合計金額を計算
