@@ -94,9 +94,6 @@ const TransactionForm = ({ date, categories }: TransactionFormProps) => {
     <Dialog
       open={open}
       onOpenChange={(isOpen) => {
-        if (isOpen === false) {
-          form.reset();
-        }
         setOpen(isOpen);
       }}
     >

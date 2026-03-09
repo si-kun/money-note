@@ -54,6 +54,16 @@ export const useTransactionForm = (date: string) => {
     name: "addHistories",
   }) || [];
 
+  useEffect(() => {
+    if(!open) {
+      const timer = setTimeout(() => {
+        form.reset()
+      },300)
+      return () => clearTimeout(timer)
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  },[open])
+
   
   const newAddProduct = () => {
     // 空文字だったら追加しない

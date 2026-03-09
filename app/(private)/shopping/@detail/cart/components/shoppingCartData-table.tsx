@@ -36,7 +36,7 @@ export function ShoppingCartItemTable<TData extends {stock : Stock | null}>({
     if(!stock || stock?.minQuantity === null) return "";
 
     if(stock && stock.quantity < stock.minQuantity) {
-      return "bg-red-200";
+      return "bg-red-50";
     }
 
     return ""

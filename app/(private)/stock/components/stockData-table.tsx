@@ -178,7 +178,7 @@ export function StockDataTable<TData extends Stock>({
                   className={`${
                     row.original.quantity !== null &&
                     row.original.quantity < (row.original.minQuantity ?? 0)
-                      ? "bg-red-100"
+                      ? "bg-red-50"
                       : ""
                   }`}
                 >
