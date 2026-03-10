@@ -9,6 +9,12 @@ generator client {
   output   = "../generated/prisma"
 }
 
+generator markdown {
+  provider = "prisma-markdown"
+  output =  "./ERD.md"
+  title = "MoneyNote"
+}
+
 datasource db {
   provider = "postgresql"
 }

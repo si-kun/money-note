@@ -1,16 +1,17 @@
 # プロジェクトの概要
 
-MoneyNote、**「買い物履歴」「収支カレンダー」「在庫管理」が自動連係する家計管理アプリ**です。
+MoneyNoteは、**「買い物履歴」「収支カレンダー」「在庫管理」が自動連係する家計管理アプリ**です。
 
-日々の買い物や消耗品を記録するだけで、在庫管理と家計簿が自動で更新されるため、
-複数のアプリを使い分ける必要がなく、家計管理をシンプルに行うことができます。
+日々の買い物や消耗品を記録するだけで
+在庫管理と家計簿が自動で更新されるため、
+複数のアプリを使い分ける必要がなく
+家計管理をシンプルに行うことができます。
 
-購入ボタン一つで、在庫数が更新され、収支も自動で記録されるため、日々の買い物や家計管理が非常に楽になります。
-**設定した在庫を下回ると専用の買い物リストに自動で追加**されるため、買い忘れ防止にも役立ちます。
+**購入記録を一度入力するだけで、在庫管理と家計簿の両方が更新される設計になっています。**
 
 # デモサイト
 [MoneyNote](https://money-note-eight.vercel.app)
-ゲストログインボタンからすぐにお試しいただけます。
+ゲストログインボタンからすぐにお試しいただけます。<br>
 **※デモ環境のデータは定期的にリセットされる場合があります。**
 
 # 主な機能
@@ -28,7 +29,6 @@ MoneyNote、**「買い物履歴」「収支カレンダー」「在庫管理」
   - 年間での収支グラフを表示
 
 # 使用技術
-
 - **フロントエンド**: Next.js(App Router),
   TypeScript, Tailwind CSS, shadcn/ui,
   React Hook Form, Zod, TanStack Table,
@@ -37,8 +37,114 @@ MoneyNote、**「買い物履歴」「収支カレンダー」「在庫管理」
 - **認証**: Supabase Auth
 - **デプロイ**: Vercel
 
-# 実装予定の機能
-* サブスク管理(基本機能は実装済み)
-  - 収支カレンダーとの連携
+## スクリーンショット
+### トップページ
+![トップページ](public/screenshot/top.jpg)
+### 在庫管理ページ
+![在庫管理ページ](public/screenshot/stock.jpg)
+### 買い物リストページ
+![買い物リストページ](public/screenshot/shopping_cart.jpg)
+### 収支グラフページ
+![収支グラフページ](public/screenshot/statistics.jpg)
 
+# ER図
+```mermaid
+erDiagram
+"User" {
+  String id PK
+  String email UK
+  String userName
+}
+"Payment" {
+  String id PK
+  String title "nullable"
+  String memo "nullable"
+  Int amount
+  DateTime paymentDate
+  String userId FK
+  String categoryId FK
+}
+"Income" {
+  String id PK
+  String title "nullable"
+  String memo "nullable"
+  Int amount
+  DateTime incomeDate
+  String categoryId FK
+  String userId FK
+}
+"Subscription" {
+  String id PK
+  String name
+  DateTime startDate
+  DateTime endDate "nullable"
+  Int monthlyPrice
+  String userId FK
+}
+"Category" {
+  String id PK
+  String name
+  CategoryType type
+  String userId FK
+}
+"Stock" {
+  String id PK
+  String name
+  Int quantity
+  Int minQuantity "nullable"
+  String unit
+  Int unitPrice "nullable"
+  String stockCategoryId FK "nullable"
+  String userId FK
+}
+"StockCategory" {
+  String id PK
+  String categoryName
+  String userId FK
+}
+"ShoppingCart" {
+  String id PK
+  String name
+  String userId FK
+}
+"ShoppingHistory" {
+  String id PK
+  String name "nullable"
+  DateTime date
+  Int totalPrice "nullable"
+  String paymentId FK,UK "nullable"
+  String userId FK
+}
+"ShoppingCartItem" {
+  String id PK
+  String itemName
+  Int quantity
+  String unit
+  Int unitPrice "nullable"
+  Boolean checked
+  String memo "nullable"
+  String cartId FK "nullable"
+  String historyId FK "nullable"
+  String stockId FK "nullable"
+}
+"Payment" }o--|| "User" : user
+"Payment" }o--|| "Category" : category
+"Income" }o--|| "User" : user
+"Income" }o--|| "Category" : category
+"Subscription" }o--|| "User" : user
+"Category" }o--|| "User" : user
+"Stock" }o--o| "StockCategory" : stockCategory
+"Stock" }o--|| "User" : user
+"StockCategory" }o--|| "User" : user
+"ShoppingCart" }o--|| "User" : user
+"ShoppingHistory" |o--o| "Payment" : payment
+"ShoppingHistory" }o--|| "User" : user
+"ShoppingCartItem" }o--o| "ShoppingCart" : cart
+"ShoppingCartItem" }o--o| "ShoppingHistory" : history
+"ShoppingCartItem" }o--o| "Stock" : stock
+```
+
+# 実装予定の機能
+- サブスク管理(基本機能は実装済み)
+  - 収支カレンダーとの連携
 - モバイル対応
