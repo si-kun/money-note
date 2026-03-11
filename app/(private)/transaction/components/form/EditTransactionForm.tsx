@@ -41,7 +41,7 @@ import {
 import { Category } from "@/generated/prisma/client";
 import NewCategoryInput from "./NewCategoryInput";
 import { useEffect, useState } from "react";
-import { createTransactionCategory } from "@/app/server-action/balance/createTransactionCategory";
+import { createTransactionCategory } from "@/app/server-action/transaction/createTransactionCategory";
 import { toast } from "sonner";
 
 interface EditTransactionFormProps {

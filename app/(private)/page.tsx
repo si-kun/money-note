@@ -1,10 +1,10 @@
 import { format, getMonth, getYear } from "date-fns";
-import { getIncome } from "../server-action/balance/getIncome";
-import { getPayment } from "../server-action/balance/getPayment";
-import { getSubscription } from "../server-action/balance/getSubscription";
+import { getIncome } from "../server-action/transaction/getIncome";
+import { getPayment } from "../server-action/transaction/getPayment";
+import { getSubscription } from "../server-action/transaction/getSubscription";
 import CalendareSection from "./transaction/components/calendar/CalendareSection";
 import SummarySection from "./transaction/components/summary/SummarySection";
-import { getCategory } from "../server-action/balance/getCategory";
+import { getCategory } from "../server-action/transaction/getCategory";
 
 export const dynamic = "force-dynamic";
 
