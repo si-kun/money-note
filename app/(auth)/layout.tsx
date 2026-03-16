@@ -6,8 +6,8 @@ interface AuthLayoutProps {
 
 const layout = ({ children }: AuthLayoutProps) => {
   return (
-    <div className="flex items-center justify-center h-screen">
-      <Card className="w-[40vw]">{children}</Card>
+    <div className="flex items-center justify-center h-screen p-4">
+      <Card className="w-full lg:w-[500px]">{children}</Card>
     </div>
   );
 };
