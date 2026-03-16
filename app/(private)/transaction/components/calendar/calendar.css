@@ -2,3 +2,8 @@
     background-color: transparent;
     border: none;
 }
+
+:root {
+    --fc-event-bg-color: transparent;
+    --fc-event-border-color: transparent;
+}
