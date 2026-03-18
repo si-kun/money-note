@@ -24,7 +24,7 @@ const MonthryTabsContent = ({
   monthlySubscription,
 }: MonthryTabsContentProps) => {
   return (
-      <Card className="h-full">
+      <Card className="h-full flex flex-col">
         <CardHeader>
           <CardTitle>
             {year}年{month}月

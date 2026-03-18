@@ -26,10 +26,10 @@ const Summary = ({
 
   return (
     <Card className="h-full flex flex-col">
-      <CardHeader>
+      <CardHeader className="px-2 lg:px-6">
         <CardTitle>日付:{date}</CardTitle>
       </CardHeader>
-      <CardContent className="flex-1 flex flex-col space-y-4 overflow-hidden">
+      <CardContent className="flex-1 flex flex-col space-y-4 overflow-hidden px-2 lg:px-6">
         {/* 収入、支出、残高のカード */}
         <div className="flex flex-col gap-4 w-full">
           <div className="flex items-center justify-between gap-4">

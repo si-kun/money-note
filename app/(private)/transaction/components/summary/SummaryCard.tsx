@@ -9,7 +9,7 @@ interface SummaryCardProps {
 
 const SummaryCard = ({ title, amount, errorText }: SummaryCardProps) => {
   return (
-    <Card className="basis-1/2">
+    <Card className="basis-1/2 gap-2 lg:gap-6">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>

@@ -76,7 +76,7 @@ export default async function Home({
   );
 
   return (
-    <div className="w-full h-full flex gap-4 overflow-hidden">
+    <div className="w-full xl:h-full flex flex-col xl:flex-row gap-4 overflow-hidden">
       <CalendareSection
         initialIncomeData={incomeResult.data}
         initialPaymentData={paymentResult.data}
@@ -84,24 +84,24 @@ export default async function Home({
         initialMonth={month}
         initialYear={year}
       />
-      <SummarySection
-        // 月次データ
-        year={year}
-        month={month}
-        incomeError={incomeError}
-        paymentError={paymentError}
-        monthlyIncomeTotal={monthlyIncomeTotal}
-        monthlyPaymentTotal={monthlyPaymentTotal}
-        monthlySubscription={monthlySubscription.data}
-        // 日次データ
-        date={date}
-        dailyIncome={dailyIncome}
-        dailyPayment={dailyPayment}
-        dailyIncomeTotal={dailyIncomeTotal}
-        dailyPaymentTotal={dailyPaymentTotal}
-        // カテゴリー
-        categories={categories.data}
-      />
+        <SummarySection
+          // 月次データ
+          year={year}
+          month={month}
+          incomeError={incomeError}
+          paymentError={paymentError}
+          monthlyIncomeTotal={monthlyIncomeTotal}
+          monthlyPaymentTotal={monthlyPaymentTotal}
+          monthlySubscription={monthlySubscription.data}
+          // 日次データ
+          date={date}
+          dailyIncome={dailyIncome}
+          dailyPayment={dailyPayment}
+          dailyIncomeTotal={dailyIncomeTotal}
+          dailyPaymentTotal={dailyPaymentTotal}
+          // カテゴリー
+          categories={categories.data}
+        />
     </div>
   );
 }

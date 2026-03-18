@@ -7,19 +7,19 @@ interface layoutProps {
   children: React.ReactNode;
 }
 const layout = async ({ children }: layoutProps) => {
-
-
   const stockResponse = await getAllStock();
-  const stocks = stockResponse.data || []
+  const stocks = stockResponse.data || [];
 
-  if(stocks.length > 0) {
+  if (stocks.length > 0) {
     await handleStockCartSyncBatch(stocks);
   }
 
   return (
     <SidebarProvider>
       <AppSidebar />
-      <div className="p-6 h-screen w-screen flex items-center justify-center overflow-hidden">{children}</div>
+      <div className="p-4 lg:p-6 lg:h-screen w-screen flex items-start justify-center xl:overflow-hidden">
+        {children}
+      </div>
     </SidebarProvider>
   );
 };

@@ -70,7 +70,7 @@ const SummarySection = ({
       </TabsContent>
 
       {/* 月次 */}
-      <TabsContent value="month" className="flex-1 overflow-hidden">
+      <TabsContent value="month" className="flex-1 h-full overflow-hidden">
         <MonthryTabsContent
           year={year}
           month={month}

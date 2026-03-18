@@ -97,10 +97,10 @@ const CalendareSection = ({
   }, [initialPaymentData, initialIncomeData]);
 
   return (
-    <div className="w-[65%] space-y-4">
+    <div className="w-full lg:h-full xl:w-[65%] h-[50%] space-y-4">
       <div className="flex items-center justify-between">
         <Button type="button" variant={"outline"} onClick={handlePrevMonth}><ArrowLeft />Prev</Button>
-        <h2 className="text-xl font-bold">
+        <h2 className="text-base md:text-xl font-bold">
           {initialYear}年{initialMonth}月収支カレンダー
         </h2>
         <Button type="button" variant={"outline"} onClick={handleNextMonth}>Next<ArrowRight /></Button>
