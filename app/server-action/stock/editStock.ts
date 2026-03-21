@@ -37,6 +37,7 @@ export const editStock = async ({
         const existingCategory = await tx.stockCategory.findFirst({
           where: {
             categoryName: data.newCategoryName,
+            userId,
           },
         });
 
@@ -57,6 +58,7 @@ export const editStock = async ({
         const existingCategory = await tx.stockCategory.findUnique({
           where: {
             id: data.categoryId,
+            userId,
           },
         });
         if (existingCategory) {

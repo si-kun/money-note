@@ -23,10 +23,11 @@ export const addStock = async ({
 
       // カテゴリーが新規の場合
       if (stock.newCategoryName) {
-        // 既存に同盟カテゴリーがあるか確認
+        // 既存に同名カテゴリーがあるか確認
         const existingCategory = await tx.stockCategory.findFirst({
           where: {
             categoryName: stock.newCategoryName,
+            userId,
           },
         });
 
