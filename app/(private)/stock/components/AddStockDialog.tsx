@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table } from "@tanstack/react-table";
 import SelectedCart from "../../../../components/select/SelectedCart";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { addStocksToCart } from "@/app/server-action/stock/addStocksToCart";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -54,53 +54,56 @@ const AddStockDialog = <TData extends Stock>({
 
   const [newCartMode, setNewCartMode] = useState(false);
   const [newCartName, setNewCartName] = useState("");
+  const [isPending, startTransition] = useTransition();
 
   // ダイアログ開閉
   const [isOpen, setIsOpen] = useState(false);
 
   const handleAddToCart = async () => {
-    if (newCartMode && !newCartName.trim()) {
-      toast.error("カート名を入力してください");
-      return;
-    }
-
-    // 既存カート選択モードの場合のチェック
-    if (!newCartMode && !selectedCartId) {
-      toast.error("カートを選択してください");
-      return;
-    }
-
-    try {
-      const result = await addStocksToCart({
-        cartId: newCartMode ? undefined : selectedCartId || undefined,
-        cartName: newCartMode ? newCartName : undefined,
-        items: selectedRows.map((row) => {
-          return {
-            itemName: row.original.name,
-            quantity: selectedQuantity[row.id] || 1,
-            unit: row.original.unit,
-            unitPrice: row.original.unitPrice ?? 0,
-            stockId: row.original.id,
-            memo: null,
-          };
-        }),
-      });
-
-      if (result.success) {
-        toast.success(result.message);
-        router.refresh();
-        table.resetRowSelection();
-        setNewCartMode(false);
-        setNewCartName("");
-        setSelectedCartId(null);
-        setIsOpen(false);
-      } else {
-        toast.error(result.message);
+    startTransition(async () => {
+      if (newCartMode && !newCartName.trim()) {
+        toast.error("カート名を入力してください");
+        return;
       }
-    } catch (error) {
-      console.error("Error adding items to cart:", error);
-      toast.error("エラーが発生しました。");
-    }
+
+      // 既存カート選択モードの場合のチェック
+      if (!newCartMode && !selectedCartId) {
+        toast.error("カートを選択してください");
+        return;
+      }
+
+      try {
+        const result = await addStocksToCart({
+          cartId: newCartMode ? undefined : selectedCartId || undefined,
+          cartName: newCartMode ? newCartName : undefined,
+          items: selectedRows.map((row) => {
+            return {
+              itemName: row.original.name,
+              quantity: selectedQuantity[row.id] || 1,
+              unit: row.original.unit,
+              unitPrice: row.original.unitPrice ?? 0,
+              stockId: row.original.id,
+              memo: null,
+            };
+          }),
+        });
+
+        if (result.success) {
+          toast.success(result.message);
+          router.refresh();
+          table.resetRowSelection();
+          setNewCartMode(false);
+          setNewCartName("");
+          setSelectedCartId(null);
+          setIsOpen(false);
+        } else {
+          toast.error(result.message);
+        }
+      } catch (error) {
+        console.error("Error adding items to cart:", error);
+        toast.error("エラーが発生しました。");
+      }
+    });
   };
 
   const disableAddButton = newCartMode
@@ -143,8 +146,9 @@ const AddStockDialog = <TData extends Stock>({
             <div className="flex items-center gap-2">
               <Label>カート選択を選択、または新規作成</Label>
               <Switch
-              className="data-[state=checked]:bg-green-500"
-              onCheckedChange={setNewCartMode} />
+                className="data-[state=checked]:bg-green-500"
+                onCheckedChange={setNewCartMode}
+              />
             </div>
             {newCartMode ? (
               <Input
@@ -180,12 +184,12 @@ const AddStockDialog = <TData extends Stock>({
         </div>
         <DialogFooter>
           <Button
-            disabled={disableAddButton}
+            disabled={disableAddButton || isPending}
             className="bg-green-500 hover:bg-green-400 disabled:bg-slate-400"
             onClick={handleAddToCart}
             type="submit"
           >
-            {disableAddButton
+            {isPending ? "追加中..." : disableAddButton
               ? "カートを選択または名前を入力してください"
               : "アイテムを追加する"}
           </Button>
