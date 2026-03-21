@@ -47,6 +47,8 @@ const StockForm = ({ row, setIsDialogOpen,categories }: StockFormProps) => {
     },
   });
 
+  const { isSubmitting } = form.formState;
+
   const FORM_VALUES = [
     {
       label: "商品名",
@@ -197,8 +199,8 @@ const StockForm = ({ row, setIsDialogOpen,categories }: StockFormProps) => {
         )}
       </Field>
 
-      <Button className="bg-green-600 hover:bg-green-500" type="submit">
-        {row ? "更新" : "登録する"}
+      <Button disabled={isSubmitting} className="bg-green-600 hover:bg-green-500 disabled:cursor-not-allowed disabled:bg-slate-400" type="submit">
+        {isSubmitting? "送信中..." : row ? "更新" : "登録する"}
       </Button>
     </form>
   );
