@@ -1,11 +1,4 @@
-import {
-  Calendar,
-  CircleUser,
-  Home,
-  Inbox,
-  Search,
-  Settings,
-} from "lucide-react";
+import { CircleUser, X } from "lucide-react";
 
 import {
   Sidebar,
@@ -16,63 +9,25 @@ import {
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import Link from "next/link";
 import { getAuthUserWithProfile } from "@/lib/supabase/getAuthUserWithProfile";
 import LogoutButton from "@/app/(auth)/components/LogoutButton";
+import SidebarLink from "./SidebarLink";
+import MobileSidebarClose from "./MobileSidebarClose";
 
-// Menu items.
-const items = [
-  {
-    title: "Home",
-    url: "/",
-    icon: Home,
-  },
-  {
-    title: "Statistics",
-    url: "/statistics",
-    icon: Inbox,
-  },
-  {
-    title: "Subscriptions",
-    url: "/subscriptions",
-    icon: Calendar,
-  },
-  {
-    title: "Stock",
-    url: "/stock",
-    icon: Search,
-  },
-  {
-    title: "shopping",
-    url: "/shopping/cart",
-    icon: Settings,
-  },
-];
-
-const AppSidebar = async() => {
-
-  const userProfile = await getAuthUserWithProfile()
+const AppSidebar = async () => {
+  const userProfile = await getAuthUserWithProfile();
 
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <div className="flex items-center justify-between">
+            <SidebarGroupLabel>Application</SidebarGroupLabel>
+            <MobileSidebarClose />
+          </div>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+            <SidebarLink />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
@@ -82,7 +37,7 @@ const AppSidebar = async() => {
             <CircleUser />
             <span>{userProfile.userName}</span>
           </SidebarMenuButton>
-            <LogoutButton />
+          <LogoutButton />
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
