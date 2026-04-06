@@ -21,9 +21,9 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import AddButton from "@/components/button/AddButton";
 import SubscriptionForm from "./components/SubscriptionForm";
-import { ShieldAlert } from "lucide-react";
+import { ListPlus, ShieldAlert } from "lucide-react";
+import AddDialog from "@/components/dialog/AddButton";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -68,14 +68,15 @@ export function DataTable<TData, TValue>({
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
         />
-        <AddButton
+        <AddDialog
           title="新しいサブスクリプションを追加"
           description="サブスクリプションの詳細を入力して、新しいサブスクリプションを追加します。"
+          icon={<ListPlus />}
         >
           {(setIsDialogOpen) => (
             <SubscriptionForm setIsDialogOpen={setIsDialogOpen} />
           )}
-        </AddButton>
+        </AddDialog>
       </div>
       {errorMessage ? (
         <span className="text-red-500 flex items-center gap-2 text-sm font-semibold">

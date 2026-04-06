@@ -34,7 +34,6 @@ const SelectedCart = ({
     return cart.name !== "在庫不足"
    })
 
-   console.log("filteredCarts", filteredCarts)
 
   return (
     <Select

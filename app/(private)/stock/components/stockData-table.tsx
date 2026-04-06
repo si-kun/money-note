@@ -31,12 +31,13 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useRouter, useSearchParams } from "next/navigation";
-import AddButton from "@/components/button/AddButton";
 import StockForm from "./StockForm";
 import AddStockDialog from "./AddStockDialog";
 import { getStockColumns } from "./stockColumns";
 import { ShoppingCartWithItems } from "@/app/types/shopping/shopping";
 import { Stock, StockCategory } from "@/generated/prisma/client";
+import AddDialog from "@/components/dialog/AddButton";
+import { PackagePlus } from "lucide-react";
 
 interface DataTableProps<TData> {
   stocks: TData[];
@@ -107,14 +108,14 @@ export function StockDataTable<TData extends Stock>({
 
   return (
     <div className="w-full h-full">
-      <div className="flex items-center justify-center py-4 gap-4">
+      <div className="grid grid-rows-2 grid-cols-4 lg:flex py-4 gap-4">
         <Input
           placeholder="Filter names..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
-          className="flex-1"
+          className="col-span-4"
         />
         <Select
           defaultValue="all"
@@ -127,7 +128,7 @@ export function StockDataTable<TData extends Stock>({
             table.getColumn("stockCategory")?.setFilterValue(value);
           }}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="lg:w-[180px] w-full col-span-3">
             <SelectValue placeholder="カテゴリー" />
           </SelectTrigger>
           <SelectContent>
@@ -139,12 +140,20 @@ export function StockDataTable<TData extends Stock>({
             ))}
           </SelectContent>
         </Select>
-        <AddButton
-          title="新しい在庫を追加"
-          description="在庫の詳細を入力して、新しい在庫を追加します。"
-        >
-          {(setIsDialogOpen) => <StockForm setIsDialogOpen={setIsDialogOpen} categories={categories} />}
-        </AddButton>
+        <div className="col-span-1 justify-self-end">
+          <AddDialog
+            title="新しい在庫を追加"
+            description="在庫の詳細を入力して、新しい在庫を追加します。"
+            icon={<PackagePlus />}
+          >
+            {(setIsDialogOpen) => (
+              <StockForm
+                setIsDialogOpen={setIsDialogOpen}
+                categories={categories}
+              />
+            )}
+          </AddDialog>
+        </div>
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table>

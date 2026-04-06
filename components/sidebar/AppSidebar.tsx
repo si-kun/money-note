@@ -1,4 +1,4 @@
-import { CircleUser, X } from "lucide-react";
+import { CircleUser } from "lucide-react";
 
 import {
   Sidebar,

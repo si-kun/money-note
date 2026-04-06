@@ -13,16 +13,18 @@ interface AddButtonProps {
     children: (setIsDialogOpen: (open: boolean) => void) => React.ReactNode;
     title: string;
     description: string;
+    icon: React.ReactNode
 }
 
-const AddButton = ({children,title,description}:AddButtonProps) => {
+const AddDialog = ({children,title,description,icon}:AddButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <Button variant={"secondary"} className="hover:bg-green-300">
-          新規登録
+          <span className="lg:hidden">{icon}</span>
+          <span className="hidden lg:block">新規作成</span>
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -39,4 +41,4 @@ const AddButton = ({children,title,description}:AddButtonProps) => {
     </Dialog>
   );
 };
-export default AddButton
+export default AddDialog;

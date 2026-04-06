@@ -9,7 +9,7 @@ const MobileSidebarClose = () => {
     const {setOpenMobile} = useSidebar()
 
   return (
-    <Button type="button" size={"icon-sm"} variant={"ghost"} onClick={() => setOpenMobile(false)}>
+    <Button type="button" size={"icon-sm"} variant={"ghost"} className="lg:hidden" onClick={() => setOpenMobile(false)}>
       <X />
     </Button>
   );
