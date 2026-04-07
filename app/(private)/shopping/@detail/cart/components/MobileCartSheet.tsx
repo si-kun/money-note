@@ -1,14 +1,10 @@
-"use client"
+"use client";
 
 import { ShoppingCartWithItems } from "@/app/types/shopping/shopping";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
@@ -37,45 +33,39 @@ const MobileCartSheet = ({
 
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-      <SheetContent className="p-4 overflow-y-auto">
-        <SheetHeader>
+      <SheetContent
+        className="p-4 overflow-y-auto h-[80vh] flex flex-col"
+        side="bottom"
+      >
+        <SheetHeader className="p-0">
           <SheetTitle>{cart.name}</SheetTitle>
-          <SheetDescription>
-            Make changes to your profile here. Click save when you&apos;re done.
-          </SheetDescription>
+          <div className="flex flex-col gap-2">
+            <p className="text-sm text-muted-foreground">
+              {cart.items?.length || 0}件のアイテム
+            </p>
+          </div>
+
+          {/* 商品追加ボタン */}
+          {!isLowStockCart && (
+            <Link href={"/stock"}>
+              <Button variant={"secondary"}>商品を追加</Button>
+            </Link>
+          )}
         </SheetHeader>
-        <Card className="h-full">
-          <CardHeader className="flex items-start justify-between">
-            <div className="flex flex-col gap-2">
-              <CardTitle>{cart.name}</CardTitle>
-              <p className="text-sm text-muted-foreground">
-                {cart.items?.length || 0}件のアイテム
-              </p>
-            </div>
-            {!isLowStockCart && (
-              <Link href={"/stock"}>
-                <Button variant={"secondary"}>商品を追加</Button>
-              </Link>
-            )}
-          </CardHeader>
-          <CardContent className="overflow-y-auto">
-            {isLowStockCart ? (
-              <LowStockTable
-                items={cart.items || []}
-                availableCarts={availableCarts}
-              />
-            ) : (
-              <NomalCartTable items={cart.items || []} />
-            )}
-            {/* 「在庫不足」カートでは非表示 */}
-            {!isLowStockCart && <BuyButton selectedCart={cart} />}
-          </CardContent>
-        </Card>
-        <SheetFooter>
-          <SheetClose asChild>
-            <Button variant="outline">Close</Button>
-          </SheetClose>
-        </SheetFooter>
+
+        {/* テーブル */}
+        <div className="overflow-y-auto flex-1">
+          {isLowStockCart ? (
+            <LowStockTable
+              items={cart.items || []}
+              availableCarts={availableCarts}
+            />
+          ) : (
+            <NomalCartTable items={cart.items || []} />
+          )}
+        </div>
+        {/* 「在庫不足」カートでは非表示 */}
+        {!isLowStockCart && <BuyButton selectedCart={cart} />}
       </SheetContent>
     </Sheet>
   );
