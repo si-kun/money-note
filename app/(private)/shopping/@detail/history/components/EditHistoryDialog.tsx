@@ -78,10 +78,10 @@ const EditHistoryDialog = ({ selectedHistory }: EditHistoryDialogProps) => {
           編集
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[90vw] lg:min-w-5xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="w-[90vw] lg:min-w-5xl max-h-[80vh] overflow-y-auto p-4 lg:p-6">
         <DialogHeader className="">
           <DialogTitle>{selectedHistory.name}</DialogTitle>
-          <div className="flex item-center gap-4">
+          <div className="flex flex-col items-start lg:flex-row lg:items-center gap-4">
             <div className="flex items-center gap-2">
               <Label className="whitespace-nowrap">購入日:</Label>
               <Popover>
@@ -89,7 +89,7 @@ const EditHistoryDialog = ({ selectedHistory }: EditHistoryDialogProps) => {
                   <Button
                     variant="outline"
                     data-empty={!date}
-                    className="data-[empty=true]:text-muted-foreground w-[280px] justify-start text-left font-normal"
+                    className="data-[empty=true]:text-muted-foreground w-full lg:w-[280px] justify-start text-left font-normal"
                   >
                     <CalendarIcon />
                     {date ? (
@@ -110,7 +110,7 @@ const EditHistoryDialog = ({ selectedHistory }: EditHistoryDialogProps) => {
                 type="number"
                 value={totalPrice}
                 onChange={(e) => setTotalPrice(Number(e.target.value))}
-                className="min-w-[100px]"
+                className="min-w-[50px]"
               />
             </div>
             <Button type="button" variant={"outline"} onClick={autoTotalPrice}>
@@ -126,7 +126,7 @@ const EditHistoryDialog = ({ selectedHistory }: EditHistoryDialogProps) => {
           columns={historyEditColumns}
         />
         <DialogFooter>
-          <Button type="submit" onClick={handleEdit} variant="outline">
+          <Button type="submit" onClick={handleEdit} variant="outline" className="w-full lg:w-auto">
             保存
           </Button>
         </DialogFooter>
