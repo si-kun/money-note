@@ -1,8 +1,6 @@
 import { getShoppingHistory } from "@/app/server-action/shopping/history/getShoppingHistory";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Link from "next/link";
 import HistorydateSelect from "./components/HistorydateSelect";
-import { format } from "date-fns";
+import HistoryList from "../../@detail/history/components/HistoryList";
 
 const HistoryPage = async ({
   searchParams,
@@ -28,27 +26,7 @@ const HistoryPage = async ({
         </p>
       )}
       {fetchHistories.data.map((history) => (
-        <Link key={history.id} href={`/shopping/history/${history.id}`}>
-          <Card
-            key={history.id}
-            className="cursor-pointer hover:bg-accent transition-colors"
-          >
-            <CardHeader className="flex items-center justify-between">
-              <CardTitle className="text-base">{history.name}</CardTitle>
-              <span>{format(new Date(history.date), "yyyy/MM/dd")}</span>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                {history.items?.length || 0}件の商品を購入しました
-              </p>
-              {history.totalPrice && (
-                <p className="text-sm font-semibold mt-1">
-                  合計: ¥{history.totalPrice.toLocaleString()}
-                </p>
-              )}
-            </CardContent>
-          </Card>
-        </Link>
+        <HistoryList key={history.id} history={history} year={year} month={month} />
       ))}
     </div>
   );

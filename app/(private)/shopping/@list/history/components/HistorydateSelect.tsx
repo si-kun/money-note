@@ -32,7 +32,7 @@ const HistorydateSelect = ({initialYear,initialMonth}:HistorydateSelectProps) =>
 
   return (
     <div className="flex items-center gap-2">
-      <span className="font-medium">表示する年月を指定:</span>
+      <span className="font-medium whitespace-nowrap">表示する年月を指定:</span>
       <Select
         value={String(initialYear)}
         onValueChange={handleYearChange}

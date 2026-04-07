@@ -78,12 +78,12 @@ const EditHistoryDialog = ({ selectedHistory }: EditHistoryDialogProps) => {
           編集
         </Button>
       </DialogTrigger>
-      <DialogContent className="min-w-5xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="w-[90vw] lg:min-w-5xl max-h-[80vh] overflow-y-auto">
         <DialogHeader className="">
           <DialogTitle>{selectedHistory.name}</DialogTitle>
           <div className="flex item-center gap-4">
             <div className="flex items-center gap-2">
-              <Label>購入日:</Label>
+              <Label className="whitespace-nowrap">購入日:</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -110,6 +110,7 @@ const EditHistoryDialog = ({ selectedHistory }: EditHistoryDialogProps) => {
                 type="number"
                 value={totalPrice}
                 onChange={(e) => setTotalPrice(Number(e.target.value))}
+                className="min-w-[100px]"
               />
             </div>
             <Button type="button" variant={"outline"} onClick={autoTotalPrice}>
