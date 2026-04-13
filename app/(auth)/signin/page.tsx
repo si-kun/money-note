@@ -93,14 +93,19 @@ const SigninPage = () => {
         buttonText={"ログイン"}
         submittingText={"ログイン中..."}
       />
-      <Button
-      disabled={isGuestLoginLoading}
-        className="mx-6 bg-blue-600 hover:bg-blue-500 "
-        type="button"
-        onClick={() => handleGuestLogin()}
-      >
-        {isGuestLoginLoading ? "ゲストログイン中..." : "ゲストログイン"}
-      </Button>
+      <div className="flex flex-col gap-2">
+        <Button
+          disabled={isGuestLoginLoading}
+          className="mx-6 bg-blue-600 hover:bg-blue-500 "
+          type="button"
+          onClick={() => handleGuestLogin()}
+        >
+          {isGuestLoginLoading ? "ゲストログイン中..." : "ゲストログイン"}
+        </Button>
+        <span className="text-red-500 font-medium text-center text-sm lg:text-md">
+          ※ゲストログインボタンから登録なしでお試しいただけます
+        </span>
+      </div>
     </>
   );
 };
