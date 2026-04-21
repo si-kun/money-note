@@ -8,23 +8,23 @@ import { toast } from "sonner";
 import StockForm from "./StockForm";
 
 import { Checkbox } from "@/components/ui/checkbox";
-import Link from "next/link";
 import StockQuantityButtons from "./StockQuantityButtons";
 import CategorySelect from "./CategorySelect";
 import { ShoppingCartWithItems } from "@/app/types/shopping/shopping";
 import { Stock, StockCategory } from "@/generated/prisma/client";
+import StockCartCell from "./StockCartCell";
 
 // TableMetaの型を拡張
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface TableMeta<TData> {
-    carts?: ShoppingCartWithItems[];
+    carts: ShoppingCartWithItems[];
     categories?: StockCategory[];
   }
 }
 
 export const getStockColumns = (
-  categories: StockCategory[]
+  categories: StockCategory[],
 ): ColumnDef<Stock>[] => [
   {
     id: "select",
@@ -44,9 +44,7 @@ export const getStockColumns = (
 
       // カートに存在する在庫は選択不可にする
       const isInCart = carts.some((cart) =>
-        cart.items.some(
-          (item) => item.stockId === stock.id
-        )
+        cart.items.some((item) => item.stockId === stock.id)
       );
 
       return (
@@ -167,12 +165,7 @@ export const getStockColumns = (
       return (
         <div>
           {cartWithStock ? (
-            <Link
-              href={`/shopping/cart/${cartWithStock.id}`}
-              className="text-blue-600 hover:underline font-medium"
-            >
-              {cartWithStock.name}
-            </Link>
+            <StockCartCell cartWithStock={cartWithStock} carts={carts} />
           ) : (
             <span>-</span>
           )}

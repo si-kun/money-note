@@ -13,9 +13,9 @@ interface CartListProps {
   carts: ShoppingCartWithItems[];
 }
 
-const CartList = ({ cart,carts }: CartListProps) => {
+const CartList = ({ cart, carts }: CartListProps) => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const prevIsMobileRef = useRef<boolean | undefined>(undefined)
+  const prevIsMobileRef = useRef<boolean | undefined>(undefined);
 
   const router = useRouter();
 
@@ -30,11 +30,11 @@ const CartList = ({ cart,carts }: CartListProps) => {
   };
 
   useEffect(() => {
-    if(prevIsMobileRef.current === false && isMobile === true) {
+    if (prevIsMobileRef.current === false && isMobile === true) {
       router.push("/shopping/cart");
     }
-    prevIsMobileRef.current = isMobile
-  },[isMobile])
+    prevIsMobileRef.current = isMobile;
+  }, [isMobile]);
 
   return (
     <>
