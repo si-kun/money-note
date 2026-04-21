@@ -36,7 +36,7 @@ const StockCartCell = ({ cartWithStock, carts }: StockCartCellProps) => {
       </Button>
 
       <MobileCartSheet
-        isSheetOpen={isSheetOpen}
+        isSheetOpen={isSheetOpen && isMobile}
         setIsSheetOpen={setIsSheetOpen}
         cart={cartWithStock}
         carts={carts}
