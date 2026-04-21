@@ -4,6 +4,7 @@ import "./calendar.css";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import listPlugin from "@fullcalendar/list";
 
 import interractionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { EventClickArg } from "@fullcalendar/core";
@@ -17,6 +18,7 @@ import {
 } from "@/app/types/transaction/transaction";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface CalendarSectionProps {
   initialYear: number;
@@ -33,6 +35,7 @@ const CalendareSection = ({
   initialMonth,
 }: CalendarSectionProps) => {
   const router = useRouter();
+  const isMobile = useIsMobile();
 
   const handlePrevMonth = () => {
     const newMonth = initialMonth === 1 ? 12 : initialMonth - 1;
@@ -106,10 +109,12 @@ const CalendareSection = ({
         <Button type="button" variant={"outline"} onClick={handleNextMonth}>Next<ArrowRight /></Button>
       </div>
       <FullCalendar
-        key={`${initialYear}-${initialMonth}`}
+        key={`${initialYear}-${initialMonth}-${isMobile}`}
+        height={"auto"}
         locale={"ja"}
-        plugins={[dayGridPlugin, interractionPlugin]}
-        initialView="dayGridMonth"
+        plugins={[dayGridPlugin, interractionPlugin,listPlugin]}
+        // initialView="dayGridMonth"
+        initialView={isMobile ? "listMonth" : "dayGridMonth"}
         initialDate={new Date(initialYear, initialMonth - 1, 1)}
         dayCellClassNames={"cursor-pointer"}
         events={events}
