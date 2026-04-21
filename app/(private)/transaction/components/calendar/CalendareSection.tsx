@@ -113,7 +113,7 @@ const CalendareSection = ({
         height={"auto"}
         locale={"ja"}
         plugins={[dayGridPlugin, interractionPlugin,listPlugin]}
-        // initialView="dayGridMonth"
+        displayEventTime={false}
         initialView={isMobile ? "listMonth" : "dayGridMonth"}
         initialDate={new Date(initialYear, initialMonth - 1, 1)}
         dayCellClassNames={"cursor-pointer"}
@@ -123,14 +123,14 @@ const CalendareSection = ({
         eventContent={(eventInfo) => {
           const { income, payment, balance } = eventInfo.event.extendedProps;
           return (
-            <div className="flex flex-col text-sm text-right gap-1 pointer-events-none">
-              <span className="text-green-500">
+            <div className="flex lg:flex-col justify-end text-sm text-right gap-3 lg:gap-1 pointer-events-none">
+              <span className="text-green-500 whitespace-nowrap">
                 収入: ¥{income.toLocaleString()}
               </span>
-              <span className="text-red-500">
+              <span className="text-red-500 whitespace-nowrap">
                 支出: ¥{payment.toLocaleString()}
               </span>
-              <span className="text-blue-500">
+              <span className="text-blue-500 whitespace-nowrap">
                 合計: ¥{balance.toLocaleString()}
               </span>
             </div>
