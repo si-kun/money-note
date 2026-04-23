@@ -3,8 +3,8 @@ import { getIncome } from "../server-action/transaction/getIncome";
 import { getPayment } from "../server-action/transaction/getPayment";
 import { getSubscription } from "../server-action/transaction/getSubscription";
 import CalendareSection from "./transaction/components/calendar/CalendareSection";
-import SummarySection from "./transaction/components/summary/SummarySection";
 import { getCategory } from "../server-action/transaction/getCategory";
+import ClientSummary from "./transaction/components/summary/ClientSummary";
 
 export const dynamic = "force-dynamic";
 
@@ -80,28 +80,28 @@ export default async function Home({
       <CalendareSection
         initialIncomeData={incomeResult.data}
         initialPaymentData={paymentResult.data}
-        today={today}
+        // today={today}
         initialMonth={month}
         initialYear={year}
+        //
       />
-        <SummarySection
-          // 月次データ
-          year={year}
-          month={month}
-          incomeError={incomeError}
-          paymentError={paymentError}
-          monthlyIncomeTotal={monthlyIncomeTotal}
-          monthlyPaymentTotal={monthlyPaymentTotal}
-          monthlySubscription={monthlySubscription.data}
-          // 日次データ
-          date={date}
-          dailyIncome={dailyIncome}
-          dailyPayment={dailyPayment}
-          dailyIncomeTotal={dailyIncomeTotal}
-          dailyPaymentTotal={dailyPaymentTotal}
-          // カテゴリー
-          categories={categories.data}
-        />
+      <ClientSummary // 月次データ
+        year={year}
+        month={month}
+        incomeError={incomeError}
+        paymentError={paymentError}
+        monthlyIncomeTotal={monthlyIncomeTotal}
+        monthlyPaymentTotal={monthlyPaymentTotal}
+        monthlySubscription={monthlySubscription.data}
+        // 日次データ
+        date={date}
+        dailyIncome={dailyIncome}
+        dailyPayment={dailyPayment}
+        dailyIncomeTotal={dailyIncomeTotal}
+        dailyPaymentTotal={dailyPaymentTotal}
+        // カテゴリー
+        categories={categories.data}
+      />
     </div>
   );
 }

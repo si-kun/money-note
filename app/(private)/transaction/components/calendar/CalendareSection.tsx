@@ -10,7 +10,7 @@ import interractionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { EventClickArg } from "@fullcalendar/core";
 
 import { Button } from "@/components/ui/button";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   BalanceData,
   IncomeWithCategory,
@@ -25,7 +25,8 @@ interface CalendarSectionProps {
   initialMonth: number;
   initialIncomeData: IncomeWithCategory[];
   initialPaymentData: PaymentWithCategory[];
-  today: Date;
+  // today: Date;
+
 }
 
 const CalendareSection = ({
@@ -33,9 +34,13 @@ const CalendareSection = ({
   initialPaymentData,
   initialYear,
   initialMonth,
+
+  //
 }: CalendarSectionProps) => {
   const router = useRouter();
   const isMobile = useIsMobile();
+
+  const [eventSheetOpen,setEventSheetOpen] = useState(true)
 
   const handlePrevMonth = () => {
     const newMonth = initialMonth === 1 ? 12 : initialMonth - 1;
@@ -60,6 +65,7 @@ const CalendareSection = ({
     router.push(
       `/?year=${initialYear}&month=${initialMonth}&date=${clickedDate}`
     );
+        console.log(eventSheetOpen);
   };
 
   const handleEventClick = (arg: EventClickArg) => {
@@ -67,7 +73,11 @@ const CalendareSection = ({
     router.push(
       `/?year=${initialYear}&month=${initialMonth}&date=${clickedDate}`
     );
+    setEventSheetOpen(true)
+      console.log(eventSheetOpen);
+
   };
+
   const events = useMemo(() => {
     const tempBalanceData: BalanceData = {};
 
@@ -100,45 +110,53 @@ const CalendareSection = ({
   }, [initialPaymentData, initialIncomeData]);
 
   return (
-    <div className="w-full lg:h-full xl:w-[65%] h-[50%] space-y-4">
-      <div className="flex items-center justify-between">
-        <Button type="button" variant={"outline"} onClick={handlePrevMonth}><ArrowLeft />Prev</Button>
-        <h2 className="text-base md:text-xl font-bold">
-          {initialYear}年{initialMonth}月収支カレンダー
-        </h2>
-        <Button type="button" variant={"outline"} onClick={handleNextMonth}>Next<ArrowRight /></Button>
+    <>
+      <div className="w-full lg:h-full xl:w-[65%] h-[50%] space-y-4">
+        <div className="flex items-center justify-between">
+          <Button type="button" variant={"outline"} onClick={handlePrevMonth}>
+            <ArrowLeft />
+            Prev
+          </Button>
+          <h2 className="text-base md:text-xl font-bold">
+            {initialYear}年{initialMonth}月収支カレンダー
+          </h2>
+          <Button type="button" variant={"outline"} onClick={handleNextMonth}>
+            Next
+            <ArrowRight />
+          </Button>
+        </div>
+        <FullCalendar
+          key={`${initialYear}-${initialMonth}-${isMobile}`}
+          height={"auto"}
+          locale={"ja"}
+          plugins={[dayGridPlugin, interractionPlugin, listPlugin]}
+          displayEventTime={false}
+          initialView={isMobile ? "listMonth" : "dayGridMonth"}
+          initialDate={new Date(initialYear, initialMonth - 1, 1)}
+          dayCellClassNames={"cursor-pointer"}
+          events={events}
+          dateClick={handleDateClick}
+          eventClick={handleEventClick}
+          eventContent={(eventInfo) => {
+            const { income, payment, balance } = eventInfo.event.extendedProps;
+            return (
+              <div className="flex lg:flex-col justify-end text-sm text-right gap-3 lg:gap-1 pointer-events-none">
+                <span className="text-green-500 whitespace-nowrap">
+                  収入: ¥{income.toLocaleString()}
+                </span>
+                <span className="text-red-500 whitespace-nowrap">
+                  支出: ¥{payment.toLocaleString()}
+                </span>
+                <span className="text-blue-500 whitespace-nowrap">
+                  合計: ¥{balance.toLocaleString()}
+                </span>
+              </div>
+            );
+          }}
+          headerToolbar={false}
+        />
       </div>
-      <FullCalendar
-        key={`${initialYear}-${initialMonth}-${isMobile}`}
-        height={"auto"}
-        locale={"ja"}
-        plugins={[dayGridPlugin, interractionPlugin,listPlugin]}
-        displayEventTime={false}
-        initialView={isMobile ? "listMonth" : "dayGridMonth"}
-        initialDate={new Date(initialYear, initialMonth - 1, 1)}
-        dayCellClassNames={"cursor-pointer"}
-        events={events}
-        dateClick={handleDateClick}
-        eventClick={handleEventClick}
-        eventContent={(eventInfo) => {
-          const { income, payment, balance } = eventInfo.event.extendedProps;
-          return (
-            <div className="flex lg:flex-col justify-end text-sm text-right gap-3 lg:gap-1 pointer-events-none">
-              <span className="text-green-500 whitespace-nowrap">
-                収入: ¥{income.toLocaleString()}
-              </span>
-              <span className="text-red-500 whitespace-nowrap">
-                支出: ¥{payment.toLocaleString()}
-              </span>
-              <span className="text-blue-500 whitespace-nowrap">
-                合計: ¥{balance.toLocaleString()}
-              </span>
-            </div>
-          );
-        }}
-        headerToolbar={false}
-      />
-    </div>
+    </>
   );
 };
 

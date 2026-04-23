@@ -4,7 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SummaryCard from "./SummaryCard";
 import BreakdownList from "../form/BreakdownList";
 import TransactionForm from "../form/TransactionForm";
-import { IncomeWithCategory, PaymentWithCategory } from "@/app/types/transaction/transaction";
+import {
+  IncomeWithCategory,
+  PaymentWithCategory,
+} from "@/app/types/transaction/transaction";
 import { Category } from "@/generated/prisma/client";
 interface SummaryProps {
   date: string;
@@ -23,7 +26,6 @@ const Summary = ({
   dailyPaymentTotal,
   categories,
 }: SummaryProps) => {
-
   return (
     <Card className="h-full flex flex-col">
       <CardHeader className="px-2 lg:px-6">
@@ -36,7 +38,10 @@ const Summary = ({
             <SummaryCard title={"収入"} amount={dailyIncomeTotal} />
             <SummaryCard title={"支出"} amount={dailyPaymentTotal} />
           </div>
-          <SummaryCard title={"残高"} amount={dailyIncomeTotal - dailyPaymentTotal} />
+          <SummaryCard
+            title={"残高"}
+            amount={dailyIncomeTotal - dailyPaymentTotal}
+          />
         </div>
 
         {/* 追加ボタン */}
@@ -49,10 +54,11 @@ const Summary = ({
         </div>
 
         {/* 内訳リスト */}
-        <BreakdownList date={date}
-        dailyIncome={dailyIncome}
-        dailyPayment={dailyPayment}
-        categories={categories}
+        <BreakdownList
+          date={date}
+          dailyIncome={dailyIncome}
+          dailyPayment={dailyPayment}
+          categories={categories}
         />
       </CardContent>
     </Card>
