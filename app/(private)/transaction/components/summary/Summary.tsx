@@ -1,9 +1,6 @@
-import { List } from "lucide-react";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SummaryCard from "./SummaryCard";
 import BreakdownList from "../form/BreakdownList";
-import TransactionForm from "../form/TransactionForm";
 import {
   IncomeWithCategory,
   PaymentWithCategory,

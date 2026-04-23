@@ -1,11 +1,11 @@
 "use client"
 
 import {
-  Calendar,
-  Home,
-  Inbox,
-  Search,
-  Settings,
+  CalendarRange,
+  ChartColumn,
+  Package,
+  ShoppingCart,
+  Subscript,
 } from "lucide-react";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "../ui/sidebar";
 import Link from "next/link";
@@ -16,27 +16,27 @@ const SidebarLink = () => {
     {
       title: "ホーム",
       url: "/",
-      icon: Home,
+      icon: CalendarRange,
     },
     {
       title: "収支グラフ",
       url: "/statistics",
-      icon: Inbox,
+      icon: ChartColumn,
     },
     {
       title: "サブスク",
       url: "/subscriptions",
-      icon: Calendar,
+      icon: Subscript,
     },
     {
       title: "在庫管理",
       url: "/stock",
-      icon: Search,
+      icon: Package,
     },
     {
       title: "買い物",
       url: "/shopping/cart",
-      icon: Settings,
+      icon: ShoppingCart,
     },
   ];
 
