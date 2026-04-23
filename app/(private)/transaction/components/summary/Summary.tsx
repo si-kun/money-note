@@ -9,6 +9,7 @@ import {
   PaymentWithCategory,
 } from "@/app/types/transaction/transaction";
 import { Category } from "@/generated/prisma/client";
+import BreakdownHeader from "../features/BreakdownHeader";
 interface SummaryProps {
   date: string;
   dailyIncome: IncomeWithCategory[];
@@ -44,14 +45,8 @@ const Summary = ({
           />
         </div>
 
-        {/* 追加ボタン */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3 py-1">
-            <List />
-            <span className="font-semibold">内訳</span>
-          </div>
-          <TransactionForm date={date} categories={categories} />
-        </div>
+        {/* 内訳追加 */}
+        <BreakdownHeader date={date} categories={categories} />
 
         {/* 内訳リスト */}
         <BreakdownList

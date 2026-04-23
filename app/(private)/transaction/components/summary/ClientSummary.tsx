@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/sheet";
 import { useRouter, useSearchParams } from "next/navigation";
 import BreakdownList from "../form/BreakdownList";
+import BreakdownHeader from "../features/BreakdownHeader";
 
 export interface SummarySectionProps {
   // 月次データ
@@ -76,9 +77,10 @@ const ClientSummary = ({
             <SheetHeader className="px-0">
               <SheetTitle>{date}</SheetTitle>
               <SheetDescription>
-                {date}の詳細情報
+                収入・支出の内訳を確認できます
               </SheetDescription>
             </SheetHeader>
+            <BreakdownHeader date={date} categories={categories} />
             <BreakdownList
               date={date}
               dailyIncome={dailyIncome}
