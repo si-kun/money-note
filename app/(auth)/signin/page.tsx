@@ -12,13 +12,9 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { guestLogin } from "@/app/server-action/auth/guestLogin";
 import { useState } from "react";
+import { FormValue } from "../types/auth";
 
-const SigninPage = () => {
-  const router = useRouter();
-
-  const [isGuestLoginLoading, setIsGuestLoginLoading] = useState(false);
-
-  const formValues = [
+  const formValues:FormValue[] = [
     {
       name: "email",
       label: "メールアドレス",
@@ -30,6 +26,13 @@ const SigninPage = () => {
       type: "password",
     },
   ];
+
+
+const SigninPage = () => {
+  const router = useRouter();
+
+  const [isGuestLoginLoading, setIsGuestLoginLoading] = useState(false);
+
 
   const form = useForm<SigninSchemaType>({
     resolver: zodResolver(signinSchema),

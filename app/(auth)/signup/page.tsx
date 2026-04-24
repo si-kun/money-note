@@ -9,27 +9,28 @@ import { toast } from "sonner";
 import AuthForm from "../components/AuthForm";
 import { CardDescription } from "@/components/ui/card";
 import Link from "next/link";
+import { FormValue } from "../types/auth";
+
+const formValues: FormValue[] = [
+  {
+    name: "userName",
+    label: "ユーザー名",
+    type: "text",
+  },
+  {
+    name: "email",
+    label: "メールアドレス",
+    type: "email",
+  },
+  {
+    name: "password",
+    label: "パスワード",
+    type: "password",
+  },
+];
 
 const SignupPage = () => {
   const router = useRouter();
-
-  const formValues = [
-    {
-      name: "userName",
-      label: "ユーザー名",
-      type: "text",
-    },
-    {
-      name: "email",
-      label: "メールアドレス",
-      type: "email",
-    },
-    {
-      name: "password",
-      label: "パスワード",
-      type: "password",
-    },
-  ];
 
   const form = useForm<SignupSchemaType>({
     resolver: zodResolver(signupSchema),
