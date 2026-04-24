@@ -10,7 +10,6 @@ import {
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "../ui/sidebar";
 import Link from "next/link";
 
-const SidebarLink = () => {
   // Menu items.
   const items = [
     {
@@ -39,6 +38,9 @@ const SidebarLink = () => {
       icon: ShoppingCart,
     },
   ];
+
+const SidebarLink = () => {
+
 
   const {setOpenMobile} = useSidebar()
 
