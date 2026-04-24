@@ -1,10 +1,11 @@
-import { format, getMonth, getYear } from "date-fns";
+import { format } from "date-fns";
 import { getIncome } from "../server-action/transaction/getIncome";
 import { getPayment } from "../server-action/transaction/getPayment";
 import { getSubscription } from "../server-action/transaction/getSubscription";
 import CalendareSection from "./transaction/components/calendar/CalendareSection";
 import { getCategory } from "../server-action/transaction/getCategory";
 import ClientSummary from "./transaction/components/summary/ClientSummary";
+import { computeTransactionData } from "./transaction/utils/computeTransactionData";
 
 export const dynamic = "force-dynamic";
 
@@ -38,52 +39,28 @@ export default async function Home({
   const paymentError =
     paymentResult.success === false ? paymentResult.message : null;
 
-  // income,paymentそれぞれの合計金額
-  const monthlyIncomeTotal = incomeResult.success
-    ? incomeResult.data
-        .filter((item) => {
-          const date = new Date(item.incomeDate);
-          return getYear(date) === year && getMonth(date) + 1 === month;
-        })
-        .reduce((total, item) => total + item.amount, 0)
-    : 0;
-
-  const monthlyPaymentTotal = paymentResult.success
-    ? paymentResult.data
-        .filter((item) => {
-          const date = new Date(item.paymentDate);
-          return getYear(date) === year && getMonth(date) + 1 === month;
-        })
-        .reduce((total, item) => total + item.amount, 0)
-    : 0;
-
-  // 当日のデータを取得
-  const dailyIncome = incomeResult.data.filter(
-    (income) => format(new Date(income.incomeDate), "yyyy-MM-dd") === date
-  );
-  const dailyPayment = paymentResult.data.filter(
-    (payment) => format(new Date(payment.paymentDate), "yyyy-MM-dd") === date
-  );
-
-  // 合計金額を計算
-  const dailyIncomeTotal = dailyIncome.reduce(
-    (total, item) => total + item.amount,
-    0
-  );
-  const dailyPaymentTotal = dailyPayment.reduce(
-    (total, item) => total + item.amount,
-    0
-  );
+  const {
+    monthlyIncomeTotal,
+    monthlyPaymentTotal,
+    dailyIncome,
+    dailyPayment,
+    dailyIncomeTotal,
+    dailyPaymentTotal,
+  } = computeTransactionData({
+    incomeResult,
+    paymentResult,
+    year,
+    month,
+    date,
+  });
 
   return (
     <div className="w-full xl:h-full flex flex-col xl:flex-row gap-4 overflow-hidden">
       <CalendareSection
         initialIncomeData={incomeResult.data}
         initialPaymentData={paymentResult.data}
-        // today={today}
         initialMonth={month}
         initialYear={year}
-        //
       />
       <ClientSummary // 月次データ
         year={year}
