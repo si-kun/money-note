@@ -22,52 +22,58 @@ import BreakdownHeader from "../features/BreakdownHeader";
 
 export interface SummarySectionProps {
   // 月次データ
-  year: number;
-  month: number;
-  incomeError: string | null;
-  paymentError: string | null;
-  monthlyIncomeTotal: number;
-  monthlyPaymentTotal: number;
-  monthlySubscription: SubscriptionResponse;
-
-  // 日次データ
-  date: string;
-  dailyIncome: IncomeWithCategory[];
-  dailyPayment: PaymentWithCategory[];
-  dailyIncomeTotal: number;
-  dailyPaymentTotal: number;
-
+  monthlyData: {
+    year: number;
+    month: number;
+    incomeError: string | null;
+    paymentError: string | null;
+    monthlyIncomeTotal: number;
+    monthlyPaymentTotal: number;
+    monthlySubscription: SubscriptionResponse;
+  };
+  dailyData: {
+    // 日次データ
+    date: string;
+    dailyIncome: IncomeWithCategory[];
+    dailyPayment: PaymentWithCategory[];
+    dailyIncomeTotal: number;
+    dailyPaymentTotal: number;
+  };
   // カテゴリー
   categories: Category[];
 }
 
 const ClientSummary = ({
-  year,
-  month,
-  incomeError,
-  paymentError,
-  monthlyIncomeTotal,
-  monthlyPaymentTotal,
-  monthlySubscription,
-
-  // 日次データ
-  date,
-  dailyIncome,
-  dailyPayment,
-  dailyIncomeTotal,
-  dailyPaymentTotal,
-
-  // カテゴリー
+  monthlyData,
+  dailyData,
   categories,
 }: SummarySectionProps) => {
+  const {
+    year,
+    month,
+    incomeError,
+    paymentError,
+    monthlyIncomeTotal,
+    monthlyPaymentTotal,
+    monthlySubscription,
+  } = monthlyData;
+
+  const {
+    date,
+    dailyIncome,
+    dailyPayment,
+    dailyIncomeTotal,
+    dailyPaymentTotal,
+  } = dailyData;
+
   const isMobile = useIsMobile();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const openDate = searchParams.get("date")
+  const openDate = searchParams.get("date");
 
   const handleCloseSheet = () => {
     router.push(`/?year=${year}&month=${month}`);
-  }
+  };
 
   return (
     <>

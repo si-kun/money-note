@@ -63,19 +63,22 @@ export default async function Home({
         initialYear={year}
       />
       <ClientSummary // 月次データ
-        year={year}
-        month={month}
-        incomeError={incomeError}
-        paymentError={paymentError}
-        monthlyIncomeTotal={monthlyIncomeTotal}
-        monthlyPaymentTotal={monthlyPaymentTotal}
-        monthlySubscription={monthlySubscription.data}
-        // 日次データ
-        date={date}
-        dailyIncome={dailyIncome}
-        dailyPayment={dailyPayment}
-        dailyIncomeTotal={dailyIncomeTotal}
-        dailyPaymentTotal={dailyPaymentTotal}
+        monthlyData={{
+          year,
+          month,
+          incomeError,
+          paymentError,
+          monthlyIncomeTotal,
+          monthlyPaymentTotal,
+          monthlySubscription: monthlySubscription.data,
+        }}
+        dailyData={{
+          date,
+          dailyIncome,
+          dailyPayment,
+          dailyIncomeTotal,
+          dailyPaymentTotal,
+        }}
         // カテゴリー
         categories={categories.data}
       />
