@@ -9,7 +9,6 @@ import listPlugin from "@fullcalendar/list";
 import interractionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { EventClickArg } from "@fullcalendar/core";
 
-import { Button } from "@/components/ui/button";
 import { useMemo } from "react";
 import {
   BalanceData,
@@ -17,8 +16,8 @@ import {
   PaymentWithCategory,
 } from "@/app/types/transaction/transaction";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import CalendarNavigation from "./CalendarNavigation";
 
 interface CalendarSectionProps {
   initialYear: number;
@@ -26,7 +25,6 @@ interface CalendarSectionProps {
   initialIncomeData: IncomeWithCategory[];
   initialPaymentData: PaymentWithCategory[];
   // today: Date;
-
 }
 
 const CalendareSection = ({
@@ -34,35 +32,16 @@ const CalendareSection = ({
   initialPaymentData,
   initialYear,
   initialMonth,
-
-  //
-}: CalendarSectionProps) => {
+}: //
+CalendarSectionProps) => {
   const router = useRouter();
   const isMobile = useIsMobile();
-
-  const handlePrevMonth = () => {
-    const newMonth = initialMonth === 1 ? 12 : initialMonth - 1;
-    const newYear = initialMonth === 1 ? initialYear - 1 : initialYear;
-
-    const url = `/?year=${newYear}&month=${newMonth}`;
-
-    router.push(url);
-  };
-
-  const handleNextMonth = () => {
-    const newMonth = initialMonth === 12 ? 1 : initialMonth + 1;
-    const newYear = initialMonth === 12 ? initialYear + 1 : initialYear;
-
-    const url = `/?year=${newYear}&month=${newMonth}`;
-
-    router.push(url);
-  };
 
   const handleDateClick = (arg: DateClickArg) => {
     const clickedDate = arg.dateStr;
     router.push(
       `/?year=${initialYear}&month=${initialMonth}&date=${clickedDate}`,
-      {scroll: false}
+      { scroll: false }
     );
   };
 
@@ -70,7 +49,7 @@ const CalendareSection = ({
     const clickedDate = arg.event.startStr;
     router.push(
       `/?year=${initialYear}&month=${initialMonth}&date=${clickedDate}`,
-      {scroll: false}
+      { scroll: false }
     );
   };
 
@@ -108,19 +87,10 @@ const CalendareSection = ({
   return (
     <>
       <div className="w-full lg:h-full xl:w-[65%] h-[50%] space-y-4">
-        <div className="flex items-center justify-between">
-          <Button type="button" variant={"outline"} onClick={handlePrevMonth}>
-            <ArrowLeft />
-            Prev
-          </Button>
-          <h2 className="text-base md:text-xl font-bold">
-            {initialYear}年{initialMonth}月収支カレンダー
-          </h2>
-          <Button type="button" variant={"outline"} onClick={handleNextMonth}>
-            Next
-            <ArrowRight />
-          </Button>
-        </div>
+        <CalendarNavigation
+          initialYear={initialYear}
+          initialMonth={initialMonth}
+        />
         <FullCalendar
           key={`${initialYear}-${initialMonth}-${isMobile}`}
           height={"auto"}
