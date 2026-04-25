@@ -1,8 +1,10 @@
 "use client";
 
 import { buyShoppingCart } from "@/app/server-action/shopping/cart/buyShoppingCart";
+import { pendingAtom } from "@/app/store/shopping/cartAtom";
 import { ShoppingCartWithItems } from "@/app/types/shopping/shopping";
 import { Button } from "@/components/ui/button";
+import { useAtomValue } from "jotai";
 import { toast } from "sonner";
 
 interface BuyButtonProps {
@@ -10,6 +12,8 @@ interface BuyButtonProps {
 }
 
 const BuyButton = ({selectedCart}:BuyButtonProps) => {
+
+  const isPending = useAtomValue(pendingAtom)
 
   const handlebuyItems = async () => {
     try {
@@ -27,12 +31,14 @@ const BuyButton = ({selectedCart}:BuyButtonProps) => {
 
   return (
     <Button
-      disabled={!selectedCart.items.some((item) => item.checked)}
+      disabled={
+        isPending > 0 || !selectedCart.items.some((item) => item.checked)
+      }
       variant={"secondary"}
       className="bg-green-500 hover:bg-green-400 disabled:bg-slate-400 mt-4 ml-auto block"
       onClick={() => handlebuyItems()}
     >
-      チェックしたアイテムを購入
+      {isPending ? "処理中" : "チェックしたアイテムを購入"}
     </Button>
   );
 };

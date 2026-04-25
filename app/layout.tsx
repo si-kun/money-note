@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { Provider } from "jotai";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "MoneyNote",
-  description: "買い物履歴・収支カレンダー・在庫管理が自動連係する家計管理アプリ",
+  description:
+    "買い物履歴・収支カレンダー・在庫管理が自動連係する家計管理アプリ",
 };
 
 export default function RootLayout({
@@ -25,12 +27,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Toaster position="top-center" expand={true} />
-        {children}
-      </body>
+      <Provider>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <Toaster position="top-center" expand={true} />
+          {children}
+        </body>
+      </Provider>
     </html>
   );
 }

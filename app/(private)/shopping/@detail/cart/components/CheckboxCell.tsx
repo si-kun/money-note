@@ -1,8 +1,10 @@
 import { updateShoppingChecked } from "@/app/server-action/shopping/cart/updateShoppingChecked";
+import { pendingAtom } from "@/app/store/shopping/cartAtom";
 import { ShoppingCartItemWithStock } from "@/app/types/shopping/shopping";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Row } from "@tanstack/react-table";
-import { useOptimistic, useTransition } from "react";
+import { useSetAtom } from "jotai";
+import { useEffect, useOptimistic, useTransition } from "react";
 import { toast } from "sonner";
 
 interface CheckboxCellProps {
@@ -11,14 +13,16 @@ interface CheckboxCellProps {
 
 const CheckboxCell = ({ row }: CheckboxCellProps) => {
 
+  const setIsPending = useSetAtom(pendingAtom)
   const [isPending, startTransition] = useTransition();
   const [optimisticChecked, setOptimisticChecked] = useOptimistic(row.original.checked)
 
 
   const handleCheckedChange = () => {
+    setIsPending((prev) => prev + 1)
     startTransition(async () => {
+      setOptimisticChecked((prev) => !prev);
       try {
-        setOptimisticChecked((prev) => !prev);
         const result = await updateShoppingChecked(
           row.original.id,
           !row.original.checked
@@ -31,9 +35,15 @@ const CheckboxCell = ({ row }: CheckboxCellProps) => {
       } catch (error) {
         console.error("Error updating shopping checked status:", error);
         toast.error("チェック状態の更新に失敗しました。");
-      }
+      } 
     });
   };
+
+  useEffect(() => {
+    if(!isPending) {
+      setIsPending((prev) => Math.max(0, prev -1))
+    }
+  },[isPending, setIsPending])
 
   return (
     <div className="flex items-center gap-2">
