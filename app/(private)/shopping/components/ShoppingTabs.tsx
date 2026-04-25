@@ -3,12 +3,7 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePathname, useRouter } from "next/navigation";
 
-// interface ShoppingTabsProps {
-//   children: React.ReactNode;
-// }
-
 const ShoppingTabs = () => {
-// const ShoppingTabs = ({ children }: ShoppingTabsProps) => {
   const router = useRouter();
   const pathname = usePathname();
 

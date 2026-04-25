@@ -19,7 +19,6 @@ const BuyButton = ({selectedCart}:BuyButtonProps) => {
     try {
       const result =  await buyShoppingCart(selectedCart);
       if(result.success) {
-        window.dispatchEvent(new Event("historyUpdate"))
         toast.success("購入が完了しました");
       } else {
         toast.error(result.message || "購入に失敗しました");
