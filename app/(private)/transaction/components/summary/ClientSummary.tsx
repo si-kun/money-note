@@ -21,7 +21,7 @@ const ClientSummary = ({
   const openDate = searchParams.get("date");
 
   const handleCloseSheet = () => {
-    router.push(`/?year=${year}&month=${month}`);
+    router.push(`/?year=${year}&month=${month}`,{scroll: false});
   };
 
   return (

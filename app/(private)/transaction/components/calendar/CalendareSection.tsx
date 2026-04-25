@@ -10,7 +10,7 @@ import interractionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { EventClickArg } from "@fullcalendar/core";
 
 import { Button } from "@/components/ui/button";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   BalanceData,
   IncomeWithCategory,
@@ -40,8 +40,6 @@ const CalendareSection = ({
   const router = useRouter();
   const isMobile = useIsMobile();
 
-  const [eventSheetOpen,setEventSheetOpen] = useState(true)
-
   const handlePrevMonth = () => {
     const newMonth = initialMonth === 1 ? 12 : initialMonth - 1;
     const newYear = initialMonth === 1 ? initialYear - 1 : initialYear;
@@ -63,19 +61,17 @@ const CalendareSection = ({
   const handleDateClick = (arg: DateClickArg) => {
     const clickedDate = arg.dateStr;
     router.push(
-      `/?year=${initialYear}&month=${initialMonth}&date=${clickedDate}`
+      `/?year=${initialYear}&month=${initialMonth}&date=${clickedDate}`,
+      {scroll: false}
     );
-        console.log(eventSheetOpen);
   };
 
   const handleEventClick = (arg: EventClickArg) => {
     const clickedDate = arg.event.startStr;
     router.push(
-      `/?year=${initialYear}&month=${initialMonth}&date=${clickedDate}`
+      `/?year=${initialYear}&month=${initialMonth}&date=${clickedDate}`,
+      {scroll: false}
     );
-    setEventSheetOpen(true)
-      console.log(eventSheetOpen);
-
   };
 
   const events = useMemo(() => {
