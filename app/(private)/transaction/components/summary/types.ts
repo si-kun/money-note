@@ -24,3 +24,7 @@ export interface SummarySectionProps {
   // カテゴリー
   categories: Category[];
 }
+
+export type MonthryTabsContentProps = Pick<SummarySectionProps, "monthlyData">;
+
+export type SummaryProps = Omit<SummarySectionProps,"monthlyData">

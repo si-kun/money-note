@@ -1,29 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SummaryCard from "./SummaryCard";
 import BreakdownList from "../form/BreakdownList";
-import {
-  IncomeWithCategory,
-  PaymentWithCategory,
-} from "@/app/types/transaction/transaction";
-import { Category } from "@/generated/prisma/client";
 import BreakdownHeader from "../features/BreakdownHeader";
-interface SummaryProps {
-  date: string;
-  dailyIncome: IncomeWithCategory[];
-  dailyPayment: PaymentWithCategory[];
-  dailyIncomeTotal: number;
-  dailyPaymentTotal: number;
-  categories: Category[];
-}
+import { SummaryProps } from "./types";
 
-const Summary = ({
-  date,
-  dailyIncome,
-  dailyPayment,
-  dailyIncomeTotal,
-  dailyPaymentTotal,
-  categories,
-}: SummaryProps) => {
+const Summary = ({ dailyData, categories }: SummaryProps) => {
+  const {
+    date,
+    dailyIncomeTotal,
+    dailyPaymentTotal,
+    dailyIncome,
+    dailyPayment,
+  } = dailyData;
+
   return (
     <Card className="h-full flex flex-col">
       <CardHeader className="px-2 lg:px-6">

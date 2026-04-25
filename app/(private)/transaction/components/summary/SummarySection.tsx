@@ -10,24 +10,6 @@ const SummarySection = ({
   categories,
 }: SummarySectionProps) => {
 
-  const {
-    year,
-    month,
-    incomeError,
-    paymentError,
-    monthlyIncomeTotal,
-    monthlyPaymentTotal,
-    monthlySubscription,
-  } = monthlyData;
-
-  const {
-    date,
-    dailyIncome,
-    dailyPayment,
-    dailyIncomeTotal,
-    dailyPaymentTotal,
-  } = dailyData;
-
   return (
     <Tabs defaultValue="day" className="flex-1 flex flex-col">
       <TabsList>
@@ -38,11 +20,7 @@ const SummarySection = ({
       {/* 日次 */}
       <TabsContent value="day" className="flex-1 overflow-hidden">
         <Summary
-          date={date}
-          dailyIncome={dailyIncome}
-          dailyPayment={dailyPayment}
-          dailyIncomeTotal={dailyIncomeTotal}
-          dailyPaymentTotal={dailyPaymentTotal}
+          dailyData={dailyData}
           categories={categories}
         />
       </TabsContent>
@@ -50,13 +28,7 @@ const SummarySection = ({
       {/* 月次 */}
       <TabsContent value="month" className="flex-1 h-full overflow-hidden">
         <MonthryTabsContent
-          year={year}
-          month={month}
-          incomeError={incomeError}
-          paymentError={paymentError}
-          monthlyIncomeTotal={monthlyIncomeTotal}
-          monthlyPaymentTotal={monthlyPaymentTotal}
-          monthlySubscription={monthlySubscription}
+          monthlyData={monthlyData}
         />
       </TabsContent>
     </Tabs>
