@@ -31,7 +31,7 @@ export const deleteSubscription = async (
     console.error("Error deleting subscription:", error);
     return {
       success: false,
-      message: "Failed to delete subscription.",
+      message: "削除に失敗しました。",
       data: null,
     };
   }

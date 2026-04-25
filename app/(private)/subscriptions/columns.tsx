@@ -71,12 +71,11 @@ export const columns: ColumnDef<Subscription>[] = [
     cell: ({ row }) => {
       const handleDelete = async () => {
         try {
-          console.log('削除前')
           await deleteSubscription(row.original.id);
-          console.log('削除後')
-          toast.success("Subscription deleted successfully.");
+          toast.success("削除に成功しました");
         } catch (error) {
-          console.error("Error deleting subscription:", error);
+          console.error(error)
+          toast.error("削除に失敗しました")
         }
       };
       return (

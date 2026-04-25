@@ -27,8 +27,6 @@ export const useEditTransactionForm = ({
   type,
 }: UseEditTransactionFormReturn) => {
 
-  console.log("transaction.categoryId:", transaction.categoryId)
-
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 

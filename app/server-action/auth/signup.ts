@@ -60,11 +60,9 @@ export const signup = async (
   } catch (error) {
     console.error("ユーザーの作成に失敗しました:", error);
     if (userId) {
-      const { data: deleteData, error: deleteError } = await supabaseAdmin.auth.admin.deleteUser(userId);
+      const {error: deleteError } = await supabaseAdmin.auth.admin.deleteUser(userId);
       if (deleteError) {
         console.error("Supabaseユーザーの削除に失敗しました:", deleteError);
-      } else {
-        console.log("Supabaseユーザーが削除されました:", deleteData);
       }
     }
     if (error instanceof Error) {
