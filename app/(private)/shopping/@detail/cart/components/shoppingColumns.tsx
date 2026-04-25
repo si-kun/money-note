@@ -50,7 +50,7 @@ export const columns: ColumnDef<ShoppingCartItemWithStock>[] = [
         }
       };
       return (
-        <ActionsCell onClickDelete={handleDelete} row={row}>
+        <ActionsCell onClickDelete={handleDelete} row={row} dialogDescription="商品情報を編集">
           {({ row, setIsDialogOpen }) => (
             <EditShopping row={row} setIsDialogOpen={setIsDialogOpen} />
           )}

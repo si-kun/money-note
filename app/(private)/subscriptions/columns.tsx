@@ -80,7 +80,7 @@ export const columns: ColumnDef<Subscription>[] = [
         }
       };
       return (
-        <ActionsCell row={row} onClickDelete={handleDelete}>
+        <ActionsCell row={row} onClickDelete={handleDelete} dialogDescription="サブスク情報を編集します">
           {({ row, setIsDialogOpen }) => (
             <SubscriptionForm row={row} setIsDialogOpen={setIsDialogOpen} />
           )}

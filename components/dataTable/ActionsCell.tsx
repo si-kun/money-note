@@ -25,12 +25,14 @@ interface ActionsCellProps<T> {
     row: Row<T>;
     setIsDialogOpen: (open: boolean) => void;
   }) => React.ReactNode;
+  dialogDescription: string
 }
 
-const ActionsCell =<T,>({
+const ActionsCell = <T,>({
   row,
   onClickDelete,
   children,
+  dialogDescription,
 }: ActionsCellProps<T>) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -40,7 +42,7 @@ const ActionsCell =<T,>({
     if (!open) {
       setIsDropdownOpen(false);
     }
-  }
+  };
 
   return (
     <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
@@ -52,10 +54,7 @@ const ActionsCell =<T,>({
           delete
         </DropdownMenuItem>
 
-        <Dialog
-          open={isDialogOpen}
-          onOpenChange={handleDialogChange}
-        >
+        <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
           <DialogTrigger asChild>
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               edit
@@ -64,9 +63,7 @@ const ActionsCell =<T,>({
           <DialogContent className="w-full">
             <DialogHeader>
               <DialogTitle>編集</DialogTitle>
-              <DialogDescription>
-                在庫情報を編集します。
-              </DialogDescription>
+              <DialogDescription>{dialogDescription}</DialogDescription>
             </DialogHeader>
             {children({ row, setIsDialogOpen: handleDialogChange })}
           </DialogContent>
