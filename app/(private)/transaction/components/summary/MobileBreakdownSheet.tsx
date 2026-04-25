@@ -5,7 +5,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import BreakdownHeader from "../features/BreakdownHeader";
+import BreakdownHeader from "./BreakdownHeader";
 import BreakdownList from "../form/BreakdownList";
 import { Category } from "@/generated/prisma/client";
 import {

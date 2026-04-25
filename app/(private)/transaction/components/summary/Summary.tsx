@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SummaryCard from "./SummaryCard";
 import BreakdownList from "../form/BreakdownList";
-import BreakdownHeader from "../features/BreakdownHeader";
+import BreakdownHeader from "./BreakdownHeader";
 import { SummaryProps } from "./types";
 
 const Summary = ({ dailyData, categories }: SummaryProps) => {

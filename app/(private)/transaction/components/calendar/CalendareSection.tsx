@@ -24,7 +24,6 @@ interface CalendarSectionProps {
   initialMonth: number;
   initialIncomeData: IncomeWithCategory[];
   initialPaymentData: PaymentWithCategory[];
-  // today: Date;
 }
 
 const CalendareSection = ({
