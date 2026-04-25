@@ -2,54 +2,32 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import Summary from "./Summary";
 import MonthryTabsContent from "./MonthryTabsContent";
-import { SubscriptionResponse } from "@/app/server-action/transaction/getSubscription";
-import {
-  IncomeWithCategory,
-  PaymentWithCategory,
-} from "@/app/types/transaction/transaction";
-import { Category } from "@/generated/prisma/client";
-
-interface SummarySectionProps {
-  // 月次データ
-  year: number;
-  month: number;
-  incomeError: string | null;
-  paymentError: string | null;
-  monthlyIncomeTotal: number;
-  monthlyPaymentTotal: number;
-  monthlySubscription: SubscriptionResponse;
-
-  // 日次データ
-  date: string;
-  dailyIncome: IncomeWithCategory[];
-  dailyPayment: PaymentWithCategory[];
-  dailyIncomeTotal: number;
-  dailyPaymentTotal: number;
-
-  // カテゴリー
-  categories: Category[];
-}
+import { SummarySectionProps } from "./types";
 
 const SummarySection = ({
-  // 月次データ
-  year,
-  month,
-  incomeError,
-  paymentError,
-  monthlyIncomeTotal,
-  monthlyPaymentTotal,
-  monthlySubscription,
-
-  // 日次データ
-  date,
-  dailyIncome,
-  dailyPayment,
-  dailyIncomeTotal,
-  dailyPaymentTotal,
-
-  // カテゴリー
+  monthlyData,
+  dailyData,
   categories,
 }: SummarySectionProps) => {
+
+  const {
+    year,
+    month,
+    incomeError,
+    paymentError,
+    monthlyIncomeTotal,
+    monthlyPaymentTotal,
+    monthlySubscription,
+  } = monthlyData;
+
+  const {
+    date,
+    dailyIncome,
+    dailyPayment,
+    dailyIncomeTotal,
+    dailyPaymentTotal,
+  } = dailyData;
+
   return (
     <Tabs defaultValue="day" className="flex-1 flex flex-col">
       <TabsList>

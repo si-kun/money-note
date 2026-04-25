@@ -1,61 +1,19 @@
 "use client";
 
-import { SubscriptionResponse } from "@/app/server-action/transaction/getSubscription";
-import {
-  IncomeWithCategory,
-  PaymentWithCategory,
-} from "@/app/types/transaction/transaction";
-import { Category } from "@/generated/prisma/client";
 import { useIsMobile } from "@/hooks/use-mobile";
 import SummarySection from "./SummarySection";
 import { useRouter, useSearchParams } from "next/navigation";
 import MobileBreakdownSheet from "./MobileBreakdownSheet";
-
-export interface SummarySectionProps {
-  // 月次データ
-  monthlyData: {
-    year: number;
-    month: number;
-    incomeError: string | null;
-    paymentError: string | null;
-    monthlyIncomeTotal: number;
-    monthlyPaymentTotal: number;
-    monthlySubscription: SubscriptionResponse;
-  };
-  dailyData: {
-    // 日次データ
-    date: string;
-    dailyIncome: IncomeWithCategory[];
-    dailyPayment: PaymentWithCategory[];
-    dailyIncomeTotal: number;
-    dailyPaymentTotal: number;
-  };
-  // カテゴリー
-  categories: Category[];
-}
+import { SummarySectionProps } from "./types";
 
 const ClientSummary = ({
   monthlyData,
   dailyData,
   categories,
 }: SummarySectionProps) => {
-  const {
-    year,
-    month,
-    incomeError,
-    paymentError,
-    monthlyIncomeTotal,
-    monthlyPaymentTotal,
-    monthlySubscription,
-  } = monthlyData;
+  const { year, month } = monthlyData;
 
-  const {
-    date,
-    dailyIncome,
-    dailyPayment,
-    dailyIncomeTotal,
-    dailyPaymentTotal,
-  } = dailyData;
+  const { date, dailyIncome, dailyPayment } = dailyData;
 
   const isMobile = useIsMobile();
   const router = useRouter();
@@ -79,20 +37,8 @@ const ClientSummary = ({
         />
       ) : (
         <SummarySection
-          // 月次データ
-          year={year}
-          month={month}
-          incomeError={incomeError}
-          paymentError={paymentError}
-          monthlyIncomeTotal={monthlyIncomeTotal}
-          monthlyPaymentTotal={monthlyPaymentTotal}
-          monthlySubscription={monthlySubscription}
-          // 日次データ
-          date={date}
-          dailyIncome={dailyIncome}
-          dailyPayment={dailyPayment}
-          dailyIncomeTotal={dailyIncomeTotal}
-          dailyPaymentTotal={dailyPaymentTotal}
+          monthlyData={monthlyData}
+          dailyData={dailyData}
           // カテゴリー
           categories={categories}
         />
