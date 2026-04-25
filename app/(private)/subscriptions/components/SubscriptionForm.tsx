@@ -15,30 +15,16 @@ import { editSubscription } from "@/app/server-action/subscription/editSubscript
 import { toast } from "sonner";
 import { addSubscriptions } from "@/app/server-action/subscription/addSubscriptions";
 import { Subscription } from "@/generated/prisma/client";
+import { SubscriptionFormValue } from "./types";
 
 interface SubscriptionFormProps {
   row?: Row<Subscription>;
   setIsDialogOpen: (open: boolean) => void;
 }
 
-const SubscriptionForm = ({ row, setIsDialogOpen }: SubscriptionFormProps) => {
-  const [startOpen, setStartOpen] = useState(false);
-  const [endOpen, setEndOpen] = useState(false);
 
-  const [isPending, startTransition] = useTransition();
 
-  const form = useForm<SubscriptionFormType>({
-    resolver: zodResolver(subscriptionSchema),
-    mode: "onChange",
-    defaultValues: {
-      name: row ? String(row.getValue("name")) : "",
-      monthlyPrice: row ? Number(row.getValue("monthlyPrice")) : undefined,
-      startDate: row ? new Date(String(row.getValue("startDate"))) : new Date(),
-      endDate: row ? new Date(String(row.getValue("endDate"))) : null,
-    },
-  });
-
-  const FORM_VALUES = [
+  const FORM_VALUES: SubscriptionFormValue[] = [
     {
       label: "タイトル",
       type: "text",
@@ -60,6 +46,25 @@ const SubscriptionForm = ({ row, setIsDialogOpen }: SubscriptionFormProps) => {
       name: "endDate",
     },
   ];
+
+const SubscriptionForm = ({ row, setIsDialogOpen }: SubscriptionFormProps) => {
+  const [startOpen, setStartOpen] = useState(false);
+  const [endOpen, setEndOpen] = useState(false);
+
+  const [isPending, startTransition] = useTransition();
+
+  const form = useForm<SubscriptionFormType>({
+    resolver: zodResolver(subscriptionSchema),
+    mode: "onChange",
+    defaultValues: {
+      name: row ? String(row.getValue("name")) : "",
+      monthlyPrice: row ? Number(row.getValue("monthlyPrice")) : undefined,
+      startDate: row ? new Date(String(row.getValue("startDate"))) : new Date(),
+      endDate: row ? new Date(String(row.getValue("endDate"))) : null,
+    },
+  });
+
+
 
   const onSubmit = async (data: SubscriptionFormType) => {
     startTransition(async () => {
