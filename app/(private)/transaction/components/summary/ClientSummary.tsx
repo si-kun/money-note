@@ -8,17 +8,8 @@ import {
 import { Category } from "@/generated/prisma/client";
 import { useIsMobile } from "@/hooks/use-mobile";
 import SummarySection from "./SummarySection";
-
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
 import { useRouter, useSearchParams } from "next/navigation";
-import BreakdownList from "../form/BreakdownList";
-import BreakdownHeader from "../features/BreakdownHeader";
+import MobileBreakdownSheet from "./MobileBreakdownSheet";
 
 export interface SummarySectionProps {
   // 月次データ
@@ -78,23 +69,14 @@ const ClientSummary = ({
   return (
     <>
       {isMobile ? (
-        <Sheet open={!!openDate} onOpenChange={handleCloseSheet}>
-          <SheetContent side="bottom" className="h-[80vh] px-4">
-            <SheetHeader className="px-0">
-              <SheetTitle>{date}</SheetTitle>
-              <SheetDescription>
-                収入・支出の内訳を確認できます
-              </SheetDescription>
-            </SheetHeader>
-            <BreakdownHeader date={date} categories={categories} />
-            <BreakdownList
-              date={date}
-              dailyIncome={dailyIncome}
-              dailyPayment={dailyPayment}
-              categories={categories}
-            />
-          </SheetContent>
-        </Sheet>
+        <MobileBreakdownSheet
+          openDate={openDate}
+          handleCloseSheet={handleCloseSheet}
+          date={date}
+          dailyIncome={dailyIncome}
+          dailyPayment={dailyPayment}
+          categories={categories}
+        />
       ) : (
         <SummarySection
           // 月次データ
