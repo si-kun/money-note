@@ -11,6 +11,7 @@ import { signin } from "@/app/server-action/auth/signin";
 import { useRouter } from "next/navigation";
 import { FormValue } from "../types/auth";
 import GuestLoginButton from "../components/features/GuestLoginButton";
+import { useTransition } from "react";
 
 const formValues: FormValue[] = [
   {
@@ -27,6 +28,7 @@ const formValues: FormValue[] = [
 
 const SigninPage = () => {
   const router = useRouter();
+  const [isPending, startTransiton] = useTransition();
 
   const form = useForm<SigninSchemaType>({
     resolver: zodResolver(signinSchema),
@@ -38,19 +40,21 @@ const SigninPage = () => {
   });
 
   const onSubmit = async (data: SigninSchemaType) => {
-    try {
-      const result = await signin(data);
+    startTransiton(async () => {
+      try {
+        const result = await signin(data);
 
-      if (!result.success) {
-        throw new Error(result.message);
+        if (!result.success) {
+          throw new Error(result.message);
+        }
+
+        toast.success("ログインに成功しました");
+        router.push("/");
+      } catch (error) {
+        console.error("ログインに失敗しました:", error);
+        toast.error("ログインに失敗しました");
       }
-
-      toast.success("ログインに成功しました");
-      router.push("/");
-    } catch (error) {
-      console.error("ログインに失敗しました:", error);
-      toast.error("ログインに失敗しました");
-    }
+    });
   };
 
   return (
@@ -70,6 +74,7 @@ const SigninPage = () => {
         formValues={formValues}
         buttonText={"ログイン"}
         submittingText={"ログイン中..."}
+        isPending={isPending}
       />
       <GuestLoginButton />
     </>

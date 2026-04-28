@@ -19,6 +19,7 @@ interface AuthFormProps<T extends SignupSchemaType | SigninSchemaType> {
     label: string;
     type: string;
   }[];
+  isPending: boolean
 }
 
 const AuthForm = <T extends SigninSchemaType | SignupSchemaType>({
@@ -29,8 +30,11 @@ const AuthForm = <T extends SigninSchemaType | SignupSchemaType>({
   form,
   onSubmit,
   formValues,
+  isPending
 }: AuthFormProps<T>) => {
-  const disabled = !form.formState.isValid || form.formState.isSubmitting;
+  const disabled = !form.formState.isValid || form.formState.isSubmitting || isPending;
+
+  console.log("isSubmitting",form.formState.isSubmitting)
 
   return (
     <>
