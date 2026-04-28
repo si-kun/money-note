@@ -10,6 +10,7 @@ import AuthForm from "../components/AuthForm";
 import { CardDescription } from "@/components/ui/card";
 import Link from "next/link";
 import { FormValue } from "../types/auth";
+import { useTransition } from "react";
 
 const formValues: FormValue[] = [
   {
@@ -31,6 +32,7 @@ const formValues: FormValue[] = [
 
 const SignupPage = () => {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const form = useForm<SignupSchemaType>({
     resolver: zodResolver(signupSchema),
@@ -43,19 +45,22 @@ const SignupPage = () => {
   });
 
   const onSubmit = async (data: SignupSchemaType) => {
-    try {
-      const result = await signup(data);
+    startTransition(async() => {
 
-      if (!result.success) {
-        throw new Error(result.message);
+      try {
+        const result = await signup(data);
+  
+        if (!result.success) {
+          throw new Error(result.message);
+        }
+  
+        toast.success("ユーザーの作成に成功しました");
+        router.push("/");
+      } catch (error) {
+        toast.error("ユーザーの作成に失敗しました");
+        console.error("ユーザーの作成に失敗しました:", error);
       }
-
-      toast.success("ユーザーの作成に成功しました");
-      router.push("/");
-    } catch (error) {
-      toast.error("ユーザーの作成に失敗しました");
-      console.error("ユーザーの作成に失敗しました:", error);
-    }
+    })
   };
 
   return (
@@ -74,6 +79,7 @@ const SignupPage = () => {
       formValues={formValues}
       buttonText={"新規登録"}
       submittingText={"登録中..."}
+      isPending={isPending}
     />
   );
 };
